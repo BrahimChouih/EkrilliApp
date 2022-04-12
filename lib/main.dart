@@ -1,4 +1,5 @@
-import 'package:ekrilli_app/screens/login_screen.dart';
+import 'package:ekrilli_app/screens/splash_screen.dart';
+import 'package:ekrilli_app/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -16,7 +17,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     Get.lazyPut(() => AuthController());
     return GetMaterialApp(
-      home: LoginScreen(),
+      theme: primaryTheme,
+      home: const SplashScreen(),
     );
   }
 }
