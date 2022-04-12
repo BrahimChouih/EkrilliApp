@@ -12,7 +12,7 @@ class AuthController extends GetxController with AuthAPI {
 
   Future<void> initData() async {
     await getTokenFromSP();
-    refreshUserInfo();
+    if (isLogin) refreshUserInfo();
   }
 
   @override

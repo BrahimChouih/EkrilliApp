@@ -7,6 +7,7 @@ class User {
   String? language;
   String? location;
   String? aboutMe;
+  String? userType;
   String? dateJoined;
 
   User({
@@ -18,6 +19,7 @@ class User {
     this.language,
     this.location,
     this.aboutMe,
+    this.userType,
     this.dateJoined,
   });
 
@@ -30,6 +32,7 @@ class User {
     language = json['language'];
     location = json['location'];
     aboutMe = json['about_me'];
+    userType = json['user_type'];
     dateJoined = json['date_joined'];
   }
 
@@ -42,6 +45,7 @@ class User {
     data['language'] = language;
     data['location'] = location;
     data['about_me'] = aboutMe;
+    data['user_type'] = userType;
     return data;
   }
 }

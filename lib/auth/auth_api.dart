@@ -33,6 +33,7 @@ class AuthAPI {
     required String email,
     required String username,
     required String password,
+    required String userType,
   }) async {
     String apiUrl = '$api/auth/register/';
 
@@ -42,6 +43,7 @@ class AuthAPI {
         'email': email,
         'username': username,
         'password': password,
+        'user_type': userType.toUpperCase(),
       },
     );
     apiToken = response.data['token'];
@@ -60,7 +62,7 @@ class AuthAPI {
   Future<void> getTokenFromSP() async {
     sharedPreferences = await SharedPreferences.getInstance();
     apiToken = sharedPreferences?.getString('apiToken');
-    if (apiToken != null) {
+    if (isLogin) {
       currentUser = await getUserInfo();
     }
   }

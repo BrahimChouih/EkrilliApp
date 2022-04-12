@@ -10,13 +10,13 @@ class SubmitButton extends StatelessWidget {
     Key? key,
   }) : super(key: key);
 
-  final Function? onTap;
+  final Function()? onTap;
   final String text;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
-      onTap: () {},
+      onTap: onTap,
       highlightColor: Colors.transparent,
       splashColor: Colors.transparent,
       child: Container(

@@ -1,32 +1,28 @@
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:ekrilli_app/screens/authentication_screen.dart';
+import 'package:ekrilli_app/screens/home_screen.dart';
 import 'package:ekrilli_app/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
-class SplashScreen extends StatefulWidget {
+import '../controllers/auth_controller.dart';
+
+class SplashScreen extends StatelessWidget {
   const SplashScreen({Key? key}) : super(key: key);
-
-  @override
-  State<SplashScreen> createState() => _SplashScreenState();
-}
-
-class _SplashScreenState extends State<SplashScreen> {
   void goToNextScreen() async {
-    await Future.delayed(const Duration(seconds: 3));
-    Get.to(AuthenticationScreen());
-  }
-
-  @override
-  void initState() {
-    goToNextScreen();
-    super.initState();
+    // await Future.delayed(const Duration(seconds: 3));
+    AuthController authController = Get.find<AuthController>();
+    await authController.initData();
+    Get.to(
+      () => !authController.isLogin ? AuthenticationScreen() : HomeScreen(),
+    );
   }
 
   final String introText = 'Ekrilli app\nRent a house now';
   @override
   Widget build(BuildContext context) {
+    Get.lazyPut(() => AuthController());
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(
@@ -51,6 +47,7 @@ class _SplashScreenState extends State<SplashScreen> {
                     ) ??
                     const TextStyle(),
                 child: AnimatedTextKit(
+                  onFinished: goToNextScreen,
                   animatedTexts: [
                     TyperAnimatedText(
                       introText,

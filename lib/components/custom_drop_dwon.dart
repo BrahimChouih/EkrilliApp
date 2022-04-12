@@ -35,24 +35,24 @@ class CustomDropDown<T> extends StatelessWidget {
           DropdownButton<T>(
             onChanged: onChange,
             value: value,
-            hint: const Expanded(
-              child: Center(
-                child: Text(
-                  'Account Type',
-                  textAlign: TextAlign.center,
-                ),
+            hint: Container(
+              width: Get.width,
+              alignment: Alignment.center,
+              child: const Text(
+                'Account Type',
+                textAlign: TextAlign.center,
               ),
             ),
             items: items
                 .map(
                   (e) => DropdownMenuItem<T>(
                     value: e,
-                    child: Expanded(
-                      child: Center(
-                        child: Text(
-                          e.toString(),
-                          textAlign: TextAlign.center,
-                        ),
+                    child: Container(
+                      width: Get.width,
+                      alignment: Alignment.center,
+                      child: Text(
+                        e.toString(),
+                        textAlign: TextAlign.center,
                       ),
                     ),
                   ),
