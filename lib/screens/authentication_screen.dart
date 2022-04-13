@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:ekrilli_app/components/custom_drop_dwon.dart';
 import 'package:ekrilli_app/controllers/auth_controller.dart';
@@ -112,6 +114,17 @@ class AuthenticationScreen extends StatelessWidget {
                           Get.offAll(() => HomeScreen());
                         }
                       } on DioError catch (e) {
+                        Get.defaultDialog(
+                          title: 'Error',
+                          content: Text(
+                            (e.response ?? 'Check your internet connection')
+                                .toString(),
+                          ),
+                          confirm: TextButton(
+                            onPressed: () => Get.back(),
+                            child: const Text('Ok'),
+                          ),
+                        );
                         print('===========');
                         print(e.response);
                       }

@@ -63,14 +63,14 @@ class AuthAPI {
     sharedPreferences = await SharedPreferences.getInstance();
     apiToken = sharedPreferences?.getString('apiToken');
     if (isLogin) {
-      currentUser = await getUserInfo();
+      await refreshUserInfo();
     }
   }
 
   Future<void> setTokenInSP() async {
     sharedPreferences = await SharedPreferences.getInstance();
     sharedPreferences?.setString('apiToken', apiToken!);
-    currentUser = await getUserInfo();
+    await refreshUserInfo();
   }
 
   Future<User> getUserInfo({int id = 0}) async {

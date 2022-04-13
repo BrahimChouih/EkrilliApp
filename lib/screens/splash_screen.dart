@@ -1,4 +1,7 @@
+import 'dart:io';
+
 import 'package:animated_text_kit/animated_text_kit.dart';
+import 'package:dio/dio.dart';
 import 'package:ekrilli_app/screens/authentication_screen.dart';
 import 'package:ekrilli_app/screens/home_screen.dart';
 import 'package:ekrilli_app/themes/primary_theme.dart';
@@ -9,20 +12,47 @@ import 'package:get/get.dart';
 import '../controllers/auth_controller.dart';
 
 class SplashScreen extends StatelessWidget {
-  const SplashScreen({Key? key}) : super(key: key);
+  SplashScreen({Key? key}) : super(key: key);
+  bool isFirstTime = true;
   void goToNextScreen() async {
     // await Future.delayed(const Duration(seconds: 3));
     AuthController authController = Get.find<AuthController>();
-    await authController.initData();
-    Get.to(
-      () => !authController.isLogin ? AuthenticationScreen() : HomeScreen(),
-    );
+    try {
+      await authController.initData();
+      Get.to(
+        () => !authController.isLogin ? AuthenticationScreen() : HomeScreen(),
+      );
+    } on DioError catch (e) {
+      String message = '';
+      if (e.message == 'Http status error [401]') {
+        message = e.message;
+        authController.signOut();
+      }
+      if (e.error.runtimeType == SocketException) {
+        message = (e.error as SocketException).message;
+      }
+
+      Get.defaultDialog(
+        title: 'Error',
+        content: Text(
+          'Error type: ' + message,
+        ),
+        confirm: TextButton(
+          onPressed: () async {
+            Get.back();
+            await Future.delayed(const Duration(seconds: 1));
+            goToNextScreen();
+          },
+          child: const Text('Rety'),
+        ),
+      );
+    }
   }
 
   final String introText = 'Ekrilli app\nRent a house now';
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut(() => AuthController());
+    Get.lazyPut<AuthController>(() => AuthController());
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.symmetric(
@@ -47,7 +77,6 @@ class SplashScreen extends StatelessWidget {
                     ) ??
                     const TextStyle(),
                 child: AnimatedTextKit(
-                  onFinished: goToNextScreen,
                   animatedTexts: [
                     TyperAnimatedText(
                       introText,
@@ -57,10 +86,18 @@ class SplashScreen extends StatelessWidget {
                       textAlign: TextAlign.start,
                     ),
                   ],
-                  isRepeatingAnimation: false,
+                  isRepeatingAnimation: true,
+                  repeatForever: true,
+                  pause: const Duration(seconds: 2),
+                  onNextBeforePause: (i, b) {
+                    if (isFirstTime) {
+                      goToNextScreen();
+                      isFirstTime = false;
+                    }
+                  },
                 ),
               ),
-            )
+            ),
           ],
         ),
       ),
