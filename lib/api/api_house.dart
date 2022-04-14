@@ -4,9 +4,10 @@ import 'api.dart';
 
 class APIHouse {
   ////////////////////////// for testing (unit) ////////////////////////
-  Options options = Options(headers: {
-    'Authorization': 'token 0a0a713f9ac3cd5dd80a2e61dce35267c5e06c90',
-  });
+  // Options options = Options(headers: {
+  //   'Authorization': 'token 0a0a713f9ac3cd5dd80a2e61dce35267c5e06c90',
+  // });
+
   Future<List<Map<String, dynamic>>?> getHouses(
       {int page = 1, int? cityId}) async {
     String apiUrl = '$api/api/houses/';
@@ -88,7 +89,30 @@ class APIHouse {
     return response?.data;
   }
 
-  Future<Map<String, dynamic>?> getCities() async {
+  Future<Map<String, dynamic>?> createNewHouse(FormData data) async {
+    String apiUrl = '$api/api/houses/';
+
+    Response response = await dio
+        .post(
+      apiUrl,
+      data: data,
+      options: options,
+    )
+        .onError<DioError>(
+      (error, stackTrace) {
+        // print(error.response.data);
+        throw error;
+      },
+    );
+
+    if (response.statusCode != 200) {
+      throw Exception(response);
+    }
+
+    return response.data;
+  }
+
+  Future<List<Map<String, dynamic>>?> getCities() async {
     String apiUrl = '$api/api/cities/';
 
     Response response = await dio
@@ -107,6 +131,6 @@ class APIHouse {
       throw Exception(response);
     }
 
-    return response.data;
+    return [...response.data];
   }
 }

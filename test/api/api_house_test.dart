@@ -26,6 +26,28 @@ void main() {
     expect(data != null, true);
   });
 
+  test('APIHouse create new house', () async {
+    //// get instence
+    APIHouse apiHouse = APIHouse();
+
+    //// create new house
+    Map<String, dynamic>? data = await apiHouse.createNewHouse(
+      FormData.fromMap({
+        "houseType": "VILLA",
+        "title": "House from test",
+        "description": "testetsetstsetstsetsets",
+        "price_per_day": 3000.0,
+        "location_latitude": 36.26417,
+        "location_longitude": 2.75393,
+        "city": 1,
+        "pictures": [],
+      }),
+    );
+
+    print(data);
+    expect(data != null, true);
+  });
+
   test('APIHouse update house info', () async {
     //// get instence
     APIHouse apiHouse = APIHouse();
@@ -48,6 +70,17 @@ void main() {
       6,
       method: DELETE,
     );
+    expect(data != null, true);
+  });
+
+  test('APICities', () async {
+    //// get instence
+    APIHouse apiHouse = APIHouse();
+
+    //// delete a house
+    List<Map<String, dynamic>>? data = await apiHouse.getCities();
+
+    print(data);
     expect(data != null, true);
   });
 }
