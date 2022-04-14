@@ -23,7 +23,7 @@ class APIHouse {
       },
     );
 
-    if (response.statusCode != 200) {
+    if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception(response);
     }
     final List<Map<String, dynamic>> houses = [...response.data['results']];
@@ -77,7 +77,7 @@ class APIHouse {
         },
       );
     }
-    if (response?.statusCode != 200) {
+    if (response?.statusCode != 200 && response?.statusCode != 201) {
       throw Exception(response);
     }
 
@@ -100,7 +100,7 @@ class APIHouse {
       },
     );
 
-    if (response.statusCode != 200) {
+    if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception(response);
     }
 
@@ -122,7 +122,7 @@ class APIHouse {
       },
     );
 
-    if (response.statusCode != 200) {
+    if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception(response);
     }
 
