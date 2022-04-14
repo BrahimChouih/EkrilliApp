@@ -3,11 +3,6 @@ import 'package:dio/dio.dart';
 import 'api.dart';
 
 class APIHouse {
-  ////////////////////////// for testing (unit) ////////////////////////
-  // Options options = Options(headers: {
-  //   'Authorization': 'token 0a0a713f9ac3cd5dd80a2e61dce35267c5e06c90',
-  // });
-
   Future<List<Map<String, dynamic>>?> getHouses(
       {int page = 1, int? cityId}) async {
     String apiUrl = '$api/api/houses/';

@@ -2,7 +2,12 @@ import 'package:dio/dio.dart' as d;
 
 const api = 'http://192.168.1.132:8000';
 d.Dio dio = d.Dio();
+
 d.Options? options;
+//////////////////////// for testing (unit) ////////////////////////
+// d.Options options = d.Options(headers: {
+//   'Authorization': 'token 0a0a713f9ac3cd5dd80a2e61dce35267c5e06c90',
+// });
 
 // ignore: non_constant_identifier_names, constant_identifier_names
 const Method GET = Method.GET;
