@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 import 'controllers/auth_controller.dart';
 
 void main() {
-  // Get.put(AuthController());
   runApp(const MyApp());
 }
 

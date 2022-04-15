@@ -8,7 +8,7 @@ class User {
   String? location;
   String? aboutMe;
   String? userType;
-  String? dateJoined;
+  DateTime? dateJoined;
 
   User({
     this.id,
@@ -33,7 +33,7 @@ class User {
     location = json['location'];
     aboutMe = json['about_me'];
     userType = json['user_type'];
-    dateJoined = json['date_joined'];
+    dateJoined = DateTime.parse(json['date_joined']);
   }
 
   Map<String, dynamic> toJson() {

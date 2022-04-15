@@ -114,7 +114,7 @@ class AuthAPI {
         throw error;
       },
     );
-    if (response.statusCode != 200) {
+    if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception(response.statusMessage);
     }
     await refreshUserInfo();
