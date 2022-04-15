@@ -10,7 +10,7 @@ void main() {
     ///// get all favorite
     List<Map<String, dynamic>>? data = await apiFavorite.getFavorites();
     // print(data);
-    expect(data?.length != null, true);
+    expect(data != null, true);
   });
 
   test('APIFavorite add favorite', () async {

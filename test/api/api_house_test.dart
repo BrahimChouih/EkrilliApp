@@ -14,7 +14,7 @@ void main() {
 
       //// get houses by city
       data = await apiHouse.getHouses(cityId: 1);
-      expect(data?.length != null, true);
+      expect(data != null, true);
     } on DioError catch (e) {
       print(e.response?.data);
       expect(e.response?.statusCode, 404);
