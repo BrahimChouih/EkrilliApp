@@ -7,14 +7,18 @@ void main() {
   test('APIHouse get houses', () async {
     //// get instence
     APIHouse apiHouse = APIHouse();
+    try {
+      ///// get all houses
+      List<Map<String, dynamic>>? data = await apiHouse.getHouses();
+      expect(data?.length != null, true);
 
-    ///// get all houses
-    List<Map<String, dynamic>>? data = await apiHouse.getHouses();
-    expect(data?.length != null, true);
-
-    //// get houses by city
-    data = await apiHouse.getHouses(cityId: 1);
-    expect(data?.length != null, true);
+      //// get houses by city
+      data = await apiHouse.getHouses(cityId: 1);
+      expect(data?.length != null, true);
+    } on DioError catch (e) {
+      print(e.response?.data);
+      expect(e.response?.statusCode, 404);
+    }
   });
 
   test('APIHouse get house info', () async {
@@ -22,8 +26,13 @@ void main() {
     APIHouse apiHouse = APIHouse();
 
     ///// get house info
-    Map<String, dynamic>? data = await apiHouse.houseInfo(1);
-    expect(data != null, true);
+    try {
+      Map<String, dynamic>? data = await apiHouse.houseInfo(1);
+      expect(data != null, true);
+    } on DioError catch (e) {
+      print(e.response?.data);
+      expect(e.response?.statusCode, 404);
+    }
   });
 
   test('APIHouse create new house', () async {
@@ -53,12 +62,18 @@ void main() {
     APIHouse apiHouse = APIHouse();
 
     //// update house info
-    Map<String, dynamic>? data = await apiHouse.houseInfo(
-      1,
-      method: PATCH,
-      data: FormData.fromMap({"title": "Come to Titree"}),
-    );
-    expect(data != null, true);
+    try {
+      Map<String, dynamic>? data = await apiHouse.houseInfo(
+        20,
+        method: PATCH,
+        data: FormData.fromMap({"title": "Come to Titree testetste"}),
+      );
+
+      expect(data != null, true);
+    } on DioError catch (e) {
+      print(e.response?.data);
+      expect(e.response?.statusCode, anyOf(404, 400));
+    }
   });
 
   test('APIHouse delete a house', () async {
@@ -66,11 +81,16 @@ void main() {
     APIHouse apiHouse = APIHouse();
 
     //// delete a house
-    Map<String, dynamic>? data = await apiHouse.houseInfo(
-      6,
-      method: DELETE,
-    );
-    expect(data != null, true);
+    try {
+      Map<String, dynamic>? data = await apiHouse.houseInfo(
+        12,
+        method: DELETE,
+      );
+      expect(data != null, true);
+    } on DioError catch (e) {
+      print(e.response?.data);
+      expect(e.response?.statusCode, anyOf(404, 400));
+    }
   });
 
   test('APICities', () async {
