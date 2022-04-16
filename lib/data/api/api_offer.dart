@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:ekrilli_app/api/api.dart';
+import 'package:ekrilli_app/data/api/api.dart';
 
 class APIOffer {
   Future<List<Map<String, dynamic>>?> getOffers() async {

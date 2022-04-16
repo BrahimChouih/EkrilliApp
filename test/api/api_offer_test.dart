@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:ekrilli_app/api/api.dart';
-import 'package:ekrilli_app/api/api_offer.dart';
+import 'package:ekrilli_app/data/api/api.dart';
+import 'package:ekrilli_app/data/api/api_offer.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -1,5 +1,5 @@
 import 'package:dio/dio.dart';
-import 'package:ekrilli_app/api/api_favorite.dart';
+import 'package:ekrilli_app/data/api/api_favorite.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {

@@ -1,12 +1,10 @@
 import 'dart:io';
 import 'package:dio/dio.dart';
-import 'package:ekrilli_app/controllers/auth_controller.dart';
 import 'package:ekrilli_app/models/user.dart';
-import 'package:get/get.dart' as getX;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:path/path.dart';
 
-import '../api/api.dart';
+import '../data/api/api.dart';
 
 class AuthAPI {
   SharedPreferences? sharedPreferences;
@@ -77,7 +75,7 @@ class AuthAPI {
     String apiUrl = '$api/auth/userinfo/$id/';
 
     options = Options(headers: {
-      'Authorization': 'token ${apiToken}',
+      'Authorization': 'token $apiToken',
     });
 
     Response response = await dio.get(apiUrl, options: options).timeout(

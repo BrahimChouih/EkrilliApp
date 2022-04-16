@@ -1,9 +1,7 @@
-import 'dart:io';
 
 import 'package:dio/dio.dart';
 import 'package:ekrilli_app/components/custom_drop_dwon.dart';
 import 'package:ekrilli_app/controllers/auth_controller.dart';
-import 'package:ekrilli_app/models/user.dart';
 import 'package:ekrilli_app/screens/home_screen.dart';
 import 'package:ekrilli_app/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
