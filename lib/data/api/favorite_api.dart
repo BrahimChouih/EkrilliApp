@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'api.dart';
 
-class APIFavorite {
+class FavoriteAPI {
   Future<List<Map<String, dynamic>>?> getFavorites() async {
     String apiUrl = '$api/api/favorites/';
 

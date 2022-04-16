@@ -1,25 +1,25 @@
 import 'package:dio/dio.dart';
-import 'package:ekrilli_app/data/api/api_favorite.dart';
+import 'package:ekrilli_app/data/api/favorite_api.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('APIFavorite get favorites', () async {
+  test('FavoriteAPI get favorites', () async {
     //// get instence
-    APIFavorite apiFavorite = APIFavorite();
+    FavoriteAPI favoriteAPI = FavoriteAPI();
 
     ///// get all favorite
-    List<Map<String, dynamic>>? data = await apiFavorite.getFavorites();
+    List<Map<String, dynamic>>? data = await favoriteAPI.getFavorites();
     // print(data);
     expect(data != null, true);
   });
 
-  test('APIFavorite add favorite', () async {
+  test('FavoriteAPI add favorite', () async {
     //// get instence
-    APIFavorite apiFavorite = APIFavorite();
+    FavoriteAPI favoriteAPI = FavoriteAPI();
 
     ///// add favorite
     try {
-      Map<String, dynamic>? data = await apiFavorite.addFavorite(200);
+      Map<String, dynamic>? data = await favoriteAPI.addFavorite(200);
       print(data);
       expect(data?.length != null, true);
     } on DioError catch (e) {
@@ -28,13 +28,13 @@ void main() {
     }
   });
 
-  test('APIFavorite delete favorite', () async {
+  test('FavoriteAPI delete favorite', () async {
     //// get instence
-    APIFavorite apiFavorite = APIFavorite();
+    FavoriteAPI favoriteAPI = FavoriteAPI();
 
     ///// add favorite
     try {
-      Map<String, dynamic>? data = await apiFavorite.deleteFavoriteItem(13);
+      Map<String, dynamic>? data = await favoriteAPI.deleteFavoriteItem(13);
       print(data);
       expect(data?.length != null, true);
     } on DioError catch (e) {

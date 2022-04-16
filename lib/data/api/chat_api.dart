@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 import 'api.dart';
 
-class APIChat {
+class ChatAPI {
   Future<List<Map<String, dynamic>>?> getConversation({
     required int offerId,
     int page = 1,

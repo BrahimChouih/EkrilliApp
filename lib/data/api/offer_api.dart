@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
 import 'package:ekrilli_app/data/api/api.dart';
 
-class APIOffer {
+class OfferAPI {
   Future<List<Map<String, dynamic>>?> getOffers() async {
     String apiUrl = '$api/api/offers/';
 

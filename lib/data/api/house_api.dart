@@ -2,7 +2,7 @@ import 'package:dio/dio.dart';
 
 import 'api.dart';
 
-class APIHouse {
+class HouseAPI {
   Future<List<Map<String, dynamic>>?> getHouses({
     int page = 1,
     int? cityId,
