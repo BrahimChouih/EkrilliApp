@@ -3,8 +3,10 @@ import 'package:dio/dio.dart';
 import 'api.dart';
 
 class APIHouse {
-  Future<List<Map<String, dynamic>>?> getHouses(
-      {int page = 1, int? cityId}) async {
+  Future<List<Map<String, dynamic>>?> getHouses({
+    int page = 1,
+    int? cityId,
+  }) async {
     String apiUrl = '$api/api/houses/';
 
     if (cityId != null) apiUrl += 'city/$cityId/';

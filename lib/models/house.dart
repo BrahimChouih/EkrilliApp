@@ -5,11 +5,11 @@ class House {
   String? houseType;
   String? title;
   String? description;
-  int? pricePerDay;
+  double? pricePerDay;
   double? locationLatitude;
   double? locationLongitude;
   bool? isAvailable;
-  int? stars;
+  double? stars;
   int? numReviews;
   DateTime? createdAt;
   User? owner;
