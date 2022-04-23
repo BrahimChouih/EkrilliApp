@@ -1,3 +1,4 @@
+import 'package:ekrilli_app/models/picture.dart';
 import 'package:ekrilli_app/models/user.dart';
 
 class House {
@@ -14,7 +15,7 @@ class House {
   DateTime? createdAt;
   User? owner;
   String? city;
-  List<String>? pictures;
+  List<Picture>? pictures = [];
 
   House(
       {this.id,
@@ -46,7 +47,7 @@ class House {
     createdAt = DateTime.parse(json['created_at']);
     owner = User.fromJson(json['owner']);
     for (var item in (json['pictures'] as List)) {
-      pictures?.add(item['picture']);
+      pictures?.add(Picture.fromJson(item));
     }
   }
 
