@@ -17,7 +17,7 @@ void main() {
     print('housesByCity.length: ${data?.length}');
   });
 
-  test('HouseAPI get house info', () async {
+  test('HouseRepository get house info', () async {
     //// get instence
     HouseRepository houseRepository = HouseRepository();
 

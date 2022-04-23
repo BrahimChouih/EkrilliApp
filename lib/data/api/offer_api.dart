@@ -2,8 +2,15 @@ import 'package:dio/dio.dart';
 import 'package:ekrilli_app/data/api/api.dart';
 
 class OfferAPI {
-  Future<List<Map<String, dynamic>>?> getOffers() async {
+  Future<List<Map<String, dynamic>>?> getOffers({
+    int page = 1,
+    int? cityId,
+  }) async {
     String apiUrl = '$api/api/offers/';
+
+    if (cityId != null) apiUrl += 'city/$cityId/';
+
+    apiUrl += '?page=$page';
 
     Response response = await dio
         .get(
@@ -19,7 +26,7 @@ class OfferAPI {
     if (response.statusCode != 200 && response.statusCode != 201) {
       throw Exception(response);
     }
-    return [...response.data];
+    return [...response.data['results']];
   }
 
   Future<Map<String, dynamic>?> createOffer(FormData data) async {

@@ -4,7 +4,7 @@ import 'package:ekrilli_app/models/user.dart';
 class Offer {
   int? id;
   String? status;
-  int? totalPrice;
+  double? totalPrice;
   DateTime? startDate;
   DateTime? endDate;
   DateTime? createdAt;
@@ -25,9 +25,17 @@ class Offer {
     id = json['id'];
     status = json['status'];
     totalPrice = json['total_price'];
-    startDate = DateTime.parse(json['start_date']);
-    endDate = DateTime.parse(json['end_date']);
-    createdAt = DateTime.parse(json['created_at']);
+
+    if (json['start_date'] != null) {
+      startDate = DateTime.parse(json['start_date']);
+    }
+    if (json['end_date'] != null) {
+      endDate = DateTime.parse(json['end_date']);
+    }
+    if (json['created_at'] != null) {
+      createdAt = DateTime.parse(json['created_at']);
+    }
+
     house = House.fromJson(json['house']);
     user = User.fromJson(json['user']);
   }
