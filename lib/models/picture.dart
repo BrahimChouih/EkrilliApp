@@ -3,7 +3,7 @@ class Picture {
   String? picture;
   bool isUrl = true;
 
-  Picture({this.id, this.picture});
+  Picture({this.id, this.picture, this.isUrl = true});
 
   Picture.fromJson(Map<String, dynamic> json) {
     id = json['id'];

@@ -1,8 +1,11 @@
+import 'dart:io';
+import 'package:path/path.dart';
 import 'package:dio/dio.dart';
 import 'package:ekrilli_app/data/api/house_api.dart';
 import 'package:ekrilli_app/models/city.dart';
 import 'package:ekrilli_app/models/house.dart';
 
+import '../../models/picture.dart';
 import '../api/api.dart';
 
 class HouseRepository {
@@ -24,8 +27,23 @@ class HouseRepository {
   }
 
   Future<House?> createHouse(House house) async {
-    FormData data = FormData.fromMap(house.toJson());
-    Map<String, dynamic>? responseData = await houseAPI.createNewHouse(data);
+    Map<String, dynamic> data = house.toJson();
+    data['pictures'] = [];
+
+    for (int i = 0; i < house.pictures!.length; i++) {
+      if (!house.pictures![i].isUrl) {
+        MultipartFile multipartFile = await MultipartFile.fromFile(
+          house.pictures![i].picture!,
+          filename: basename(house.pictures![i].picture!),
+        );
+        data['pictures'].add({'picture': multipartFile});
+      }
+    }
+
+    FormData formdata = FormData.fromMap(data, ListFormat.multiCompatible);
+
+    Map<String, dynamic>? responseData =
+        await houseAPI.createNewHouse(formdata);
     if (responseData != null) {
       House responseOffer = House.fromJson(responseData);
       return responseOffer;
@@ -41,12 +59,37 @@ class HouseRepository {
   Future<House?> updateHouseInfo({
     required int houseId,
     required House house,
+    List<Picture> deletedPictures = const [],
   }) async {
-    FormData data = FormData.fromMap(house.toJson());
+    // FormData data = FormData.fromMap(house.toJson());
+
+    Map<String, dynamic> data = house.toJson();
+    data['pictures'] = [];
+
+    for (int i = 0; i < house.pictures!.length; i++) {
+      if (!house.pictures![i].isUrl) {
+        MultipartFile multipartFile = await MultipartFile.fromFile(
+          house.pictures![i].picture!,
+          filename: basename(house.pictures![i].picture!),
+        );
+        data['pictures'].add({'picture': multipartFile});
+      }
+    }
+
+    try {
+      for (int i = 0; i < deletedPictures.length; i++) {
+        await houseAPI.deletePicture(deletedPictures[i].id!);
+      }
+    } on DioError catch (e) {
+      print(e.response?.data);
+    }
+
+    FormData formdata = FormData.fromMap(data, ListFormat.multiCompatible);
+
     Map<String, dynamic>? responseData = await houseAPI.houseInfo(
       houseId,
       method: PATCH,
-      data: data,
+      data: formdata,
     );
     if (responseData != null) {
       House responseOffer = House.fromJson(responseData);

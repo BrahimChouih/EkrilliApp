@@ -34,9 +34,9 @@ void main() {
 
     ///// add favorite
     try {
-      Map<String, dynamic>? data = await favoriteAPI.deleteFavoriteItem(13);
-      print(data);
-      expect(data?.length != null, true);
+      Response? data = await favoriteAPI.deleteFavoriteItem(13);
+      print(data.statusCode);
+      expect(data.statusCode, anyOf(200, 201));
     } on DioError catch (e) {
       print(e.response?.data);
       expect(e.response?.statusCode, anyOf(404, 400));

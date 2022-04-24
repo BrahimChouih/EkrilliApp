@@ -1,7 +1,10 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:ekrilli_app/data/repositories/house_repository.dart';
 import 'package:ekrilli_app/models/city.dart';
 import 'package:ekrilli_app/models/house.dart';
+import 'package:ekrilli_app/models/picture.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -36,6 +39,7 @@ void main() {
   test('HouseRepository create house', () async {
     //// get instence
     HouseRepository houseRepository = HouseRepository();
+    File picture = File('test_resources/image.jpg');
 
     ///// create new house
     try {
@@ -46,6 +50,16 @@ void main() {
           title: 'test repository',
           houseType: 'VILLA',
           pricePerDay: 1324,
+          pictures: [
+            Picture(
+              isUrl: false,
+              picture: picture.path,
+            ),
+            Picture(
+              isUrl: false,
+              picture: picture.path,
+            ),
+          ],
         ),
       );
       print(data?.toJson());
@@ -59,12 +73,24 @@ void main() {
   test('HouseRepository update offer', () async {
     //// get instence
     HouseRepository houseRepository = HouseRepository();
+    File picture = File('test_resources/image.jpg');
 
     ///// update house info
     try {
       House? data = await houseRepository.updateHouseInfo(
-        houseId: 25,
-        house: House(title: 'test repository update'),
+        houseId: 38,
+        house: House(title: 'test repository update', pictures: [
+          Picture(
+            isUrl: false,
+            picture: picture.path,
+          ),
+        ]),
+        deletedPictures: [
+          Picture(id: 16),
+          Picture(id: 17),
+          Picture(id: 18),
+          Picture(id: 19),
+        ],
       );
       print(data?.toJson());
       expect(data != null, true);

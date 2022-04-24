@@ -103,4 +103,20 @@ void main() {
     print(data);
     expect(data != null, true);
   });
+
+  test('HouseAPI delete a picture', () async {
+    try {
+      //// get instence
+      HouseAPI houseAPI = HouseAPI();
+
+      //// delete a house
+      Response? data = await houseAPI.deletePicture(6);
+
+      print(data?.statusCode);
+      expect(data?.statusCode, anyOf(200, 201));
+    } on DioError catch (e) {
+      print(e.response?.data);
+      expect(e.response?.statusCode, anyOf(404, 400));
+    }
+  });
 }

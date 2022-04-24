@@ -130,4 +130,20 @@ class HouseAPI {
 
     return [...response.data];
   }
+
+  Future<Response?> deletePicture(int pictureId) async {
+    String apiUrl = '$api/api/houses/picture/$pictureId/';
+    Response? response = await dio
+        .delete(
+      apiUrl,
+      options: options,
+    )
+        .onError<DioError>(
+      (error, stackTrace) {
+        // print(error.response.data);
+        throw error;
+      },
+    );
+    return response;
+  }
 }

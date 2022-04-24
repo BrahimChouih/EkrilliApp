@@ -18,21 +18,22 @@ class House {
   City? city;
   List<Picture>? pictures = [];
 
-  House(
-      {this.id,
-      this.houseType,
-      this.title,
-      this.description,
-      this.pricePerDay,
-      this.locationLatitude,
-      this.locationLongitude,
-      this.isAvailable,
-      this.stars,
-      this.numReviews,
-      this.createdAt,
-      this.owner,
-      this.city,
-      this.pictures});
+  House({
+    this.id,
+    this.houseType,
+    this.title,
+    this.description,
+    this.pricePerDay,
+    this.locationLatitude,
+    this.locationLongitude,
+    this.isAvailable,
+    this.stars,
+    this.numReviews,
+    this.createdAt,
+    this.owner,
+    this.city,
+    this.pictures = const [],
+  });
 
   House.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -65,7 +66,10 @@ class House {
     data['stars'] = stars;
     data['numReviews'] = numReviews;
     data['city'] = city?.id;
-    data['pictures'] = pictures;
+    data['pictures'] = [];
+    pictures?.forEach((element) {
+      data['pictures'].add(element.picture);
+    });
     return data;
   }
 }
