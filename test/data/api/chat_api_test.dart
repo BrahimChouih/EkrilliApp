@@ -9,8 +9,11 @@ void main() {
 
     ///// get Conversation
     try {
-      List<Map<String, dynamic>>? data =
-          await chatAPI.getConversation(offerId: 1, page: 1);
+      List<Map<String, dynamic>>? data = await chatAPI.getConversation(
+        offerId: 1,
+        userId: 2,
+        page: 1,
+      );
       print('conversation.length: ${data?.length}');
       expect(data != null, true);
     } on DioError catch (e) {
@@ -27,6 +30,7 @@ void main() {
     try {
       Map<String, dynamic>? data = await chatAPI.sendMessage(
           offerId: 1,
+          userId: 2,
           data: FormData.fromMap({
             "message_type": "REQUEST",
             "content_type": "MESSAGE",
@@ -45,16 +49,20 @@ void main() {
 
     ///// send message
     try {
-      Map<String, dynamic>? data =
-          await chatAPI.sendMessage(offerId: 0, withOffer: true, data: {
-        "message_type": "REQUEST",
-        "content_type": "MESSAGE",
-        "message": "form test",
-        "offer": {
-          "total_price": 0.0,
-          "house": 1,
-        }
-      });
+      Map<String, dynamic>? data = await chatAPI.sendMessage(
+        offerId: 0,
+        userId: 2,
+        withOffer: true,
+        data: {
+          "message_type": "REQUEST",
+          "content_type": "MESSAGE",
+          "message": "form test",
+          "offer": {
+            "total_price": 0.0,
+            "house": 1,
+          }
+        },
+      );
       print(data);
       expect(data != null, true);
     } on DioError catch (e) {

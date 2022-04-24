@@ -10,11 +10,11 @@ void main() {
     //// get instence
     OfferRepository offerRepository = OfferRepository();
 
-    //// get all houses
+    //// get all offers
     List<Offer>? data = await offerRepository.getOffers();
     print('allOffers.length: ${data?.length}');
 
-    //// get houses by city
+    //// get offers by city
     data = await offerRepository.getOffers(cityId: 1);
     print('offersByCity.length: ${data?.length}');
   });
@@ -23,7 +23,7 @@ void main() {
     //// get instence
     OfferRepository offerRepository = OfferRepository();
 
-    ///// get house info
+    ///// get offer info
     try {
       Offer? data = await offerRepository.getOfferInfo(1);
       print(data?.toJson());
@@ -38,7 +38,7 @@ void main() {
     //// get instence
     OfferRepository offerRepository = OfferRepository();
 
-    ///// get house info
+    ///// create new offer
     try {
       Offer? data = await offerRepository.createOffer(
         Offer(
@@ -58,7 +58,7 @@ void main() {
     //// get instence
     OfferRepository offerRepository = OfferRepository();
 
-    ///// get house info
+    ///// update offer
     try {
       Offer? data = await offerRepository.updateOfferInfo(
         offerId: 25,
@@ -76,7 +76,7 @@ void main() {
     //// get instence
     OfferRepository offerRepository = OfferRepository();
 
-    ///// get house info
+    ///// change offer status to PUBLISHED
     try {
       Offer? data = await offerRepository.changeStatus(
         offerId: 25,

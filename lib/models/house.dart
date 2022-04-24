@@ -1,3 +1,4 @@
+import 'package:ekrilli_app/models/city.dart';
 import 'package:ekrilli_app/models/picture.dart';
 import 'package:ekrilli_app/models/user.dart';
 
@@ -14,7 +15,7 @@ class House {
   int? numReviews;
   DateTime? createdAt;
   User? owner;
-  String? city;
+  City? city;
   List<Picture>? pictures = [];
 
   House(
@@ -45,6 +46,7 @@ class House {
     stars = json['stars'];
     numReviews = json['numReviews'];
     createdAt = DateTime.parse(json['created_at']);
+    city = City.fromJson(json['city']);
     owner = User.fromJson(json['owner']);
     for (var item in (json['pictures'] as List)) {
       pictures?.add(Picture.fromJson(item));
@@ -62,7 +64,7 @@ class House {
     data['isAvailable'] = isAvailable;
     data['stars'] = stars;
     data['numReviews'] = numReviews;
-    data['city'] = city;
+    data['city'] = city?.id;
     data['pictures'] = pictures;
     return data;
   }
