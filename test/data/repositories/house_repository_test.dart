@@ -49,7 +49,6 @@ void main() {
           description: 'fdsfdsa',
           title: 'test repository',
           houseType: 'VILLA',
-          pricePerDay: 1324,
           pictures: [
             Picture(
               isUrl: false,

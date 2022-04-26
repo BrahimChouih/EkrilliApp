@@ -7,7 +7,10 @@ class House {
   String? houseType;
   String? title;
   String? description;
-  double? pricePerDay;
+  int? rooms;
+  int? bathrooms;
+  int? kitchens;
+  int? bedrooms;
   double? locationLatitude;
   double? locationLongitude;
   bool? isAvailable;
@@ -23,7 +26,10 @@ class House {
     this.houseType,
     this.title,
     this.description,
-    this.pricePerDay,
+    this.rooms,
+    this.bathrooms,
+    this.kitchens,
+    this.bedrooms,
     this.locationLatitude,
     this.locationLongitude,
     this.isAvailable,
@@ -40,7 +46,10 @@ class House {
     houseType = json['houseType'];
     title = json['title'];
     description = json['description'];
-    pricePerDay = json['price_per_day'];
+    rooms = json['rooms'];
+    bathrooms = json['bathrooms'];
+    kitchens = json['kitchens'];
+    bedrooms = json['bedrooms'];
     locationLatitude = json['location_latitude'];
     locationLongitude = json['location_longitude'];
     isAvailable = json['isAvailable'];
@@ -59,7 +68,10 @@ class House {
     data['houseType'] = houseType;
     data['title'] = title;
     data['description'] = description;
-    data['price_per_day'] = pricePerDay;
+    data['rooms'] = rooms;
+    data['bathrooms'] = bathrooms;
+    data['kitchens'] = kitchens;
+    data['bedrooms'] = bedrooms;
     data['location_latitude'] = locationLatitude;
     data['location_longitude'] = locationLongitude;
     data['isAvailable'] = isAvailable;
