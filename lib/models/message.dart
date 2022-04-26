@@ -1,4 +1,5 @@
 import 'package:ekrilli_app/models/offer.dart';
+import 'package:ekrilli_app/models/user.dart';
 
 class Message {
   int? id;
@@ -8,15 +9,18 @@ class Message {
   String? image;
   DateTime? createdAt;
   Offer? offer;
+  User? user;
 
-  Message(
-      {this.id,
-      this.messageType,
-      this.contentType,
-      this.message,
-      this.image,
-      this.createdAt,
-      this.offer});
+  Message({
+    this.id,
+    this.messageType,
+    this.contentType,
+    this.message,
+    this.image,
+    this.createdAt,
+    this.offer,
+    this.user,
+  });
 
   Message.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -26,6 +30,7 @@ class Message {
     image = json['image'];
     createdAt = DateTime.parse(json['created_at']);
     offer = Offer.fromJson(json['offer']);
+    user = User.fromJson(json['user']);
   }
 
   Map<String, dynamic> toJson() {
@@ -34,8 +39,8 @@ class Message {
     data['content_type'] = contentType;
     data['message'] = message;
     data['image'] = image;
-    data['created_at'] = createdAt?.toIso8601String();
     data['offer'] = offer?.id;
+    data['user'] = user?.id;
     return data;
   }
 }

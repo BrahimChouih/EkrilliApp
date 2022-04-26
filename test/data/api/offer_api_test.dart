@@ -1,26 +1,26 @@
 import 'package:dio/dio.dart';
-import 'package:ekrilli_app/api/api.dart';
-import 'package:ekrilli_app/api/api_offer.dart';
+import 'package:ekrilli_app/data/api/api.dart';
+import 'package:ekrilli_app/data/api/offer_api.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('APIOffer get offers', () async {
+  test('OfferAPI get offers', () async {
     //// get instence
-    APIOffer apiOffer = APIOffer();
+    OfferAPI offerAPI = OfferAPI();
 
     ///// get my offers
-    List<Map<String, dynamic>>? data = await apiOffer.getOffers();
+    List<Map<String, dynamic>>? data = await offerAPI.getOffers();
     print(data);
     expect(data?.length != null, true);
   });
 
-  test('APIOffer create new offers', () async {
+  test('OfferAPI create new offers', () async {
     //// get instence
-    APIOffer apiOffer = APIOffer();
+    OfferAPI offerAPI = OfferAPI();
 
     //// create new offer
     try {
-      Map<String, dynamic>? data = await apiOffer.createOffer(
+      Map<String, dynamic>? data = await offerAPI.createOffer(
         FormData.fromMap({
           "house": 9,
           "user": 2,
@@ -35,13 +35,13 @@ void main() {
     }
   });
 
-  test('APIOffer get offer info', () async {
+  test('OfferAPI get offer info', () async {
     //// get instence
-    APIOffer apiOffer = APIOffer();
+    OfferAPI offerAPI = OfferAPI();
 
     //// create new house
     try {
-      Map<String, dynamic>? data = await apiOffer.offerInfo(15);
+      Map<String, dynamic>? data = await offerAPI.offerInfo(15);
 
       print(data);
       expect(data != null, true);
@@ -51,13 +51,13 @@ void main() {
     }
   });
 
-  test('APIOffer update offer info', () async {
+  test('OfferAPI update offer info', () async {
     //// get instence
-    APIOffer apiOffer = APIOffer();
+    OfferAPI offerAPI = OfferAPI();
 
     //// create new house
     try {
-      Map<String, dynamic>? data = await apiOffer.offerInfo(
+      Map<String, dynamic>? data = await offerAPI.offerInfo(
         15,
         method: PATCH,
         data: FormData.fromMap({
@@ -73,13 +73,13 @@ void main() {
     }
   });
 
-  test('APIOffer change offer status', () async {
+  test('OfferAPI change offer status', () async {
     //// get instence
-    APIOffer apiOffer = APIOffer();
+    OfferAPI offerAPI = OfferAPI();
 
     //// create new house
     try {
-      Map<String, dynamic>? data = await apiOffer.changeStatus(
+      Map<String, dynamic>? data = await offerAPI.changeStatus(
         offerId: 15,
         status: 'WAITING_FOR_ACCEPTE',
       );

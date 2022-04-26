@@ -1,7 +1,7 @@
 import 'package:dio/dio.dart';
-import 'package:ekrilli_app/api/api.dart';
+import 'package:ekrilli_app/data/api/api.dart';
 
-class APIRating {
+class RatingAPI {
   Future<List<Map<String, dynamic>>?> getHouseRatings({
     required int houseId,
     int page = 1,

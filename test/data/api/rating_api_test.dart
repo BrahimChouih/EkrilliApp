@@ -1,15 +1,15 @@
 import 'package:dio/dio.dart';
-import 'package:ekrilli_app/api/api_rating.dart';
+import 'package:ekrilli_app/data/api/rating_api.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('APIRating get house ratings', () async {
+  test('RatingAPI get house ratings', () async {
     //// get instence
-    APIRating apiRating = APIRating();
+    RatingAPI ratingAPI = RatingAPI();
 
     ///// get house ratings
     try {
-      List<Map<String, dynamic>>? data = await apiRating.getHouseRatings(
+      List<Map<String, dynamic>>? data = await ratingAPI.getHouseRatings(
         houseId: 1,
         page: 1,
       );
@@ -21,13 +21,13 @@ void main() {
     }
   });
 
-  test('APIRating rating on house', () async {
+  test('RatingAPI rating on house', () async {
     //// get instence
-    APIRating apiRating = APIRating();
+    RatingAPI ratingAPI = RatingAPI();
 
     ///// create a rate
     try {
-      Map<String, dynamic>? data = await apiRating.ratingOnHouse(
+      Map<String, dynamic>? data = await ratingAPI.ratingOnHouse(
         data: FormData.fromMap({
           "comment": "greate",
           "stars": 5.0,

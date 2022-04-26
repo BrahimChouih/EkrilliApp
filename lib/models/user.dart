@@ -33,7 +33,9 @@ class User {
     location = json['location'];
     aboutMe = json['about_me'];
     userType = json['user_type'];
-    dateJoined = DateTime.parse(json['date_joined']);
+    if (json['date_joined'] != null) {
+      dateJoined = DateTime.parse(json['date_joined']);
+    }
   }
 
   Map<String, dynamic> toJson() {

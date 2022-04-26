@@ -3,8 +3,6 @@ import 'package:ekrilli_app/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-import 'controllers/auth_controller.dart';
-
 void main() {
   runApp(const MyApp());
 }

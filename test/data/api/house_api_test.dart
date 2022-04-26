@@ -1,19 +1,19 @@
 import 'package:dio/dio.dart';
-import 'package:ekrilli_app/api/api.dart';
-import 'package:ekrilli_app/api/api_house.dart';
+import 'package:ekrilli_app/data/api/api.dart';
+import 'package:ekrilli_app/data/api/house_api.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('APIHouse get houses', () async {
+  test('HouseAPI get houses', () async {
     //// get instence
-    APIHouse apiHouse = APIHouse();
+    HouseAPI houseAPI = HouseAPI();
     try {
       ///// get all houses
-      List<Map<String, dynamic>>? data = await apiHouse.getHouses();
+      List<Map<String, dynamic>>? data = await houseAPI.getHouses();
       expect(data?.length != null, true);
 
       //// get houses by city
-      data = await apiHouse.getHouses(cityId: 1);
+      data = await houseAPI.getHouses(cityId: 1);
       expect(data != null, true);
     } on DioError catch (e) {
       print(e.response?.data);
@@ -21,13 +21,13 @@ void main() {
     }
   });
 
-  test('APIHouse get house info', () async {
+  test('HouseAPI get house info', () async {
     //// get instence
-    APIHouse apiHouse = APIHouse();
+    HouseAPI houseAPI = HouseAPI();
 
     ///// get house info
     try {
-      Map<String, dynamic>? data = await apiHouse.houseInfo(1);
+      Map<String, dynamic>? data = await houseAPI.houseInfo(1);
       expect(data != null, true);
     } on DioError catch (e) {
       print(e.response?.data);
@@ -35,12 +35,12 @@ void main() {
     }
   });
 
-  test('APIHouse create new house', () async {
+  test('HouseAPI create new house', () async {
     //// get instence
-    APIHouse apiHouse = APIHouse();
+    HouseAPI houseAPI = HouseAPI();
 
     //// create new house
-    Map<String, dynamic>? data = await apiHouse.createNewHouse(
+    Map<String, dynamic>? data = await houseAPI.createNewHouse(
       FormData.fromMap({
         "houseType": "VILLA",
         "title": "House from test",
@@ -57,13 +57,13 @@ void main() {
     expect(data != null, true);
   });
 
-  test('APIHouse update house info', () async {
+  test('HouseAPI update house info', () async {
     //// get instence
-    APIHouse apiHouse = APIHouse();
+    HouseAPI houseAPI = HouseAPI();
 
     //// update house info
     try {
-      Map<String, dynamic>? data = await apiHouse.houseInfo(
+      Map<String, dynamic>? data = await houseAPI.houseInfo(
         20,
         method: PATCH,
         data: FormData.fromMap({"title": "Come to Titree testetste"}),
@@ -76,13 +76,13 @@ void main() {
     }
   });
 
-  test('APIHouse delete a house', () async {
+  test('HouseAPI delete a house', () async {
     //// get instence
-    APIHouse apiHouse = APIHouse();
+    HouseAPI houseAPI = HouseAPI();
 
     //// delete a house
     try {
-      Map<String, dynamic>? data = await apiHouse.houseInfo(
+      Map<String, dynamic>? data = await houseAPI.houseInfo(
         12,
         method: DELETE,
       );
@@ -93,14 +93,30 @@ void main() {
     }
   });
 
-  test('APICities', () async {
+  test('CitiesAPI', () async {
     //// get instence
-    APIHouse apiHouse = APIHouse();
+    HouseAPI houseAPI = HouseAPI();
 
     //// delete a house
-    List<Map<String, dynamic>>? data = await apiHouse.getCities();
+    List<Map<String, dynamic>>? data = await houseAPI.getCities();
 
     print(data);
     expect(data != null, true);
+  });
+
+  test('HouseAPI delete a picture', () async {
+    try {
+      //// get instence
+      HouseAPI houseAPI = HouseAPI();
+
+      //// delete a house
+      Response? data = await houseAPI.deletePicture(6);
+
+      print(data?.statusCode);
+      expect(data?.statusCode, anyOf(200, 201));
+    } on DioError catch (e) {
+      print(e.response?.data);
+      expect(e.response?.statusCode, anyOf(404, 400));
+    }
   });
 }

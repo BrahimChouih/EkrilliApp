@@ -1,16 +1,19 @@
 import 'package:dio/dio.dart';
-import 'package:ekrilli_app/api/api_chat.dart';
+import 'package:ekrilli_app/data/api/chat_api.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  test('APIChat get conversation', () async {
+  test('ChatAPI get conversation', () async {
     //// get instence
-    APIChat apiChat = APIChat();
+    ChatAPI chatAPI = ChatAPI();
 
     ///// get Conversation
     try {
-      List<Map<String, dynamic>>? data =
-          await apiChat.getConversation(offerId: 1, page: 1);
+      List<Map<String, dynamic>>? data = await chatAPI.getConversation(
+        offerId: 1,
+        userId: 2,
+        page: 1,
+      );
       print('conversation.length: ${data?.length}');
       expect(data != null, true);
     } on DioError catch (e) {
@@ -19,14 +22,15 @@ void main() {
     }
   });
 
-  test('APIChat send message', () async {
+  test('ChatAPI send message', () async {
     //// get instence
-    APIChat apiChat = APIChat();
+    ChatAPI chatAPI = ChatAPI();
 
     ///// send message
     try {
-      Map<String, dynamic>? data = await apiChat.sendMessage(
+      Map<String, dynamic>? data = await chatAPI.sendMessage(
           offerId: 1,
+          userId: 2,
           data: FormData.fromMap({
             "message_type": "REQUEST",
             "content_type": "MESSAGE",
@@ -39,22 +43,26 @@ void main() {
       expect(e.response?.statusCode, 404);
     }
   });
-  test('APIChat send message with new offer', () async {
+  test('ChatAPI send message with new offer', () async {
     //// get instence
-    APIChat apiChat = APIChat();
+    ChatAPI chatAPI = ChatAPI();
 
     ///// send message
     try {
-      Map<String, dynamic>? data =
-          await apiChat.sendMessage(offerId: 0, withOffer: true, data: {
-        "message_type": "REQUEST",
-        "content_type": "MESSAGE",
-        "message": "form test",
-        "offer": {
-          "total_price": 0.0,
-          "house": 1,
-        }
-      });
+      Map<String, dynamic>? data = await chatAPI.sendMessage(
+        offerId: 0,
+        userId: 2,
+        withOffer: true,
+        data: {
+          "message_type": "REQUEST",
+          "content_type": "MESSAGE",
+          "message": "form test",
+          "offer": {
+            "total_price": 0.0,
+            "house": 1,
+          }
+        },
+      );
       print(data);
       expect(data != null, true);
     } on DioError catch (e) {

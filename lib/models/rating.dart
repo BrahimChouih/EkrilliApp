@@ -3,7 +3,7 @@ import 'package:ekrilli_app/models/offer.dart';
 class Rating {
   int? id;
   String? comment;
-  int? stars;
+  double? stars;
   DateTime? createdAt;
   Offer? offer;
 

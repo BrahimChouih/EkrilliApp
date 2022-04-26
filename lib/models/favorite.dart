@@ -1,16 +1,19 @@
+import 'package:ekrilli_app/models/house.dart';
+import 'package:ekrilli_app/models/user.dart';
+
 class Favorite {
   int? id;
   DateTime? createdAt;
-  String? house;
-  String? user;
+  House? house;
+  User? user;
 
   Favorite({this.id, this.createdAt, this.house, this.user});
 
   Favorite.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     createdAt = DateTime.parse(json['created_at']);
-    house = json['house'];
-    user = json['user'];
+    house = House.fromJson(json['house']);
+    user = User.fromJson(json['user']);
   }
 
   Map<String, dynamic> toJson() {
