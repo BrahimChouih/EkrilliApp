@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../themes/primary_theme.dart';
+import '../utils/constants.dart';
 
 class SubmitButton extends StatelessWidget {
   const SubmitButton({
