@@ -12,6 +12,8 @@ class CustomTextField extends StatelessWidget {
     this.margin,
     this.obscureText = false,
     this.keyboardType,
+    this.onChange,
+    this.prefixIcon,
   }) : super(key: key);
 
   final String? hintText;
@@ -19,6 +21,8 @@ class CustomTextField extends StatelessWidget {
   final bool obscureText;
   final EdgeInsetsGeometry? margin;
   final TextInputType? keyboardType;
+  Function(String)? onChange;
+  Widget? prefixIcon;
 
   @override
   Widget build(BuildContext context) {
@@ -27,10 +31,12 @@ class CustomTextField extends StatelessWidget {
       child: TextField(
         textAlign: TextAlign.center,
         controller: controller,
+        onChanged: onChange,
         obscureText: obscureText,
         keyboardType: keyboardType,
         decoration: InputDecoration(
           hintText: hintText,
+          prefixIcon: prefixIcon,
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(15),
             borderSide: const BorderSide(

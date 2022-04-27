@@ -21,7 +21,7 @@ class CustomBottomNavigationBar extends StatelessWidget {
         onTap: navBarController.onChange,
         currentIndex: navBarController.currentPageIndex,
         type: BottomNavigationBarType.fixed,
-        backgroundColor: greyColor,
+        backgroundColor: backgroundColor,
         elevation: 0,
         items: [
           navBarItem(

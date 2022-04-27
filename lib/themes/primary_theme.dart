@@ -4,6 +4,10 @@ import '../utils/constants.dart';
 
 ThemeData primaryTheme = ThemeData.light().copyWith(
   primaryColor: primaryColor,
+  colorScheme: ColorScheme.light().copyWith(
+    primary: primaryColor,
+    secondary: primaryColor,
+  ),
   scaffoldBackgroundColor: backgroundColor,
   textTheme: ThemeData.light().textTheme.apply(
         fontFamily: 'VarelaRound',
