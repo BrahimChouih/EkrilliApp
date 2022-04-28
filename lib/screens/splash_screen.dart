@@ -20,16 +20,15 @@ class SplashScreen extends StatelessWidget {
     AuthController authController = Get.find<AuthController>();
     try {
       await authController.initData();
-      Get.to(
+      Get.offAll(
         () => !authController.isLogin ? AuthenticationScreen() : HomeScreen(),
       );
     } on DioError catch (e) {
-      String message = '';
+      String message = e.message.toString();
       if (e.message == 'Http status error [401]') {
         message = e.message;
         authController.signOut();
-      }
-      if (e.error.runtimeType == SocketException) {
+      } else if (e.error.runtimeType == SocketException) {
         message = (e.error as SocketException).message;
       }
 

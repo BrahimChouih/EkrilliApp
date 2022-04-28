@@ -2,6 +2,8 @@ import 'package:ekrilli_app/models/city.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../utils/constants.dart';
+
 class CityWidget extends StatelessWidget {
   const CityWidget({
     Key? key,
@@ -22,7 +24,7 @@ class CityWidget extends StatelessWidget {
       width: width,
       margin: margin ?? const EdgeInsets.symmetric(horizontal: 10),
       decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: borderRadius,
         color: Colors.black,
         image: DecorationImage(
           fit: BoxFit.cover,

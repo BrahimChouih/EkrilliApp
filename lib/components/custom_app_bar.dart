@@ -23,9 +23,10 @@ class CustomAppBar extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
+    return Container(
       height: height,
       width: width,
+      margin: const EdgeInsets.symmetric(vertical: 10),
       child: Stack(
         children: [
           Positioned(
@@ -33,7 +34,10 @@ class CustomAppBar extends StatelessWidget {
             child: leading ??
                 (backButton
                     ? InkWell(
-                        child: const Icon(Icons.arrow_back_ios),
+                        child: const Icon(
+                          Icons.arrow_back_ios,
+                          color: Colors.black54,
+                        ),
                         onTap: () => Get.back(),
                       )
                     : const SizedBox()),
@@ -43,7 +47,6 @@ class CustomAppBar extends StatelessWidget {
               title,
               style: const TextStyle(
                 fontSize: 18,
-                fontFamily: "SFProRounded",
                 fontWeight: FontWeight.bold,
               ),
             ),

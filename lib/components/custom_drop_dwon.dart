@@ -26,7 +26,7 @@ class CustomDropDown<T> extends StatelessWidget {
       margin: margin ?? EdgeInsets.symmetric(vertical: Get.height * 0.01),
       decoration: BoxDecoration(
         color: Colors.transparent,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: borderRadius,
         border: Border.all(color: primaryColor),
       ),
       padding: const EdgeInsets.symmetric(horizontal: 15),
@@ -60,7 +60,7 @@ class CustomDropDown<T> extends StatelessWidget {
                 )
                 .toList(),
             alignment: Alignment.center,
-            borderRadius: BorderRadius.circular(15),
+            borderRadius: borderRadius,
             underline: const SizedBox(),
             dropdownColor: backgroundColor,
             isExpanded: true,

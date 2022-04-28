@@ -9,10 +9,10 @@ import '../screens/home/home_tap.dart';
 
 class NavBarController extends GetxController {
   List<Widget> pages = [
-    const HomeTap(),
-    const ChatTap(),
-    const FavoriteTap(),
-    const ProfileTap(),
+    HomeTap(),
+    ChatTap(),
+    FavoriteTap(),
+    ProfileTap(),
   ];
 
   int currentPageIndex = 0;

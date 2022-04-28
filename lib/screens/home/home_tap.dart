@@ -2,8 +2,10 @@ import 'dart:ui';
 
 import 'package:ekrilli_app/components/city_widget.dart';
 import 'package:ekrilli_app/components/custom_text_field.dart';
+import 'package:ekrilli_app/components/empty_screen.dart';
 import 'package:ekrilli_app/components/house_widget.dart';
 import 'package:ekrilli_app/components/title_widget.dart';
+import 'package:ekrilli_app/controllers/offers_controller.dart';
 import 'package:ekrilli_app/data/api/api.dart';
 import 'package:ekrilli_app/models/city.dart';
 import 'package:ekrilli_app/models/house.dart';
@@ -15,8 +17,8 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
 class HomeTap extends StatelessWidget {
-  const HomeTap({Key? key}) : super(key: key);
-
+  HomeTap({Key? key}) : super(key: key);
+  OfferController offerController = Get.put(OfferController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,9 +31,10 @@ class HomeTap extends StatelessWidget {
               CustomTextField(
                 hintText: 'Search',
                 margin: EdgeInsets.symmetric(horizontal: Get.width * 0.05),
+                borderColor: deepPrimaryColor,
                 prefixIcon: const Icon(
                   FontAwesomeIcons.magnifyingGlass,
-                  color: primaryColor,
+                  color: deepPrimaryColor,
                 ),
               ),
               TitleWidget(
@@ -47,9 +50,11 @@ class HomeTap extends StatelessWidget {
                   itemCount: 10,
                   itemBuilder: (_, index) => CityWidget(
                     city: City(
-                      name: 'Oran',
+                      name: 'Media',
                       picture:
-                          '$api/media/Cities/Oran_2022-04-01-074238.694908.jpg',
+                          '$api/media/Cities/Media_2022-03-29-105751.189979.jpg',
+                      // picture:
+                      //     '$api/media/Cities/Oran_2022-04-01-074238.694908.jpg',
                     ),
                     margin: const EdgeInsets.symmetric(horizontal: 10).copyWith(
                       left: index == 0 ? Get.width * 0.05 : null,
@@ -68,32 +73,19 @@ class HomeTap extends StatelessWidget {
                   horizontal: Get.width * 0.05,
                 ),
               ),
-              ListView.builder(
-                itemCount: 10,
-                shrinkWrap: true,
-                primary: false,
-                itemBuilder: (_, index) => HouseWidget(
-                  offer: Offer(
-                    house: House(
-                      title: 'Come to titree',
-                      location: '3ème Boulevard Péripherique',
-                      city: City(name: 'Oran'),
-                      rooms: 4,
-                      kitchens: 1,
-                      bathrooms: 1,
-                      bedrooms: 1,
-                      stars: 23,
-                      numReviews: 5,
-                      pictures: [
-                        Picture(
-                          picture:
-                              '$api/media/houses/Come_to_Titree_2022-03-29-105836.813969.jpg',
-                        ),
-                      ],
+              offerController.isEmpty
+                  ? const EmptyScreen(
+                      title: 'No Houses yet',
+                      icon: FontAwesomeIcons.comments,
+                    )
+                  : ListView.builder(
+                      itemCount: 10,
+                      shrinkWrap: true,
+                      primary: false,
+                      itemBuilder: (_, index) => HouseWidget(
+                        offer: offerController.offers.first..id = index,
+                      ),
                     ),
-                  ),
-                ),
-              ),
             ],
           ),
         ),

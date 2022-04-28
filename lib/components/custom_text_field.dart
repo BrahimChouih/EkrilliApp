@@ -14,6 +14,7 @@ class CustomTextField extends StatelessWidget {
     this.keyboardType,
     this.onChange,
     this.prefixIcon,
+    this.borderColor = primaryColor,
   }) : super(key: key);
 
   final String? hintText;
@@ -23,6 +24,7 @@ class CustomTextField extends StatelessWidget {
   final TextInputType? keyboardType;
   Function(String)? onChange;
   Widget? prefixIcon;
+  final Color borderColor;
 
   @override
   Widget build(BuildContext context) {
@@ -38,22 +40,22 @@ class CustomTextField extends StatelessWidget {
           hintText: hintText,
           prefixIcon: prefixIcon,
           focusedBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: const BorderSide(
-              color: primaryColor,
+            borderRadius: borderRadius,
+            borderSide: BorderSide(
+              color: borderColor,
               width: 1.5,
             ),
           ),
           enabledBorder: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: const BorderSide(
-              color: primaryColor,
+            borderRadius: borderRadius,
+            borderSide: BorderSide(
+              color: borderColor,
             ),
           ),
           border: OutlineInputBorder(
-            borderRadius: BorderRadius.circular(15),
-            borderSide: const BorderSide(
-              color: primaryColor,
+            borderRadius: borderRadius,
+            borderSide: BorderSide(
+              color: borderColor,
             ),
           ),
         ),

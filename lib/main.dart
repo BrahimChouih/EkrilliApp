@@ -15,6 +15,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       theme: primaryTheme,
       home: SplashScreen(),
+      // defaultTransition: Transition.rightToLeft,
     );
   }
 }
