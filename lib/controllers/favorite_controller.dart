@@ -14,7 +14,10 @@ class FavoriteController extends GetxController with FavoriteRepository {
     Favorite(
       offer: Offer(
         house: House(
-          owner: User(username: 'Brahim CHOUIH'),
+          owner: User(
+            username: 'Brahim CHOUIH',
+            picture: '$api/media/users/5_pictuer_2022-04-29-150027.864713.png',
+          ),
           title: 'Come to titree',
           location: '3ème Boulevard Péripherique',
           city: City(name: 'Oran'),

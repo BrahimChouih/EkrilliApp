@@ -1,3 +1,4 @@
+import 'package:ekrilli_app/screens/home_screen.dart';
 import 'package:ekrilli_app/screens/splash_screen.dart';
 import 'package:ekrilli_app/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
@@ -15,7 +16,7 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       theme: primaryTheme,
       home: SplashScreen(),
-      // defaultTransition: Transition.rightToLeft,
+      // home: HomeScreen(),
     );
   }
 }

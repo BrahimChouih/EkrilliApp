@@ -6,10 +6,12 @@ class TitleWidget extends StatelessWidget {
     Key? key,
     required this.title,
     this.margin,
+    this.textStyle,
   }) : super(key: key);
 
   final String title;
   final EdgeInsets? margin;
+  final TextStyle? textStyle;
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +19,7 @@ class TitleWidget extends StatelessWidget {
       margin: margin ?? EdgeInsets.symmetric(horizontal: Get.width * 0.05),
       child: Text(
         title,
-        style: Get.theme.textTheme.headline6,
+        style: textStyle ?? Get.textTheme.headline6,
       ),
     );
   }

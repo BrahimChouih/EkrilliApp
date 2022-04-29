@@ -11,7 +11,7 @@ class PicturesSlider extends StatelessWidget {
     required this.pictures,
   }) : super(key: key);
   List<Picture> pictures;
-
+  RxInt currentIndex = 0.obs;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -31,20 +31,32 @@ class PicturesSlider extends StatelessWidget {
             tag: 'PictureSlider',
             child: CarouselSlider.builder(
               itemCount: pictures.length,
-              itemBuilder: (_, index, index2) => Container(
-                alignment: Alignment.center,
-                decoration: BoxDecoration(
-                  image: DecorationImage(
-                    image: NetworkImage(
-                      pictures[index].picture!,
+              itemBuilder: (_, index, index2) => Obx(
+                () => AnimatedContainer(
+                  duration: const Duration(milliseconds: 200),
+                  margin: EdgeInsets.symmetric(
+                    horizontal: 5,
+                    vertical: index != currentIndex.value ? 10 : 0,
+                  ),
+                  alignment: Alignment.center,
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    image: DecorationImage(
+                      image: NetworkImage(
+                        pictures[index].picture!,
+                      ),
+                      fit: BoxFit.cover,
                     ),
-                    fit: BoxFit.cover,
                   ),
                 ),
               ),
               options: CarouselOptions(
                 autoPlay: pictures.length > 1,
+                onPageChanged: (index, carouselPageChangedReason) {
+                  currentIndex.value = index;
+                },
                 height: picturesHeight,
+                viewportFraction: 0.88,
                 enableInfiniteScroll: pictures.length > 1,
               ),
             ),

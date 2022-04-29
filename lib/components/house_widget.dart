@@ -1,6 +1,7 @@
 import 'dart:ui';
 
-import 'package:ekrilli_app/components/rating_widget.dart';
+import 'package:ekrilli_app/components/stars_widget.dart';
+import 'package:ekrilli_app/components/rooms_number_widget.dart';
 import 'package:ekrilli_app/models/offer.dart';
 import 'package:ekrilli_app/screens/house_details_screen.dart';
 import 'package:flutter/material.dart';
@@ -91,24 +92,12 @@ class HouseWidget extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          rooms(
-                            rooms: offer.house?.kitchens ?? 1,
-                            icon: FontAwesomeIcons.kitchenSet,
-                          ),
-                          rooms(
-                            rooms: offer.house?.bathrooms ?? 1,
-                            icon: FontAwesomeIcons.toilet,
-                          ),
-                          rooms(
-                            rooms: offer.house?.bedrooms ?? 1,
-                            icon: FontAwesomeIcons.bed,
-                          ),
-                        ],
+                      RoomsNumberWidget(
+                        kitchens: offer.house?.kitchens ?? 1,
+                        bathrooms: offer.house?.bathrooms ?? 1,
+                        bedrooms: offer.house?.bedrooms ?? 1,
                       ),
-                      RatingWidget(
+                      StarsWidget(
                         stars: offer.house?.stars ?? 0,
                         numReviews: offer.house?.numReviews ?? 0,
                       ),
@@ -139,26 +128,6 @@ class HouseWidget extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  Row rooms({required int rooms, required IconData icon}) {
-    return Row(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: [
-        FaIcon(
-          icon,
-          color: Colors.white,
-          size: 20,
-        ),
-        const SizedBox(width: 15),
-        Text(
-          rooms.toString(),
-          style: Get.theme.textTheme.headline6?.copyWith(
-            color: Colors.white,
-          ),
-        ),
-      ],
     );
   }
 }

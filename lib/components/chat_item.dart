@@ -1,3 +1,4 @@
+import 'package:ekrilli_app/components/stars_widget.dart';
 import 'package:ekrilli_app/models/offer.dart';
 import 'package:ekrilli_app/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -34,20 +35,10 @@ class ChatItem extends StatelessWidget {
             offer.house?.pictures.first.picture ?? '',
           ),
         ),
-        trailing: Row(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Text(
-              '(' +
-                  ((offer.house?.stars ?? 0) / (offer.house?.numReviews ?? 1))
-                      .toString() +
-                  ')',
-            ),
-            const FaIcon(
-              Icons.star_rounded,
-              color: Colors.amber,
-            ),
-          ],
+        trailing: StarsWidget(
+          stars: offer.house?.stars ?? 0,
+          numReviews: offer.house?.numReviews ?? 1,
+          type: StarsWidgetType.digital,
         ),
         subtitle: Row(
           mainAxisSize: MainAxisSize.min,
