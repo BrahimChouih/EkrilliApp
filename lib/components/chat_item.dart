@@ -1,8 +1,10 @@
 import 'package:ekrilli_app/components/stars_widget.dart';
 import 'package:ekrilli_app/models/offer.dart';
+import 'package:ekrilli_app/screens/chatting_screen.dart';
 import 'package:ekrilli_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:get/get.dart';
 
 class ChatItem extends StatelessWidget {
   const ChatItem({Key? key, required this.offer}) : super(key: key);
@@ -28,6 +30,9 @@ class ChatItem extends StatelessWidget {
       ),
       child: ListTile(
         title: Text(offer.house?.title ?? ''),
+        onTap: () => Get.to(
+          () => ChattingScreen(offer: offer),
+        ),
         leading: CircleAvatar(
           radius: 30,
           backgroundColor: Colors.white,
