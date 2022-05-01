@@ -1,6 +1,8 @@
 import 'package:ekrilli_app/models/offer.dart';
 import 'package:ekrilli_app/models/user.dart';
 
+import '../data/api/api.dart';
+
 class Message {
   int? id;
   String? messageType;
@@ -27,7 +29,7 @@ class Message {
     messageType = json['message_type'];
     contentType = json['content_type'];
     message = json['message'];
-    image = json['image'];
+    image = !json['image'].contains(api) ? api + json['image'] : json['image'];
     createdAt = DateTime.parse(json['created_at']);
     offer = Offer.fromJson(json['offer']);
     user = User.fromJson(json['user']);

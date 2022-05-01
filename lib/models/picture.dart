@@ -1,3 +1,5 @@
+import '../data/api/api.dart';
+
 class Picture {
   int? id;
   String? picture;
@@ -7,6 +9,8 @@ class Picture {
 
   Picture.fromJson(Map<String, dynamic> json) {
     id = json['id'];
-    picture = json['picture'];
+    picture = !json['picture'].contains(api)
+        ? api + json['picture']
+        : json['picture'];
   }
 }

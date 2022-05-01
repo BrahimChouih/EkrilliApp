@@ -1,3 +1,5 @@
+import '../data/api/api.dart';
+
 class City {
   int? id;
   String? name;
@@ -8,7 +10,9 @@ class City {
   City.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    picture = json['picture'];
+    picture = !json['picture'].contains(api)
+        ? api + json['picture']
+        : json['picture'];
   }
 
   Map<String, dynamic> toJson() {
