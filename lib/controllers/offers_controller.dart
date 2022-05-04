@@ -11,9 +11,12 @@ import '../models/picture.dart';
 class OfferController extends GetxController with OfferRepository {
   List<Offer> offers = [
     Offer(
+      pricePerDay: 3000,
       house: House(
         title: 'Come to titree',
         location: '3ème Boulevard Péripherique',
+        locationLatitude: 36.26417,
+        locationLongitude: 2.75393,
         city: City(name: 'Oran'),
         owner: User(
           username: 'Brahim CHOUIH',

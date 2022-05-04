@@ -24,11 +24,15 @@ class ProfileTap extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            SvgPicture.asset(
-              'assets/vectors/profile.svg',
-              color: Colors.white.withOpacity(0.7),
-              colorBlendMode: BlendMode.dstATop,
-            ),
+            // Positioned(
+            //   left: -Get.width * 0.1,
+            //   child: SvgPicture.asset(
+            //     'assets/vectors/profile.svg',
+            //     // 'assets/vectors/profile2.svg',
+            //     // color: Colors.white.withOpacity(0.7),
+            //     // colorBlendMode: BlendMode.dstATop,
+            //   ),
+            // ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: Get.width * 0.03),
               child: Column(
@@ -88,8 +92,10 @@ class ProfileTap extends StatelessWidget {
                         ),
                         SubmitButton(
                           text: 'Sign Out',
+                          textColor: Colors.black.withOpacity(0.75),
+                          fontWeight: FontWeight.bold,
                           color: deepPrimaryColor.withOpacity(0.2),
-                          margin: EdgeInsets.symmetric(vertical: 15),
+                          margin: const EdgeInsets.symmetric(vertical: 15),
                           onTap: () async {
                             await authController.signOut();
                             Get.offAll(SplashScreen());
@@ -113,17 +119,15 @@ class ProfileTap extends StatelessWidget {
       mainAxisSize: MainAxisSize.min,
       children: [
         CircleAvatar(
-          backgroundColor: deepPrimaryColor.withOpacity(0.2),
+          backgroundColor: Colors.transparent,
           backgroundImage: authController.currentUser?.picture != null
               ? NetworkImage(
                   authController.currentUser?.picture ?? '',
                 )
               : null,
           child: authController.currentUser?.picture == null
-              ? const Icon(
-                  FontAwesomeIcons.userLarge,
-                  color: Colors.white,
-                  size: 35,
+              ? SvgPicture.asset(
+                  'assets/vectors/person.svg',
                 )
               : null,
           radius: Get.width * 0.1,
@@ -133,10 +137,14 @@ class ProfileTap extends StatelessWidget {
           authController.currentUser?.username?.toUpperCase() ?? '',
           style: Get.textTheme.headline6?.copyWith(
             fontWeight: FontWeight.bold,
+            color: Colors.black.withOpacity(0.75),
           ),
         ),
         Text(
           authController.currentUser?.userType?.toUpperCase() ?? '',
+          style: TextStyle(
+            color: Colors.black.withOpacity(0.75),
+          ),
         ),
       ],
     );

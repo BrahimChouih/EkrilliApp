@@ -46,17 +46,19 @@ class ProfielTapTile extends StatelessWidget {
               child: Row(
                 children: [
                   Icon(
-                    icon,
-                    color: Colors.white,
-                    size: 30,
+                    icon, size: 30,
+                    color: Colors.black.withOpacity(0.75),
+                    // color: Colors.white,
                   ),
                   SizedBox(width: Get.width * 0.07),
                   Column(
                     children: [
                       Text(
                         title,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                          color: Colors.black.withOpacity(0.75),
+                          // color: Colors.white,
                         ),
                       ),
                       subtitle != null

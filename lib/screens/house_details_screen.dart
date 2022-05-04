@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:ekrilli_app/components/description_viewer.dart';
+import 'package:ekrilli_app/components/map_apps.dart';
 import 'package:ekrilli_app/components/pictures_slider.dart';
 import 'package:ekrilli_app/components/rating_widget.dart';
 import 'package:ekrilli_app/components/stars_widget.dart';
@@ -8,9 +9,11 @@ import 'package:ekrilli_app/components/rooms_number_widget.dart';
 import 'package:ekrilli_app/components/submit_button.dart';
 import 'package:ekrilli_app/components/title_widget.dart';
 import 'package:ekrilli_app/models/offer.dart';
+import 'package:ekrilli_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:map_launcher/map_launcher.dart';
 
 import '../components/custom_app_bar.dart';
 
@@ -105,6 +108,64 @@ class HouseDetailsScreen extends StatelessWidget {
                             color: Colors.black54,
                             size: 25,
                             textStyle: Get.theme.textTheme.headline5,
+                          ),
+                        ),
+                        Container(
+                          margin: margin,
+                          child: Row(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              InkWell(
+                                splashColor: Colors.transparent,
+                                highlightColor: Colors.transparent,
+                                onTap: () {
+                                  if (offer.house!.locationLatitude != null &&
+                                      offer.house!.locationLongitude != null) {
+                                    Get.bottomSheet(
+                                      MapApps(
+                                        coords: Coords(
+                                          offer.house!.locationLatitude!,
+                                          offer.house!.locationLongitude!,
+                                        ),
+                                      ),
+                                      elevation: 0,
+                                      barrierColor: Colors.transparent,
+                                    );
+                                  }
+                                },
+                                child: Row(
+                                  children: const [
+                                    FaIcon(
+                                      FontAwesomeIcons.locationDot,
+                                      color: primaryColor,
+                                    ),
+                                    SizedBox(width: 5),
+                                    Text(
+                                      'Open Map',
+                                      style: TextStyle(
+                                        color: primaryColor,
+                                        fontSize: 16,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              const Spacer(),
+                              Text(
+                                offer.pricePerDay.toString(),
+                                style: const TextStyle(
+                                  fontSize: 18,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                              const Text(
+                                'DA/Day',
+                                style: TextStyle(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
                         TitleWidget(

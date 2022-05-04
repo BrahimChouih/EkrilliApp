@@ -13,6 +13,7 @@ class SubmitButton extends StatelessWidget {
     this.margin,
     this.color,
     this.textColor,
+    this.fontWeight,
   }) : super(key: key);
 
   final Function()? onTap;
@@ -21,6 +22,7 @@ class SubmitButton extends StatelessWidget {
   final EdgeInsets? margin;
   final Color? color;
   final Color? textColor;
+  final FontWeight? fontWeight;
 
   @override
   Widget build(BuildContext context) {
@@ -44,6 +46,7 @@ class SubmitButton extends StatelessWidget {
           style: TextStyle(
             color: textColor ?? Colors.white,
             fontSize: 18,
+            fontWeight: fontWeight,
           ),
         ),
       ),

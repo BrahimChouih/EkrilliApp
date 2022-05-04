@@ -37,14 +37,15 @@ class ProfileTapItem extends StatelessWidget {
             Icon(
               icon,
               size: 30,
-              color: Colors.white,
+              color: Colors.black.withOpacity(0.75),
               // color: Colors.white,
             ),
             const SizedBox(height: 5),
             Text(
               title,
-              style: const TextStyle(
-                color: Colors.white,
+              style: TextStyle(
+                fontWeight: FontWeight.bold,
+                color: Colors.black.withOpacity(0.75),
                 // color: Colors.white,
               ),
             ),
