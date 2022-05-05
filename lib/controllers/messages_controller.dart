@@ -30,11 +30,19 @@ class MessagesController extends GetxController with ChatRepository {
           pictures: [
             Picture(
               picture:
-                  '$api/media/houses/Come_to_Titree_2022-03-29-105846.882861.jpg',
+                  '$api/media/houses/Come_to_Titree_2022-03-29-105836.813969.jpg',
+
+              /// firebase
+              // picture:
+              //     'https://firebasestorage.googleapis.com/v0/b/fir-project-be9a2.appspot.com/o/Come_to_Titree_2022-03-29-105836.813969.jpg?alt=media&token=07e17d5d-c5c5-4041-955c-5f96e38ce7f8',
             ),
             Picture(
               picture:
-                  '$api/media/houses/Come_to_Titree_2022-03-29-105836.813969.jpg',
+                  '$api/media/houses/Come_to_Titree_2022-03-29-105846.882861.jpg',
+
+              /// firebase
+              // picture:
+              //     'https://firebasestorage.googleapis.com/v0/b/fir-project-be9a2.appspot.com/o/Come_to_Titree_2022-03-29-105846.882861.jpg?alt=media&token=91d77bf7-f999-4303-a379-e122794d857c',
             ),
           ],
         ),

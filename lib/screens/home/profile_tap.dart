@@ -1,8 +1,8 @@
 import 'dart:ui';
-
 import 'package:ekrilli_app/components/custom_app_bar.dart';
 import 'package:ekrilli_app/components/submit_button.dart';
 import 'package:ekrilli_app/controllers/auth_controller.dart';
+import 'package:ekrilli_app/screens/my_houses_screen.dart';
 import 'package:ekrilli_app/screens/splash_screen.dart';
 import 'package:ekrilli_app/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -51,7 +51,7 @@ class ProfileTap extends StatelessWidget {
                         ProfileTapItem(
                           icon: FontAwesomeIcons.house,
                           title: 'My houses',
-                          onTap: () {},
+                          onTap: () => Get.to(() => MyHousesScreen()),
                         ),
                         ProfileTapItem(
                           icon: FontAwesomeIcons.clockRotateLeft,

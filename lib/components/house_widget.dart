@@ -2,6 +2,7 @@ import 'dart:ui';
 
 import 'package:ekrilli_app/components/stars_widget.dart';
 import 'package:ekrilli_app/components/rooms_number_widget.dart';
+import 'package:ekrilli_app/models/house.dart';
 import 'package:ekrilli_app/models/offer.dart';
 import 'package:ekrilli_app/screens/house_details_screen.dart';
 import 'package:flutter/material.dart';
@@ -14,11 +15,15 @@ import '../utils/constants.dart';
 class HouseWidget extends StatelessWidget {
   const HouseWidget({
     Key? key,
-    required this.offer,
+    this.offer,
+    this.house,
     this.margin,
     this.height,
+    this.onTap,
   }) : super(key: key);
-  final Offer offer;
+  final Offer? offer;
+  final House? house;
+  final Function()? onTap;
   final EdgeInsets? margin;
   final double? height;
 
@@ -27,13 +32,16 @@ class HouseWidget extends StatelessWidget {
     return InkWell(
       splashColor: Colors.transparent,
       highlightColor: Colors.transparent,
-      onTap: () {
-        Get.to(
-          () => HouseDetailsScreen(
-            offer: offer,
-          ),
-        );
-      },
+      onTap: onTap ??
+          () {
+            if (offer != null) {
+              Get.to(
+                () => HouseDetailsScreen(
+                  offer: offer!,
+                ),
+              );
+            }
+          },
       child: Container(
         margin: margin ??
             EdgeInsets.symmetric(
@@ -58,12 +66,9 @@ class HouseWidget extends StatelessWidget {
               height: height ?? Get.height * 0.27,
               child: ClipRRect(
                 borderRadius: borderRadius,
-                child: Hero(
-                  tag: offer.id!,
-                  child: Image.network(
-                    offer.house?.pictures.first.picture ?? '',
-                    fit: BoxFit.cover,
-                  ),
+                child: Image.network(
+                  (offer?.house ?? house)?.pictures.first.picture ?? '',
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -93,13 +98,13 @@ class HouseWidget extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       RoomsNumberWidget(
-                        kitchens: offer.house?.kitchens ?? 1,
-                        bathrooms: offer.house?.bathrooms ?? 1,
-                        bedrooms: offer.house?.bedrooms ?? 1,
+                        kitchens: (offer?.house ?? house)?.kitchens ?? 1,
+                        bathrooms: (offer?.house ?? house)?.bathrooms ?? 1,
+                        bedrooms: (offer?.house ?? house)?.bedrooms ?? 1,
                       ),
                       StarsWidget(
-                        stars: offer.house?.stars ?? 0,
-                        numReviews: offer.house?.numReviews ?? 0,
+                        stars: (offer?.house ?? house)?.stars ?? 0,
+                        numReviews: (offer?.house ?? house)?.numReviews ?? 0,
                       ),
                       Row(
                         children: [
@@ -110,9 +115,9 @@ class HouseWidget extends StatelessWidget {
                           ),
                           const SizedBox(width: 10),
                           Text(
-                            (offer.house!.location ?? '') +
+                            ((offer?.house ?? house)!.location ?? '') +
                                 ', ' +
-                                (offer.house?.city?.name ?? ''),
+                                ((offer?.house ?? house)?.city?.name ?? ''),
                             overflow: TextOverflow.ellipsis,
                             style: const TextStyle(
                               color: Colors.white,
