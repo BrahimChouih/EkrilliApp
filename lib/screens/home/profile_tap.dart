@@ -35,73 +35,85 @@ class ProfileTap extends StatelessWidget {
             // ),
             Container(
               padding: EdgeInsets.symmetric(horizontal: Get.width * 0.03),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Spacer(),
-                  section(
-                    child: userInfo(),
-                    width: Get.width,
-                  ),
-                  const Spacer(),
-                  section(
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        ProfileTapItem(
-                          icon: FontAwesomeIcons.house,
-                          title: 'My houses',
-                          onTap: () => Get.to(() => MyHousesScreen()),
-                        ),
-                        ProfileTapItem(
-                          icon: FontAwesomeIcons.clockRotateLeft,
-                          title: 'History',
-                          onTap: () {},
-                        ),
-                        ProfileTapItem(
-                          icon: FontAwesomeIcons.house,
-                          title: 'Rented',
-                          onTap: () {},
-                        ),
-                      ],
-                    ),
-                  ),
-                  SizedBox(height: Get.height * 0.02),
-                  section(
-                    padding: EdgeInsets.symmetric(
-                      horizontal: Get.width * 0.02,
-                      vertical: 15,
-                    ),
+              child: CustomScrollView(
+                slivers: [
+                  SliverFillRemaining(
+                    hasScrollBody: false,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
-                        ProfielTapTile(
-                          title: 'Settings',
-                          icon: FontAwesomeIcons.gears,
-                          onTap: () {},
+                        const Spacer(),
+                        section(
+                          child: userInfo(),
+                          width: Get.width,
                         ),
-                        ProfielTapTile(
-                          title: 'Privacy Policy',
-                          icon: FontAwesomeIcons.shield,
-                          onTap: () {},
+                        const Spacer(),
+                        section(
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              ProfileTapItem(
+                                icon: FontAwesomeIcons.house,
+                                title: 'My houses',
+                                onTap: () => Get.to(() => MyHousesScreen()),
+                              ),
+                              ProfileTapItem(
+                                icon: FontAwesomeIcons.clockRotateLeft,
+                                title: 'History',
+                                onTap: () {},
+                              ),
+                              ProfileTapItem(
+                                icon: FontAwesomeIcons.house,
+                                title: 'Rented',
+                                onTap: () {},
+                              ),
+                            ],
+                          ),
                         ),
-                        ProfielTapTile(
-                          title: 'About Us',
-                          icon: FontAwesomeIcons.circleInfo,
-                          onTap: () {},
+                        section(
+                          margin: EdgeInsets.only(top: Get.height * 0.02),
+                          padding: EdgeInsets.symmetric(
+                            horizontal: Get.width * 0.02,
+                            vertical: Get.height * 0.02,
+                          ),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              ProfielTapTile(
+                                title: 'Settings',
+                                icon: FontAwesomeIcons.gears,
+                                onTap: () {},
+                              ),
+                              ProfielTapTile(
+                                title: 'Privacy Policy',
+                                icon: FontAwesomeIcons.shield,
+                                onTap: () {},
+                              ),
+                              ProfielTapTile(
+                                title: 'About Us',
+                                icon: FontAwesomeIcons.circleInfo,
+                                onTap: () {},
+                              ),
+                              SubmitButton(
+                                text: 'Sign Out',
+                                textColor: Colors.black.withOpacity(0.75),
+                                fontWeight: FontWeight.bold,
+                                color: deepPrimaryColor.withOpacity(0.2),
+                                margin: EdgeInsets.symmetric(
+                                  vertical: Get.height * 0.02,
+                                ),
+                                padding: EdgeInsets.symmetric(
+                                  horizontal: Get.width * 0.1,
+                                  vertical: Get.height * 0.02,
+                                ),
+                                onTap: () async {
+                                  await authController.signOut();
+                                  Get.offAll(SplashScreen());
+                                },
+                              ),
+                            ],
+                          ),
                         ),
-                        SubmitButton(
-                          text: 'Sign Out',
-                          textColor: Colors.black.withOpacity(0.75),
-                          fontWeight: FontWeight.bold,
-                          color: deepPrimaryColor.withOpacity(0.2),
-                          margin: const EdgeInsets.symmetric(vertical: 15),
-                          onTap: () async {
-                            await authController.signOut();
-                            Get.offAll(SplashScreen());
-                          },
-                        ),
-                        SizedBox(height: Get.height * 0.02),
                       ],
                     ),
                   ),
@@ -153,6 +165,7 @@ class ProfileTap extends StatelessWidget {
   Widget section({
     required Widget child,
     EdgeInsets? padding,
+    EdgeInsets? margin,
     double? width,
     double? height,
   }) =>
@@ -162,10 +175,11 @@ class ProfileTap extends StatelessWidget {
           child: Container(
             width: width,
             height: height,
+            margin: margin,
             padding: padding ??
                 EdgeInsets.symmetric(
                   horizontal: Get.width * 0.05,
-                  vertical: 15,
+                  vertical: Get.height * 0.02,
                 ),
             decoration: BoxDecoration(
               color: deepPrimaryColor.withOpacity(0.1),

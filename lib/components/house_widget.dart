@@ -81,7 +81,7 @@ class HouseWidget extends StatelessWidget {
                 ),
                 child: Container(
                   width: Get.width,
-                  height: (height ?? Get.height * 0.27) * 0.4,
+                  // height: (height ?? Get.height * 0.27) * 0.4,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       begin: Alignment.topLeft,
@@ -96,6 +96,7 @@ class HouseWidget extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
                       RoomsNumberWidget(
                         kitchens: (offer?.house ?? house)?.kitchens ?? 1,

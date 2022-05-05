@@ -34,7 +34,7 @@ class ProfielTapTile extends StatelessWidget {
             child: Container(
               padding: EdgeInsets.symmetric(
                 horizontal: Get.width * 0.05,
-                vertical: 15,
+                vertical: Get.height * 0.02,
               ),
               decoration: BoxDecoration(
                 borderRadius: borderRadius,
