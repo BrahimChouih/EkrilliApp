@@ -18,8 +18,13 @@ import 'package:map_launcher/map_launcher.dart';
 import '../components/custom_app_bar.dart';
 
 class HouseDetailsScreen extends StatelessWidget {
-  HouseDetailsScreen({Key? key, required this.offer}) : super(key: key);
+  HouseDetailsScreen({
+    Key? key,
+    required this.offer,
+    this.isPreview = false,
+  }) : super(key: key);
   Offer offer;
+  bool isPreview;
   EdgeInsets margin = EdgeInsets.symmetric(
     horizontal: Get.width * 0.03,
     vertical: Get.height * 0.01,
@@ -39,17 +44,19 @@ class HouseDetailsScreen extends StatelessWidget {
       body: SafeArea(
         child: Column(
           children: [
-            CustomAppBar(
-              title: 'House',
-              backButton: true,
-              trailing: InkWell(
-                child: const Icon(
-                  Icons.favorite_border,
-                  color: Colors.black54,
-                ),
-                onTap: () {},
-              ),
-            ),
+            isPreview
+                ? CustomAppBar(title: 'Preview')
+                : CustomAppBar(
+                    title: 'House',
+                    backButton: true,
+                    trailing: InkWell(
+                      child: const Icon(
+                        Icons.favorite_border,
+                        color: Colors.black54,
+                      ),
+                      onTap: () {},
+                    ),
+                  ),
             Expanded(
               child: Stack(
                 children: [
@@ -150,12 +157,15 @@ class HouseDetailsScreen extends StatelessWidget {
                                   ],
                                 ),
                               ),
-                              const Spacer(),
-                              Text(
-                                offer.pricePerDay.toString(),
-                                style: const TextStyle(
-                                  fontSize: 18,
-                                  fontWeight: FontWeight.bold,
+                              Expanded(
+                                child: Text(
+                                  offer.pricePerDay.toString(),
+                                  overflow: TextOverflow.ellipsis,
+                                  textAlign: TextAlign.end,
+                                  style: const TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.bold,
+                                  ),
                                 ),
                               ),
                               const Text(
@@ -193,30 +203,33 @@ class HouseDetailsScreen extends StatelessWidget {
                       ],
                     ),
                   ),
-                  Positioned(
-                    width: Get.width,
-                    bottom: 0,
-                    child: ClipRRect(
-                      child: BackdropFilter(
-                        filter: ImageFilter.blur(
-                          sigmaX: 6,
-                          sigmaY: 6,
-                        ),
-                        child: Center(
-                          child: SubmitButton(
-                            key: startChattingButton,
-                            text: 'Start Chatting',
-                            margin: const EdgeInsets.symmetric(vertical: 5),
-                            padding: const EdgeInsets.symmetric(
-                              vertical: 10,
-                              horizontal: 25,
+                  isPreview
+                      ? const SizedBox()
+                      : Positioned(
+                          width: Get.width,
+                          bottom: 0,
+                          child: ClipRRect(
+                            child: BackdropFilter(
+                              filter: ImageFilter.blur(
+                                sigmaX: 6,
+                                sigmaY: 6,
+                              ),
+                              child: Center(
+                                child: SubmitButton(
+                                  key: startChattingButton,
+                                  text: 'Start Chatting',
+                                  margin:
+                                      const EdgeInsets.symmetric(vertical: 5),
+                                  padding: const EdgeInsets.symmetric(
+                                    vertical: 10,
+                                    horizontal: 25,
+                                  ),
+                                  onTap: () {},
+                                ),
+                              ),
                             ),
-                            onTap: () {},
                           ),
                         ),
-                      ),
-                    ),
-                  ),
                 ],
               ),
             ),

@@ -1,4 +1,6 @@
 import 'package:ekrilli_app/controllers/offers_controller.dart';
+import 'package:ekrilli_app/models/house.dart';
+import 'package:ekrilli_app/screens/create_offer_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -9,7 +11,8 @@ import '../components/empty_screen.dart';
 import '../utils/constants.dart';
 
 class OffersScreen extends StatelessWidget {
-  OffersScreen({Key? key}) : super(key: key);
+  OffersScreen({Key? key, required this.house}) : super(key: key);
+  House house;
   OfferController offerController = Get.find<OfferController>();
   @override
   Widget build(BuildContext context) {
@@ -19,7 +22,9 @@ class OffersScreen extends StatelessWidget {
           FontAwesomeIcons.notesMedical,
           color: Colors.white,
         ),
-        onPressed: () {},
+        onPressed: () => Get.to(() => CreateOfferScreen(
+              house: house,
+            )),
       ),
       body: SafeArea(
         child: Column(

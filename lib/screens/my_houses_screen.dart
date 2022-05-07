@@ -95,7 +95,12 @@ class MyHousesScreen extends StatelessWidget {
                                 ),
                                 house: houseController.houses.first..id = index,
                                 onTap: () {
-                                  Get.to(() => OffersScreen());
+                                  Get.to(
+                                    () => OffersScreen(
+                                      house: houseController.houses.first
+                                        ..id = index,
+                                    ),
+                                  );
                                 },
                               ),
                             ),
