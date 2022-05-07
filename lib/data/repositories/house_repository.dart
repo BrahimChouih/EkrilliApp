@@ -33,8 +33,8 @@ class HouseRepository {
     for (int i = 0; i < house.pictures.length; i++) {
       if (!house.pictures[i].isUrl) {
         MultipartFile multipartFile = await MultipartFile.fromFile(
-          house.pictures[i].picture!,
-          filename: basename(house.pictures[i].picture!),
+          house.pictures[i].picture,
+          filename: basename(house.pictures[i].picture),
         );
         data['pictures'].add({'picture': multipartFile});
       }
@@ -69,8 +69,8 @@ class HouseRepository {
     for (int i = 0; i < house.pictures.length; i++) {
       if (house.pictures[i].isUrl) {
         MultipartFile multipartFile = await MultipartFile.fromFile(
-          house.pictures[i].picture!,
-          filename: basename(house.pictures[i].picture!),
+          house.pictures[i].picture,
+          filename: basename(house.pictures[i].picture),
         );
         data['pictures'].add({'picture': multipartFile});
       }

@@ -34,7 +34,7 @@ class FullscreenPicturesSlider extends StatelessWidget {
                   height: Get.height,
                   child: Center(
                     child: Image.network(
-                      pictures[index].picture!,
+                      pictures[index].picture,
                       fit: BoxFit.contain,
                     ),
                   ),

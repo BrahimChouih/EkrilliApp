@@ -34,6 +34,8 @@ class CustomAppBar extends StatelessWidget {
             child: leading ??
                 (backButton
                     ? InkWell(
+                        splashColor: Colors.transparent,
+                        highlightColor: Colors.transparent,
                         child: const Icon(
                           Icons.arrow_back_ios,
                           color: Colors.black54,

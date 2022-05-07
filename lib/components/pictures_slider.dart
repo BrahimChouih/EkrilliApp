@@ -43,7 +43,7 @@ class PicturesSlider extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                     image: DecorationImage(
                       image: NetworkImage(
-                        pictures[index].picture!,
+                        pictures[index].picture,
                       ),
                       fit: BoxFit.cover,
                     ),

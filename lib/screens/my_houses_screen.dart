@@ -1,4 +1,5 @@
 import 'package:ekrilli_app/controllers/house_controller.dart';
+import 'package:ekrilli_app/screens/create_house_screen.dart';
 import 'package:ekrilli_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -15,6 +16,13 @@ class MyHousesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      floatingActionButton: FloatingActionButton(
+        child: const Icon(
+          FontAwesomeIcons.houseMedical,
+          color: Colors.white,
+        ),
+        onPressed: () => Get.to(() => CreateHouseScreen()),
+      ),
       body: SafeArea(
         child: Column(
           children: [

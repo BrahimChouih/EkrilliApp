@@ -44,11 +44,13 @@ class ProfileTap extends StatelessWidget {
                       children: [
                         const Spacer(),
                         section(
+                          margin: EdgeInsets.only(top: Get.height * 0.01),
                           child: userInfo(),
                           width: Get.width,
                         ),
                         const Spacer(),
                         section(
+                          margin: EdgeInsets.only(top: Get.height * 0.01),
                           child: Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
@@ -71,7 +73,7 @@ class ProfileTap extends StatelessWidget {
                           ),
                         ),
                         section(
-                          margin: EdgeInsets.only(top: Get.height * 0.02),
+                          margin: EdgeInsets.only(top: Get.height * 0.01),
                           padding: EdgeInsets.symmetric(
                             horizontal: Get.width * 0.02,
                             vertical: Get.height * 0.02,
