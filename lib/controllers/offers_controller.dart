@@ -12,6 +12,7 @@ class OfferController extends GetxController with OfferRepository {
   List<Offer> offers = [
     Offer(
       pricePerDay: 3000,
+      status: 'PUBLISHED',
       house: House(
         title: 'Come to titree',
         location: '3ème Boulevard Péripherique',

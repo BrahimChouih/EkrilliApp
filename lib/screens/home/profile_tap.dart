@@ -65,7 +65,7 @@ class ProfileTap extends StatelessWidget {
                                 onTap: () {},
                               ),
                               ProfileTapItem(
-                                icon: FontAwesomeIcons.house,
+                                icon: FontAwesomeIcons.clipboardList,
                                 title: 'Rented',
                                 onTap: () {},
                               ),

@@ -80,7 +80,7 @@ class HouseWidget extends StatelessWidget {
                   sigmaY: 6,
                 ),
                 child: Container(
-                  width: Get.width,
+                  width: Get.width * 0.9,
                   // height: (height ?? Get.height * 0.27) * 0.4,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(

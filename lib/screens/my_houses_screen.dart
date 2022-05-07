@@ -1,5 +1,6 @@
 import 'package:ekrilli_app/controllers/house_controller.dart';
 import 'package:ekrilli_app/screens/create_house_screen.dart';
+import 'package:ekrilli_app/screens/offers_screen.dart';
 import 'package:ekrilli_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -44,50 +45,59 @@ class MyHousesScreen extends StatelessWidget {
                           itemCount: 10,
                           shrinkWrap: true,
                           primary: false,
-                          itemBuilder: (_, index) => Dismissible(
-                            key: ObjectKey(index),
-                            background:
-                                backgroundSwipping(Alignment.centerLeft),
-                            secondaryBackground:
-                                backgroundSwipping(Alignment.centerRight),
-                            onDismissed: (DismissDirection dismissDirection) {
-                              if (dismissDirection ==
-                                  DismissDirection.startToEnd) {
-                                print('remove');
-                              }
-                            },
-                            confirmDismiss:
-                                (DismissDirection dismissDirection) async {
-                              if (dismissDirection ==
-                                  DismissDirection.startToEnd) {
-                                print('remove');
-                                bool confirmed = false;
-                                await Get.defaultDialog(
-                                  title: 'Wait',
-                                  content: const Text(
-                                    'Do you want to delete this house ?',
-                                  ),
-                                  onCancel: () {
-                                    confirmed = false;
-                                    // Get.back();
-                                  },
-                                  onConfirm: () {
-                                    confirmed = true;
-                                    Get.back();
-                                  },
-                                  confirmTextColor: Colors.white,
-                                );
-                                return confirmed;
-                              } else {
-                                print('edit');
-                                return false;
-                              }
-                            },
-                            child: HouseWidget(
-                              house: houseController.houses.first..id = index,
-                              onTap: () {
-                                print('object');
+                          itemBuilder: (_, index) => Container(
+                            margin: EdgeInsets.symmetric(
+                              horizontal: Get.width * 0.02,
+                              vertical: 10,
+                            ),
+                            child: Dismissible(
+                              key: ObjectKey(index),
+                              background:
+                                  backgroundSwipping(Alignment.centerLeft),
+                              secondaryBackground:
+                                  backgroundSwipping(Alignment.centerRight),
+                              onDismissed: (DismissDirection dismissDirection) {
+                                if (dismissDirection ==
+                                    DismissDirection.startToEnd) {
+                                  print('remove');
+                                }
                               },
+                              confirmDismiss:
+                                  (DismissDirection dismissDirection) async {
+                                if (dismissDirection ==
+                                    DismissDirection.startToEnd) {
+                                  print('remove');
+                                  bool confirmed = false;
+                                  await Get.defaultDialog(
+                                    title: 'Wait',
+                                    content: const Text(
+                                      'Do you want to delete this house ?',
+                                    ),
+                                    onCancel: () {
+                                      confirmed = false;
+                                      // Get.back();
+                                    },
+                                    onConfirm: () {
+                                      confirmed = true;
+                                      Get.back();
+                                    },
+                                    confirmTextColor: Colors.white,
+                                  );
+                                  return confirmed;
+                                } else {
+                                  print('edit');
+                                  return false;
+                                }
+                              },
+                              child: HouseWidget(
+                                margin: EdgeInsets.symmetric(
+                                  horizontal: Get.width * 0.03,
+                                ),
+                                house: houseController.houses.first..id = index,
+                                onTap: () {
+                                  Get.to(() => OffersScreen());
+                                },
+                              ),
                             ),
                           ),
                         ),
@@ -137,7 +147,10 @@ class MyHousesScreen extends StatelessWidget {
   }
 
   Widget backgroundSwipping(AlignmentGeometry alignment) => Container(
-        color: alignment == Alignment.centerLeft ? Colors.red : primaryColor,
+        decoration: BoxDecoration(
+          color: alignment == Alignment.centerLeft ? Colors.red : primaryColor,
+          borderRadius: borderRadius,
+        ),
         alignment: alignment,
         padding: EdgeInsets.symmetric(horizontal: Get.width * 0.1),
         child: Icon(
