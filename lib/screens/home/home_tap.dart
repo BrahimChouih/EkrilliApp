@@ -16,9 +16,22 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-class HomeTap extends StatelessWidget {
+class HomeTap extends StatefulWidget {
   HomeTap({Key? key}) : super(key: key);
+
+  @override
+  State<HomeTap> createState() => _HomeTapState();
+}
+
+class _HomeTapState extends State<HomeTap> {
   OfferController offerController = Get.put(OfferController());
+  ScrollController offersScrollController = ScrollController();
+  @override
+  void initState() {
+    offerController.getOffers();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -73,19 +86,25 @@ class HomeTap extends StatelessWidget {
                   horizontal: Get.width * 0.05,
                 ),
               ),
-              offerController.isEmpty
-                  ? const EmptyScreen(
-                      title: 'No Houses yet',
-                      icon: FontAwesomeIcons.comments,
-                    )
-                  : ListView.builder(
-                      itemCount: 10,
-                      shrinkWrap: true,
-                      primary: false,
-                      itemBuilder: (_, index) => HouseWidget(
-                        offer: offerController.offers.first..id = index,
+              GetBuilder<OfferController>(
+                builder: (_) => offerController.isEmpty
+                    ? const Center(
+                        child: EmptyScreen(
+                          title: 'No Houses yet',
+                          icon: FontAwesomeIcons.houseCircleExclamation,
+                          isExpanded: false,
+                        ),
+                      )
+                    : ListView.builder(
+                        itemCount: offerController.offers.length,
+                        controller: offersScrollController,
+                        shrinkWrap: true,
+                        primary: false,
+                        itemBuilder: (_, index) => HouseWidget(
+                          offer: offerController.offers.first..id = index,
+                        ),
                       ),
-                    ),
+              ),
             ],
           ),
         ),

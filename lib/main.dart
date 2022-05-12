@@ -18,8 +18,8 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       theme: primaryTheme,
-      // home: SplashScreen(),
-      home: HomeScreen(),
+      home: SplashScreen(),
+      // home: HomeScreen(),
       // home: MyHousesScreen(),
     );
   }

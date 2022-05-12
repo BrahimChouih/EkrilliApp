@@ -42,7 +42,7 @@ class ChattingScreen extends StatelessWidget {
                       isMe: index % 3 != 0,
                     ),
                   ),
-                  const OfferAction(),
+                  OfferAction(),
                 ],
               ),
             ),

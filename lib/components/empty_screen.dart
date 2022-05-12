@@ -7,14 +7,22 @@ class EmptyScreen extends StatelessWidget {
     Key? key,
     required this.title,
     required this.icon,
+    this.isExpanded = true,
   }) : super(key: key);
   final String title;
   final IconData icon;
+  final bool isExpanded;
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: Column(
+    return isExpanded
+        ? Expanded(
+            child: child(),
+          )
+        : child();
+  }
+
+  Widget child() => Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           FaIcon(
@@ -30,7 +38,5 @@ class EmptyScreen extends StatelessWidget {
             ),
           ),
         ],
-      ),
-    );
-  }
+      );
 }

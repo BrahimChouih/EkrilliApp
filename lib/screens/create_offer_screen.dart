@@ -63,9 +63,11 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
                 trailing: InkWell(
                   splashColor: Colors.transparent,
                   highlightColor: Colors.transparent,
-                  child: const Icon(
-                    Icons.check_rounded,
-                    color: Colors.black54,
+                  child: const Text(
+                    'Publish',
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                    ),
                   ),
                   onTap: () {
                     pricePerDayKey.currentState?.validate();
