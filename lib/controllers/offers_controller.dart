@@ -6,6 +6,7 @@ import 'package:get/get.dart';
 import '../data/api/api.dart';
 import '../models/city.dart';
 import '../models/house.dart';
+import '../models/municipality.dart';
 import '../models/offer.dart';
 import '../models/picture.dart';
 
@@ -80,10 +81,12 @@ List offerData = [
     status: 'PUBLISHED',
     house: House(
       title: 'Come to titree',
-      location: '3ème Boulevard Péripherique',
       locationLatitude: 36.26417,
       locationLongitude: 2.75393,
-      city: City(name: 'Oran'),
+      municipality: Municipality(
+        name: 'Ouled Bouachra',
+        city: City(name: 'Medea'),
+      ),
       owner: User(
         username: 'Brahim CHOUIH',
         picture: '$api/media/users/5_pictuer_2022-04-29-150027.864713.png',

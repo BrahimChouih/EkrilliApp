@@ -123,15 +123,24 @@ class HouseWidget extends StatelessWidget {
                             size: 20,
                           ),
                           const SizedBox(width: 10),
-                          Text(
-                            ((offer?.house ?? house)!.location ?? '') +
-                                ', ' +
-                                ((offer?.house ?? house)?.city?.name ?? ''),
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
+                          (offer?.house ?? house)!.municipality != null
+                              ? Text(
+                                  ((offer?.house ?? house)!
+                                              .municipality
+                                              ?.name ??
+                                          '') +
+                                      ', ' +
+                                      ((offer?.house ?? house)
+                                              ?.municipality
+                                              ?.city
+                                              ?.name ??
+                                          ''),
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(
+                                    color: Colors.white,
+                                  ),
+                                )
+                              : const SizedBox(),
                         ],
                       ),
                     ],

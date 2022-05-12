@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:ekrilli_app/models/municipality.dart';
 import 'package:path/path.dart';
 import 'package:dio/dio.dart';
 import 'package:ekrilli_app/data/api/house_api.dart';
@@ -105,5 +106,17 @@ class HouseRepository {
     });
 
     return cities;
+  }
+
+  Future<List<Municipality>?> getMunicipalities({int cityId = 1}) async {
+    List<Map<String, dynamic>>? data = await houseAPI.getMunicipalities(
+      cityId: cityId,
+    );
+    List<Municipality> municipalities = [];
+    data?.forEach((element) {
+      municipalities.add(Municipality.fromJson(element));
+    });
+
+    return municipalities;
   }
 }

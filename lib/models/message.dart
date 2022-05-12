@@ -29,7 +29,10 @@ class Message {
     messageType = json['message_type'];
     contentType = json['content_type'];
     message = json['message'];
-    image = !json['image'].contains(api) ? api + json['image'] : json['image'];
+    if (json['image'] != null) {
+      image =
+          !json['image'].contains(api) ? api + json['image'] : json['image'];
+    }
     createdAt = DateTime.parse(json['created_at']);
     offer = Offer.fromJson(json['offer']);
     user = User.fromJson(json['user']);

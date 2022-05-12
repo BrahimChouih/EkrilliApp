@@ -48,7 +48,7 @@ void main() {
         "price_per_day": 3000.0,
         "location_latitude": 36.26417,
         "location_longitude": 2.75393,
-        "city": 1,
+        "municipality": 1,
         "pictures": [],
       }),
     );
@@ -97,8 +97,21 @@ void main() {
     //// get instence
     HouseAPI houseAPI = HouseAPI();
 
-    //// delete a house
+    //// get all cities
     List<Map<String, dynamic>>? data = await houseAPI.getCities();
+
+    print(data);
+    expect(data != null, true);
+  });
+
+  test('MunicipalitiesAPI', () async {
+    //// get instence
+    HouseAPI houseAPI = HouseAPI();
+
+    //// get all Municipalities
+    List<Map<String, dynamic>>? data = await houseAPI.getMunicipalities(
+        // cityId: 2,
+        );
 
     print(data);
     expect(data != null, true);

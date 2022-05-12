@@ -131,6 +131,30 @@ class HouseAPI {
     return [...response.data];
   }
 
+  Future<List<Map<String, dynamic>>?> getMunicipalities({
+    int cityId = 1,
+  }) async {
+    String apiUrl = '$api/api/municipalities/$cityId/';
+
+    Response response = await dio
+        .get(
+      apiUrl,
+      options: options,
+    )
+        .onError<DioError>(
+      (error, stackTrace) {
+        // print(error.response.data);
+        throw error;
+      },
+    );
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception(response);
+    }
+
+    return [...response.data];
+  }
+
   Future<Response?> deletePicture(int pictureId) async {
     String apiUrl = '$api/api/houses/picture/$pictureId/';
     Response? response = await dio

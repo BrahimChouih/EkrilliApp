@@ -19,8 +19,6 @@ class MessagesController extends GetxController with ChatRepository {
         house: House(
           owner: User(username: 'Brahim CHOUIH'),
           title: 'Come to titree',
-          location: '3ème Boulevard Péripherique',
-          city: City(name: 'Oran'),
           rooms: 4,
           kitchens: 1,
           bathrooms: 1,

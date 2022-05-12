@@ -1,4 +1,5 @@
 import 'package:ekrilli_app/data/repositories/chat_repository.dart';
+import 'package:ekrilli_app/models/municipality.dart';
 import 'package:ekrilli_app/models/offer.dart';
 import 'package:ekrilli_app/models/user.dart';
 import 'package:get/get.dart';
@@ -14,8 +15,10 @@ class ChatController extends GetxController with ChatRepository {
       house: House(
         owner: User(username: 'Brahim CHOUIH'),
         title: 'Come to titree',
-        location: '3ème Boulevard Péripherique',
-        city: City(name: 'Oran'),
+        municipality: Municipality(
+          name: 'Ouled Bouachra',
+          city: City(name: 'Medea'),
+        ),
         rooms: 4,
         kitchens: 1,
         bathrooms: 1,

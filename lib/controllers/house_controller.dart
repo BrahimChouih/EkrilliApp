@@ -37,8 +37,6 @@ List<House> houseData = [
       //     'https://firebasestorage.googleapis.com/v0/b/fir-project-be9a2.appspot.com/o/5_pictuer_2022-04-29-150027.864713.png?alt=media&token=dd6fa134-042a-4ef0-90bb-bb7cdf97af85',
     ),
     title: 'Come to titree',
-    location: '3ème Boulevard Péripherique',
-    city: City(name: 'Oran'),
     rooms: 4,
     kitchens: 1,
     bathrooms: 1,

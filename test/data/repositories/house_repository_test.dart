@@ -4,6 +4,7 @@ import 'package:dio/dio.dart';
 import 'package:ekrilli_app/data/repositories/house_repository.dart';
 import 'package:ekrilli_app/models/city.dart';
 import 'package:ekrilli_app/models/house.dart';
+import 'package:ekrilli_app/models/municipality.dart';
 import 'package:ekrilli_app/models/picture.dart';
 import 'package:flutter_test/flutter_test.dart';
 
@@ -45,7 +46,7 @@ void main() {
     try {
       House? data = await houseRepository.createHouse(
         House(
-          city: City(id: 1),
+          municipality: Municipality(id: 1),
           description: 'fdsfdsa',
           title: 'test repository',
           houseType: 'VILLA',
@@ -106,5 +107,16 @@ void main() {
     //// get all Cities
     List<City>? data = await houseRepository.getCities();
     print('allCities.length: ${data?.length}');
+  });
+
+  test('MunicipalityRepository get Municipalities', () async {
+    //// get instence
+    HouseRepository houseRepository = HouseRepository();
+
+    //// get all Municipalities
+    List<Municipality>? data = await houseRepository.getMunicipalities(
+        // cityId: 2222,
+        );
+    print('allMunicipalities.length: ${data?.length}');
   });
 }
