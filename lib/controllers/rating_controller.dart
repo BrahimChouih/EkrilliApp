@@ -3,12 +3,14 @@ import 'package:ekrilli_app/models/user.dart';
 import 'package:get/get.dart';
 import '../data/api/api.dart';
 import '../data/repositories/rating_repository.dart';
+import '../models/house.dart';
 import '../models/offer.dart';
 
 class RatingController extends GetxController with RatingRepository {
   List<Rating> ratings = [
     Rating(
       offer: Offer(
+        house: House(id: 1),
         user: User(
           username: 'Mohamed Elabass',
           picture: '$api/media/users/6_pictuer_2022-04-29-150204.168265.jpg',

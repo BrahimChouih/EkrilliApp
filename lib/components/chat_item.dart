@@ -29,7 +29,7 @@ class ChatItem extends StatelessWidget {
         // ),
       ),
       child: ListTile(
-        title: Text(offer.house?.title ?? ''),
+        title: Text(offer.house.title ?? ''),
         onTap: () => Get.to(
           () => ChattingScreen(offer: offer),
         ),
@@ -37,12 +37,12 @@ class ChatItem extends StatelessWidget {
           radius: 30,
           backgroundColor: Colors.white,
           backgroundImage: NetworkImage(
-            offer.house?.pictures.first.picture ?? '',
+            offer.house.pictures.first.picture,
           ),
         ),
         trailing: StarsWidget(
-          stars: offer.house?.stars ?? 0,
-          numReviews: offer.house?.numReviews ?? 1,
+          stars: offer.house.stars ?? 0,
+          numReviews: offer.house.numReviews ?? 1,
           type: StarsWidgetType.digital,
         ),
         subtitle: Row(
@@ -65,7 +65,7 @@ class ChatItem extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            Text(offer.house?.owner?.username ?? ''),
+            Text(offer.house.owner?.username ?? ''),
           ],
         ),
       ),

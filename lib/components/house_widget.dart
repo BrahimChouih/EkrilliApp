@@ -6,6 +6,7 @@ import 'package:ekrilli_app/models/house.dart';
 import 'package:ekrilli_app/models/offer.dart';
 import 'package:ekrilli_app/screens/house_details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -66,10 +67,17 @@ class HouseWidget extends StatelessWidget {
               height: height ?? Get.height * 0.27,
               child: ClipRRect(
                 borderRadius: borderRadius,
-                child: Image.network(
-                  (offer?.house ?? house)?.pictures.first.picture ?? '',
-                  fit: BoxFit.cover,
-                ),
+                child: (offer?.house ?? house)!.pictures.isNotEmpty
+                    ? Image.network(
+                        (offer?.house ?? house)!.pictures.first.picture,
+                        fit: BoxFit.cover,
+                      )
+                    : Container(
+                        color: deepPrimaryColor.withOpacity(0.1),
+                        child: SvgPicture.asset(
+                          'assets/vectors/house.svg',
+                        ),
+                      ),
               ),
             ),
             ClipRRect(

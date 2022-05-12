@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:ekrilli_app/data/repositories/rating_repository.dart';
+import 'package:ekrilli_app/models/house.dart';
 import 'package:ekrilli_app/models/offer.dart';
 import 'package:ekrilli_app/models/rating.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -24,7 +25,7 @@ void main() {
     try {
       Rating? data = await ratingRepository.ratingOnHouse(
         rating: Rating(
-          offer: Offer(id: 25),
+          offer: Offer(id: 25, house: House()),
           stars: 5.0,
           comment: 'greate',
         ),

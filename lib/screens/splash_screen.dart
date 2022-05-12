@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:dio/dio.dart';
+import 'package:ekrilli_app/controllers/house_controller.dart';
 import 'package:ekrilli_app/screens/authentication_screen.dart';
 import 'package:ekrilli_app/screens/home_screen.dart';
 import 'package:ekrilli_app/themes/primary_theme.dart';
@@ -18,11 +19,19 @@ class SplashScreen extends StatelessWidget {
   void goToNextScreen() async {
     // await Future.delayed(const Duration(seconds: 3));
     AuthController authController = Get.find<AuthController>();
+    HouseController houseController = Get.put(HouseController());
     try {
       await authController.initData();
-      Get.offAll(
-        () => !authController.isLogin ? AuthenticationScreen() : HomeScreen(),
-      );
+      if (authController.isLogin) {
+        await houseController.getCities();
+        await Get.offAll(
+          () => HomeScreen(),
+        );
+      } else {
+        Get.offAll(
+          () => AuthenticationScreen(),
+        );
+      }
     } on DioError catch (e) {
       String message = e.message.toString();
       if (e.message == 'Http status error [401]') {

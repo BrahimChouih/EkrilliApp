@@ -1,3 +1,4 @@
+import 'package:ekrilli_app/controllers/pagination_controller.dart';
 import 'package:ekrilli_app/data/repositories/offer_repository.dart';
 import 'package:ekrilli_app/models/user.dart';
 import 'package:get/get.dart';
@@ -8,32 +9,71 @@ import '../models/house.dart';
 import '../models/offer.dart';
 import '../models/picture.dart';
 
-class OfferController extends GetxController with OfferRepository {
+class OfferController extends PaginationController with OfferRepository {
   List<Offer> offers = [];
-  bool isLoading = false;
+
+  final String offerInfoWidgetId = 'offerInfoWidgetId';
 
   bool get isEmpty => offers.isEmpty;
 
   @override
-  Future<List<Offer>?> getOffers({int page = 1, int? cityId}) async {
-    changeLoadingState(true);
+  Future<void> getData({required int page}) async {
+    // changeLoadingState(true);
 
-    List<Offer>? resualt = await super.getOffers(page: page, cityId: cityId);
+    List<Offer>? resualt = await super.getOffers(
+      page: page,
+      // cityId: parameters.cityId,
+    );
+
+    if (resualt != null) {
+      offers.addAll(resualt);
+    }
+
+    // changeLoadingState(false);
+  }
+
+  @override
+  Future<void> initData({Parameters? parameters}) async {
+    List<Offer>? resualt = await super.getOffers(
+      page: 1,
+      cityId: parameters?.cityId,
+    );
+
     if (resualt != null) {
       offers = resualt;
     }
-
-    changeLoadingState(false);
-
-    return resualt;
   }
 
-  void changeLoadingState(bool state) {
-    isLoading = state;
-    update();
+  @override
+  Future<Offer?> getOfferInfo(
+    int offerId, {
+    Function(Offer)? returnOffer,
+  }) async {
+    Offer? offer = await super.getOfferInfo(offerId);
+    if (offer != null && returnOffer != null) {
+      returnOffer(offer);
+    }
+    update([offerInfoWidgetId]);
+    return offer;
   }
 }
 
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
 List offerData = [
   Offer(
     pricePerDay: 3000,

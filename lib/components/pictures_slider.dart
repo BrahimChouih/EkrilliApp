@@ -1,6 +1,7 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ekrilli_app/components/full_screen_pictures_slider.dart';
 import 'package:ekrilli_app/models/picture.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import '../utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -41,13 +42,20 @@ class PicturesSlider extends StatelessWidget {
                   alignment: Alignment.center,
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(10),
-                    image: DecorationImage(
-                      image: NetworkImage(
-                        pictures[index].picture,
-                      ),
-                      fit: BoxFit.cover,
-                    ),
+                    image: pictures[index].isUrl
+                        ? DecorationImage(
+                            image: NetworkImage(
+                              pictures[index].picture,
+                            ),
+                            fit: BoxFit.cover,
+                          )
+                        : null,
                   ),
+                  child: !pictures[index].isUrl
+                      ? Container(
+                          color: Colors.white,
+                          child: SvgPicture.asset(pictures[index].picture))
+                      : SizedBox(),
                 ),
               ),
               options: CarouselOptions(

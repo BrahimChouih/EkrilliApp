@@ -62,7 +62,7 @@ void main() {
     try {
       Offer? data = await offerRepository.updateOfferInfo(
         offerId: 25,
-        offer: Offer(status: 'DONE'),
+        offer: Offer(status: 'DONE', house: House()),
       );
       print(data?.toJson());
       expect(data != null, true);
