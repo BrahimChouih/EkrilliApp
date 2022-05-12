@@ -1,4 +1,3 @@
-
 import 'package:dio/dio.dart';
 import 'package:ekrilli_app/components/custom_drop_dwon.dart';
 import 'package:ekrilli_app/controllers/auth_controller.dart';
@@ -10,6 +9,7 @@ import 'package:get/get.dart';
 
 import '../components/custom_text_field.dart';
 import '../components/submit_button.dart';
+import '../utils/constants.dart';
 
 class AuthenticationScreen extends StatelessWidget {
   AuthController authController = Get.find<AuthController>();
@@ -79,7 +79,7 @@ class AuthenticationScreen extends StatelessWidget {
                       : const SizedBox(),
                   authenticationMode.value == AuthenticationMode.signUp
                       ? CustomDropDown<String>(
-                          items: const ['Owner', 'Tanent'],
+                          items: const ['Owner', 'Tenant'],
                           value: accountType,
                           onChange: (val) {
                             accountType = val;
@@ -105,7 +105,7 @@ class AuthenticationScreen extends StatelessWidget {
                             email: emailController.text,
                             password: passwordController.text,
                             username: usernameController.text,
-                            userType: accountType ?? 'Tanent',
+                            userType: accountType ?? 'Tenant',
                           );
                         }
                         if (authController.isLogin) {

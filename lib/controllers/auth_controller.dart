@@ -12,4 +12,10 @@ class AuthController extends GetxController with AuthAPI {
     await super.refreshUserInfo();
     update();
   }
+
+  @override
+  Future<void> signOut() {
+    Get.delete();
+    return super.signOut();
+  }
 }

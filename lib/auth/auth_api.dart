@@ -79,9 +79,14 @@ class AuthAPI {
     });
 
     Response response = await dio.get(apiUrl, options: options).timeout(
-      const Duration(seconds: 15),
+      const Duration(seconds: 10),
       onTimeout: () {
-        throw Exception('Check your internet connection !!');
+        throw DioError(
+          type: DioErrorType.connectTimeout,
+          error: 'internet connection !!',
+          requestOptions: RequestOptions(path: ''),
+        );
+        // throw Exception('Check your internet connection !!');
       },
     );
     return User.fromJson(response.data);

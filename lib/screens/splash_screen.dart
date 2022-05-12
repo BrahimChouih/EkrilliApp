@@ -10,6 +10,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
+import '../utils/constants.dart';
 
 class SplashScreen extends StatelessWidget {
   SplashScreen({Key? key}) : super(key: key);
@@ -19,16 +20,15 @@ class SplashScreen extends StatelessWidget {
     AuthController authController = Get.find<AuthController>();
     try {
       await authController.initData();
-      Get.to(
+      Get.offAll(
         () => !authController.isLogin ? AuthenticationScreen() : HomeScreen(),
       );
     } on DioError catch (e) {
-      String message = '';
+      String message = e.message.toString();
       if (e.message == 'Http status error [401]') {
         message = e.message;
         authController.signOut();
-      }
-      if (e.error.runtimeType == SocketException) {
+      } else if (e.error.runtimeType == SocketException) {
         message = (e.error as SocketException).message;
       }
 

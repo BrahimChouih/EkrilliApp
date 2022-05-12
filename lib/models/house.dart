@@ -11,6 +11,7 @@ class House {
   int? bathrooms;
   int? kitchens;
   int? bedrooms;
+  String? location;
   double? locationLatitude;
   double? locationLongitude;
   bool? isAvailable;
@@ -19,7 +20,7 @@ class House {
   DateTime? createdAt;
   User? owner;
   City? city;
-  List<Picture>? pictures = [];
+  List<Picture> pictures = [];
 
   House({
     this.id,
@@ -30,6 +31,7 @@ class House {
     this.bathrooms,
     this.kitchens,
     this.bedrooms,
+    this.location,
     this.locationLatitude,
     this.locationLongitude,
     this.isAvailable,
@@ -50,6 +52,7 @@ class House {
     bathrooms = json['bathrooms'];
     kitchens = json['kitchens'];
     bedrooms = json['bedrooms'];
+    location = json['location'];
     locationLatitude = json['location_latitude'];
     locationLongitude = json['location_longitude'];
     isAvailable = json['isAvailable'];
@@ -59,7 +62,7 @@ class House {
     city = City.fromJson(json['city']);
     owner = User.fromJson(json['owner']);
     for (var item in (json['pictures'] as List)) {
-      pictures?.add(Picture.fromJson(item));
+      pictures.add(Picture.fromJson(item));
     }
   }
 
@@ -72,6 +75,7 @@ class House {
     data['bathrooms'] = bathrooms;
     data['kitchens'] = kitchens;
     data['bedrooms'] = bedrooms;
+    data['location'] = location;
     data['location_latitude'] = locationLatitude;
     data['location_longitude'] = locationLongitude;
     data['isAvailable'] = isAvailable;
@@ -79,7 +83,7 @@ class House {
     data['numReviews'] = numReviews;
     data['city'] = city?.id;
     data['pictures'] = [];
-    pictures?.forEach((element) {
+    pictures.forEach((element) {
       data['pictures'].add(element.picture);
     });
     return data;

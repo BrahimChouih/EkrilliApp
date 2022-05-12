@@ -1,27 +1,20 @@
-import 'package:ekrilli_app/controllers/auth_controller.dart';
-import 'package:ekrilli_app/screens/splash_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../components/custom_bottom_navigation_bar.dart';
+import '../controllers/nav_bar_controller.dart';
+
 class HomeScreen extends StatelessWidget {
+  NavBarController navBarController = Get.put(NavBarController());
+
   HomeScreen({Key? key}) : super(key: key);
-  final AuthController authController = Get.find<AuthController>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(authController.currentUser?.toJson().toString() ?? ''),
-          TextButton(
-            onPressed: () async {
-              await authController.signOut();
-              Get.offAll(() => SplashScreen());
-            },
-            child: const Text('Sign Out'),
-          ),
-        ],
+      body: GetBuilder<NavBarController>(
+        builder: (_) => navBarController.currentPage,
       ),
+      bottomNavigationBar: CustomBottomNavigationBar(),
     );
   }
 }

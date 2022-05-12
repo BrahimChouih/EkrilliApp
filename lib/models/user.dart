@@ -1,3 +1,5 @@
+import '../data/api/api.dart';
+
 class User {
   int? id;
   String? email;
@@ -28,7 +30,11 @@ class User {
     email = json['email'];
     username = json['username'];
     phone = json['phone'];
-    picture = json['picture'];
+    if (json['picture'] != null) {
+      picture = !json['picture'].contains(api)
+          ? api + json['picture']
+          : json['picture'];
+    }
     language = json['language'];
     location = json['location'];
     aboutMe = json['about_me'];

@@ -2,16 +2,27 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 import '../themes/primary_theme.dart';
+import '../utils/constants.dart';
 
 class SubmitButton extends StatelessWidget {
   const SubmitButton({
     this.onTap,
-    this.text = '',
+    required this.text,
     Key? key,
+    this.padding,
+    this.margin,
+    this.color,
+    this.textColor,
+    this.fontWeight,
   }) : super(key: key);
 
   final Function()? onTap;
   final String text;
+  final EdgeInsets? padding;
+  final EdgeInsets? margin;
+  final Color? color;
+  final Color? textColor;
+  final FontWeight? fontWeight;
 
   @override
   Widget build(BuildContext context) {
@@ -20,20 +31,22 @@ class SubmitButton extends StatelessWidget {
       highlightColor: Colors.transparent,
       splashColor: Colors.transparent,
       child: Container(
-        margin: EdgeInsets.all(Get.height * 0.015),
-        padding: const EdgeInsets.symmetric(
-          horizontal: 35,
-          vertical: 15,
-        ),
+        margin: margin ?? EdgeInsets.all(Get.height * 0.015),
+        padding: padding ??
+            const EdgeInsets.symmetric(
+              horizontal: 35,
+              vertical: 15,
+            ),
         decoration: BoxDecoration(
-          color: primaryColor,
-          borderRadius: BorderRadius.circular(15),
+          color: color ?? primaryColor,
+          borderRadius: borderRadius,
         ),
         child: Text(
           text,
-          style: const TextStyle(
-            color: Colors.white,
+          style: TextStyle(
+            color: textColor ?? Colors.white,
             fontSize: 18,
+            fontWeight: fontWeight,
           ),
         ),
       ),

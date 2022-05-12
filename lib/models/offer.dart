@@ -4,7 +4,7 @@ import 'package:ekrilli_app/models/user.dart';
 class Offer {
   int? id;
   String? status;
-  double? totalPrice;
+  double? pricePerDay;
   DateTime? startDate;
   DateTime? endDate;
   DateTime? createdAt;
@@ -14,7 +14,7 @@ class Offer {
   Offer(
       {this.id,
       this.status,
-      this.totalPrice,
+      this.pricePerDay,
       this.startDate,
       this.endDate,
       this.createdAt,
@@ -24,7 +24,7 @@ class Offer {
   Offer.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     status = json['status'];
-    totalPrice = json['total_price'];
+    pricePerDay = json['price_per_day'];
 
     if (json['start_date'] != null) {
       startDate = DateTime.parse(json['start_date']);
@@ -43,7 +43,7 @@ class Offer {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['status'] = status;
-    data['total_price'] = totalPrice;
+    data['price_per_day'] = pricePerDay;
     data['start_date'] = startDate?.toIso8601String();
     data['end_date'] = endDate?.toIso8601String();
     data['house'] = house?.id;
