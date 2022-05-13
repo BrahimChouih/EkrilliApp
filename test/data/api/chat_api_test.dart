@@ -22,6 +22,17 @@ void main() {
     }
   });
 
+  test('ChatAPI get Offers By Messages', () async {
+    //// get instence
+    ChatAPI chatAPI = ChatAPI();
+
+    ///// get Offers By Messages
+
+    List<Map<String, dynamic>>? data = await chatAPI.getOffersByMessages();
+    print('offers.length: ${data?.length}');
+    expect(data != null, true);
+  });
+
   test('ChatAPI send message', () async {
     //// get instence
     ChatAPI chatAPI = ChatAPI();

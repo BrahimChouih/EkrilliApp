@@ -27,6 +27,26 @@ class ChatAPI {
     return [...response.data['results']];
   }
 
+  Future<List<Map<String, dynamic>>?> getOffersByMessages() async {
+    String apiUrl = '$api/api/chat/offers/';
+
+    Response response = await dio
+        .get(
+      apiUrl,
+      options: options,
+    )
+        .onError<DioError>(
+      (error, stackTrace) {
+        throw error;
+      },
+    );
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception(response);
+    }
+    return [...response.data];
+  }
+
   Future<Map<String, dynamic>?> sendMessage({
     /// if withOffer is true then offerId dosen't metter
     required int offerId,

@@ -18,6 +18,17 @@ void main() {
     print('allMessage.length: ${data?.length}');
   });
 
+  test('ChatRepository get Offers By Messages', () async {
+    //// get instence
+    ChatRepository chatRepository = ChatRepository();
+
+    ///// get Offers By Messages
+
+    List<Offer>? data = await chatRepository.getOffersByMessages();
+    print('offers.length: ${data?.length}');
+    expect(data != null, true);
+  });
+
   test('ChatRepository send message', () async {
     //// get instence
     ChatRepository chatRepository = ChatRepository();
