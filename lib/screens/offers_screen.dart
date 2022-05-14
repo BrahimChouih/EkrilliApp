@@ -1,3 +1,4 @@
+import 'package:ekrilli_app/components/swipe_help.dart';
 import 'package:ekrilli_app/controllers/offers_controller.dart';
 import 'package:ekrilli_app/models/house.dart';
 import 'package:ekrilli_app/screens/create_offer_screen.dart';
@@ -42,33 +43,7 @@ class OffersScreen extends StatelessWidget {
                 : Expanded(
                     child: Column(
                       children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white30,
-                            borderRadius: borderRadius,
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 5,
-                            horizontal: 10,
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              SvgPicture.asset(
-                                'assets/icons/swipe.svg',
-                                color: deepPrimaryColor,
-                              ),
-                              const SizedBox(width: 5),
-                              const Text(
-                                'swipe on an item to edit',
-                                style: TextStyle(
-                                  color: deepPrimaryColor,
-                                  fontSize: 12,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
+                        const SwipeHelp(text: 'swipe on an item to edit'),
                         Expanded(
                           child: ListView.builder(
                             itemCount: 10,

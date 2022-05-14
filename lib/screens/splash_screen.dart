@@ -11,6 +11,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
+import '../controllers/favorite_controller.dart';
 import '../utils/constants.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -20,10 +21,12 @@ class SplashScreen extends StatelessWidget {
     // await Future.delayed(const Duration(seconds: 3));
     AuthController authController = Get.find<AuthController>();
     HouseController houseController = Get.put(HouseController());
+    FavoriteController favoriteController = Get.put(FavoriteController());
+
     try {
       await authController.initData();
+      await houseController.getCities();
       if (authController.isLogin) {
-        await houseController.getCities();
         await Get.offAll(
           () => HomeScreen(),
         );

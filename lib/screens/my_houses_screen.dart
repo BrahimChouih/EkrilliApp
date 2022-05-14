@@ -1,3 +1,4 @@
+import 'package:ekrilli_app/components/swipe_help.dart';
 import 'package:ekrilli_app/controllers/house_controller.dart';
 import 'package:ekrilli_app/screens/create_house_screen.dart';
 import 'package:ekrilli_app/screens/offers_screen.dart';
@@ -106,40 +107,10 @@ class MyHousesScreen extends StatelessWidget {
                             ),
                           ),
                         ),
-                        Positioned(
+                        const Positioned(
                           top: 5,
-                          child: ClipRRect(
-                            borderRadius: borderRadius,
-                            child: BackdropFilter(
-                              filter: blurEffect,
-                              child: Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white30,
-                                  borderRadius: borderRadius,
-                                ),
-                                padding: const EdgeInsets.symmetric(
-                                  vertical: 5,
-                                  horizontal: 10,
-                                ),
-                                child: Row(
-                                  mainAxisSize: MainAxisSize.min,
-                                  children: [
-                                    SvgPicture.asset(
-                                      'assets/icons/swipe.svg',
-                                      color: deepPrimaryColor,
-                                    ),
-                                    const SizedBox(width: 5),
-                                    const Text(
-                                      'swipe on an item to delete or edit',
-                                      style: TextStyle(
-                                        color: deepPrimaryColor,
-                                        fontSize: 12,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ),
+                          child: SwipeHelp(
+                            text: 'swipe on an item to delete or edit',
                           ),
                         ),
                       ],

@@ -3,6 +3,7 @@ import 'package:ekrilli_app/models/offer.dart';
 import 'package:ekrilli_app/screens/chatting_screen.dart';
 import 'package:ekrilli_app/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
@@ -36,9 +37,14 @@ class ChatItem extends StatelessWidget {
         leading: CircleAvatar(
           radius: 30,
           backgroundColor: Colors.white,
-          backgroundImage: NetworkImage(
-            offer.house.pictures.first.picture,
-          ),
+          backgroundImage: offer.house.pictures.isNotEmpty
+              ? NetworkImage(
+                  offer.house.pictures.first.picture,
+                )
+              : null,
+          child: offer.house.pictures.isEmpty
+              ? SvgPicture.asset('assets/vectors/house.svg')
+              : null,
         ),
         trailing: StarsWidget(
           stars: offer.house.stars ?? 0,

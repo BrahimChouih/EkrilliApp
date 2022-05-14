@@ -26,7 +26,9 @@ class _HomeTapState extends State<HomeTap> {
   ScrollController offersScrollController = ScrollController();
   @override
   void initState() {
-    offerController.refreshData();
+    if (offerController.isEmpty) {
+      offerController.refreshData();
+    }
     offersScrollController.addListener(() {
       if ((offersScrollController.position.maxScrollExtent * 0.9) <
           offersScrollController.position.pixels) {

@@ -8,7 +8,7 @@ import '../models/user.dart';
 
 class HouseController extends GetxController with HouseRepository {
   List<City> cities = [];
-  List<House> houses = [];
+  List<House> houses = [...houseData];
 
   bool get isEmpty => houses.isEmpty;
   @override

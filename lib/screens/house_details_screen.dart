@@ -20,6 +20,7 @@ import 'package:get/get.dart';
 import 'package:map_launcher/map_launcher.dart';
 
 import '../components/custom_app_bar.dart';
+import '../controllers/favorite_controller.dart';
 
 class HouseDetailsScreen extends StatefulWidget {
   HouseDetailsScreen({
@@ -37,6 +38,7 @@ class HouseDetailsScreen extends StatefulWidget {
 
 class _HouseDetailsScreenState extends State<HouseDetailsScreen> {
   OfferController offerController = Get.find<OfferController>();
+  FavoriteController favoriteController = Get.find<FavoriteController>();
 
   EdgeInsets margin = EdgeInsets.symmetric(
     horizontal: Get.width * 0.03,
@@ -76,11 +78,23 @@ class _HouseDetailsScreenState extends State<HouseDetailsScreen> {
                     title: 'House',
                     backButton: true,
                     trailing: InkWell(
-                      child: const Icon(
-                        Icons.favorite_border,
-                        color: Colors.black54,
+                      child: GetBuilder<FavoriteController>(
+                        id: favoriteController.favoriteIconId,
+                        builder: (context) {
+                          return Icon(
+                            favoriteController.contains(widget.offer.id!)
+                                ? Icons.favorite_rounded
+                                : Icons.favorite_border,
+                            color: Colors.black54,
+                          );
+                        },
                       ),
-                      onTap: () {},
+                      onTap: () async {
+                        if (widget.offer.id != null) {
+                          await favoriteController
+                              .addFavorite(widget.offer.id!);
+                        }
+                      },
                     ),
                   ),
             Expanded(
