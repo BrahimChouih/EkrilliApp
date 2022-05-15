@@ -19,10 +19,15 @@ class ChatTap extends StatefulWidget {
 
 class _ChatTapState extends State<ChatTap> {
   ChatController chatController = Get.put(ChatController());
+
   @override
   void initState() {
     if (chatController.isEmpty) {
-      chatController.getOffersByMessages();
+      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+        chatController.changeLoadingState(true);
+        await Future.delayed(const Duration(milliseconds: 300));
+        chatController.getOffersByMessages();
+      });
     }
     super.initState();
   }
@@ -34,35 +39,31 @@ class _ChatTapState extends State<ChatTap> {
         child: Column(
           children: [
             CustomAppBar(title: 'Chat'),
-            Expanded(
-              child: GetBuilder<ChatController>(
-                builder: (context) {
-                  return chatController.isLoading
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
-                      : chatController.isEmpty
-                          ? const EmptyScreen(
-                              title: 'No Messages yet',
-                              icon: FontAwesomeIcons.comments,
-                            )
-                          : RefreshIndicator(
-                              onRefresh: () async {
-                                await chatController.getOffersByMessages();
-                              },
-                              child: SizedBox(
-                                height: double.infinity,
-                                child: ListView.builder(
-                                  shrinkWrap: true,
-                                  itemCount: chatController.offers.length,
-                                  itemBuilder: (_, index) => ChatItem(
-                                    offer: chatController.offers[index],
-                                  ),
+            GetBuilder<ChatController>(
+              builder: (context) {
+                return chatController.isLoading
+                    ? const ChatLoader()
+                    : chatController.isEmpty
+                        ? const EmptyScreen(
+                            title: 'No Messages yet',
+                            icon: FontAwesomeIcons.comments,
+                          )
+                        : RefreshIndicator(
+                            onRefresh: () async {
+                              await chatController.getOffersByMessages();
+                            },
+                            child: SizedBox(
+                              height: double.infinity,
+                              child: ListView.builder(
+                                shrinkWrap: true,
+                                itemCount: chatController.offers.length,
+                                itemBuilder: (_, index) => ChatItem(
+                                  offer: chatController.offers[index],
                                 ),
                               ),
-                            );
-                },
-              ),
+                            ),
+                          );
+              },
             ),
           ],
         ),

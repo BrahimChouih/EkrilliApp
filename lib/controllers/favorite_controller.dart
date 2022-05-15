@@ -32,13 +32,15 @@ class FavoriteController extends GetxController with FavoriteRepository {
 
   @override
   Future<Favorite?> addFavorite(int offerId) async {
-    changeLoadingState(true);
+    if (!contains(offerId)) {
+      changeLoadingState(true);
 
-    await super.addFavorite(offerId);
-    await getFavorites();
+      await super.addFavorite(offerId);
+      await getFavorites();
 
-    update([favoriteIconId]);
-    changeLoadingState(false);
+      update([favoriteIconId]);
+      changeLoadingState(false);
+    }
   }
 
   @override

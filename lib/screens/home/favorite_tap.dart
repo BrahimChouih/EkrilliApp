@@ -20,11 +20,16 @@ class _FavoriteTapState extends State<FavoriteTap> {
   FavoriteController favoriteController = Get.find<FavoriteController>();
   @override
   void initState() {
-    if (favoriteController.isEmpty) {
-      favoriteController.getFavorites();
-    } else {
-      favoriteController.changeLoadingState(false);
-    }
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+      if (favoriteController.isEmpty) {
+        favoriteController.changeLoadingState(true);
+        await Future.delayed(const Duration(milliseconds: 300));
+        favoriteController.getFavorites();
+      } else {
+        favoriteController.changeLoadingState(false);
+      }
+    });
+
     super.initState();
   }
 
@@ -70,7 +75,10 @@ class _FavoriteTapState extends State<FavoriteTap> {
                                                   vertical: 10,
                                                 ),
                                                 child: Dismissible(
-                                                  key: ObjectKey(index),
+                                                  key: ObjectKey(
+                                                    favoriteController
+                                                        .favorites[index],
+                                                  ),
                                                   background:
                                                       backgroundSwipping(
                                                           Alignment.centerLeft),

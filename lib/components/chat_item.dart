@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:skeleton_loader/skeleton_loader.dart';
 
 class ChatItem extends StatelessWidget {
   const ChatItem({Key? key, required this.offer}) : super(key: key);
@@ -74,6 +75,66 @@ class ChatItem extends StatelessWidget {
             Text(offer.house.owner?.username ?? ''),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class ChatLoader extends StatelessWidget {
+  const ChatLoader({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: SkeletonLoader(
+        baseColor: deepPrimaryColor.withOpacity(0.1),
+        builder: Container(
+          padding: EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+          child: Row(
+            children: <Widget>[
+              const CircleAvatar(
+                backgroundColor: Colors.white,
+                radius: 30,
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: <Widget>[
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Container(
+                          width: Get.width * 0.35,
+                          height: 10,
+                          color: Colors.white,
+                        ),
+                        Container(
+                          width: Get.width * 0.1,
+                          height: 10,
+                          color: Colors.white,
+                        ),
+                      ],
+                    ),
+                    SizedBox(height: 10),
+                    Container(
+                      width: Get.width * 0.25,
+                      height: 12,
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
+        items: 7,
+        period: const Duration(seconds: 2),
+        highlightColor: primaryColor.withOpacity(0.6),
+        direction: SkeletonDirection.ltr,
       ),
     );
   }

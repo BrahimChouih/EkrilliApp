@@ -78,6 +78,8 @@ class _HouseDetailsScreenState extends State<HouseDetailsScreen> {
                     title: 'House',
                     backButton: true,
                     trailing: InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
                       child: GetBuilder<FavoriteController>(
                         id: favoriteController.favoriteIconId,
                         builder: (context) {
@@ -85,7 +87,9 @@ class _HouseDetailsScreenState extends State<HouseDetailsScreen> {
                             favoriteController.contains(widget.offer.id!)
                                 ? Icons.favorite_rounded
                                 : Icons.favorite_border,
-                            color: Colors.black54,
+                            color: favoriteController.contains(widget.offer.id!)
+                                ? primaryColor
+                                : deepPrimaryColor,
                           );
                         },
                       ),
