@@ -40,9 +40,7 @@ class _FavoriteTapState extends State<FavoriteTap> {
               child: GetBuilder<FavoriteController>(
                 builder: (context) {
                   return favoriteController.isLoading
-                      ? const Center(
-                          child: CircularProgressIndicator(),
-                        )
+                      ? const HouseLoader()
                       : Column(
                           children: [
                             favoriteController.isEmpty

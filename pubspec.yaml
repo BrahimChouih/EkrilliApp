@@ -40,6 +40,7 @@ dependencies:
   image_picker: ^0.8.5
   map_launcher: ^2.2.1+2
   shared_preferences: ^2.0.13
+  skeleton_loader: ^2.0.0+4
 
 dev_dependencies:
   flutter_lints: ^1.0.0

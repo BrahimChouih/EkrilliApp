@@ -5,25 +5,27 @@ class PaginationController extends GetxController {
   bool isGetAllPages = false;
   bool isLoading = true;
 
-  Future<void> refreshData() async {
+  Future<void> refreshData({Parameters? parameters}) async {
     currentPage = 1;
     isGetAllPages = false;
     changeLoadingState(true);
-    await initData();
+    await initData(parameters: parameters);
     changeLoadingState(false);
-    await getNextPage();
   }
 
-  Future<void> getNextPage() async {
+  Future<void> getNextPage({Parameters? parameters}) async {
     if (!isLoading && !isGetAllPages) {
       changeLoadingState(true);
 
       try {
         currentPage++;
-        await getData(page: currentPage);
+        await getData(
+          page: currentPage,
+          parameters: parameters,
+        );
       } catch (e) {
         isGetAllPages = true;
-        print(e);
+        // print(e);
       }
 
       changeLoadingState(false);
@@ -39,7 +41,7 @@ class PaginationController extends GetxController {
 
   Future<void> initData({Parameters? parameters}) async {}
 
-  Future<void> getData({required int page}) async {}
+  Future<void> getData({required int page, Parameters? parameters}) async {}
 
   Future<void> getInfo() async {}
 }

@@ -98,9 +98,7 @@ class _HomeTapState extends State<HomeTap> {
                 GetBuilder<OfferController>(
                   builder: (_) => offerController.isEmpty
                       ? offerController.isLoading
-                          ? const Center(
-                              child: CircularProgressIndicator(),
-                            )
+                          ? HouseLoader()
                           : const Center(
                               child: EmptyScreen(
                                 title: 'No Houses yet',

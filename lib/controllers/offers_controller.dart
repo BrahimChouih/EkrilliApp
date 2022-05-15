@@ -12,36 +12,38 @@ import '../models/picture.dart';
 
 class OfferController extends PaginationController with OfferRepository {
   List<Offer> offers = [];
+  List<Offer> offersByCity = [];
 
   final String offerInfoWidgetId = 'offerInfoWidgetId';
 
   bool get isEmpty => offers.isEmpty;
 
   @override
-  Future<void> getData({required int page}) async {
+  Future<void> getData({required int page, Parameters? parameters}) async {
     // changeLoadingState(true);
 
     List<Offer>? resualt = await super.getOffers(
       page: page,
-      // cityId: parameters.cityId,
+      cityId: parameters?.cityId,
     );
 
-    if (resualt != null) {
-      offers.addAll(resualt);
+    if (parameters?.cityId == null) {
+      offers.addAll(resualt ?? []);
+    } else {
+      offersByCity.addAll(resualt ?? []);
     }
-
     // changeLoadingState(false);
   }
 
   @override
   Future<void> initData({Parameters? parameters}) async {
     List<Offer>? resualt = await super.getOffers(
-      page: 1,
       cityId: parameters?.cityId,
     );
-
-    if (resualt != null) {
-      offers = resualt;
+    if (parameters?.cityId == null) {
+      offers = resualt ?? [];
+    } else {
+      offersByCity = resualt ?? [];
     }
   }
 
