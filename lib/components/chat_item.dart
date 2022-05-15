@@ -1,4 +1,5 @@
 import 'package:ekrilli_app/components/stars_widget.dart';
+import 'package:ekrilli_app/controllers/auth_controller.dart';
 import 'package:ekrilli_app/models/offer.dart';
 import 'package:ekrilli_app/screens/chatting_screen.dart';
 import 'package:ekrilli_app/utils/constants.dart';
@@ -9,10 +10,18 @@ import 'package:get/get.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
 
 class ChatItem extends StatelessWidget {
-  const ChatItem({Key? key, required this.offer}) : super(key: key);
+  ChatItem({Key? key, required this.offer}) : super(key: key);
   final Offer offer;
+  final AuthController authController = Get.find<AuthController>();
+
   @override
   Widget build(BuildContext context) {
+    print("authController.currentUser!.id != offer.house.owner!.id");
+    print(authController.currentUser!.id != offer.house.owner!.id);
+    print("authController.currentUser!.id");
+    print(authController.currentUser!.id);
+    print("offer.house.owner!.id");
+    print(offer.house.owner!.id);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
@@ -67,7 +76,9 @@ class ChatItem extends StatelessWidget {
               ),
               child: FaIcon(
                 FontAwesomeIcons.userLarge,
-                color: primaryColor.withOpacity(0.5),
+                color: authController.currentUser!.id != offer.house.owner!.id
+                    ? primaryColor.withOpacity(0.5)
+                    : Colors.red.withOpacity(0.5),
                 size: 16,
               ),
             ),

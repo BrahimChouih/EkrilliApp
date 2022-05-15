@@ -49,9 +49,13 @@ class PaginationController extends GetxController {
 class Parameters {
   int page;
   int? cityId;
+  int? offerId;
+  int? userId;
 
   Parameters({
     this.page = 1,
     this.cityId,
+    this.offerId,
+    this.userId,
   });
 }

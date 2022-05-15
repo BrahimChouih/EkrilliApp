@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:dio/dio.dart';
 import 'package:ekrilli_app/controllers/house_controller.dart';
+import 'package:ekrilli_app/controllers/messages_controller.dart';
 import 'package:ekrilli_app/screens/authentication_screen.dart';
 import 'package:ekrilli_app/screens/home_screen.dart';
-import 'package:ekrilli_app/themes/primary_theme.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -21,7 +21,10 @@ class SplashScreen extends StatelessWidget {
     // await Future.delayed(const Duration(seconds: 3));
     AuthController authController = Get.find<AuthController>();
     HouseController houseController = Get.put(HouseController());
-    FavoriteController favoriteController = Get.put(FavoriteController());
+    // FavoriteController favoriteController = Get.put(FavoriteController());
+    // MessagesController messagesController = Get.put(MessagesController());
+    Get.lazyPut(() => FavoriteController(), fenix: true);
+    Get.lazyPut(() => MessagesController(), fenix: true);
 
     try {
       await authController.initData();

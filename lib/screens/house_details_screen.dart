@@ -12,6 +12,7 @@ import 'package:ekrilli_app/controllers/house_controller.dart';
 import 'package:ekrilli_app/controllers/offers_controller.dart';
 import 'package:ekrilli_app/models/offer.dart';
 import 'package:ekrilli_app/models/picture.dart';
+import 'package:ekrilli_app/screens/chatting_screen.dart';
 import 'package:ekrilli_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -315,7 +316,10 @@ class _HouseDetailsScreenState extends State<HouseDetailsScreen> {
                                     vertical: 10,
                                     horizontal: 25,
                                   ),
-                                  onTap: () {},
+                                  onTap: () => Get.to(
+                                    () => ChattingScreen(offer: widget.offer),
+                                    transition: Transition.downToUp,
+                                  ),
                                 ),
                               ),
                             ),

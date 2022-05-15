@@ -1,24 +1,38 @@
-import 'dart:ui';
-
 import 'package:ekrilli_app/components/custom_app_bar.dart';
-import 'package:ekrilli_app/components/custom_text_field.dart';
 import 'package:ekrilli_app/components/message_field.dart';
 import 'package:ekrilli_app/components/message_widget.dart';
 import 'package:ekrilli_app/components/offer_action.dart';
-import 'package:ekrilli_app/components/submit_button.dart';
+import 'package:ekrilli_app/controllers/auth_controller.dart';
 import 'package:ekrilli_app/controllers/messages_controller.dart';
+import 'package:ekrilli_app/controllers/pagination_controller.dart';
 import 'package:ekrilli_app/models/offer.dart';
-import 'package:ekrilli_app/utils/constants.dart';
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 
-class ChattingScreen extends StatelessWidget {
+class ChattingScreen extends StatefulWidget {
   ChattingScreen({Key? key, required this.offer}) : super(key: key);
   final Offer offer;
-  MessagesController messagesController = Get.put(MessagesController());
-  bool isMe = false;
-  // bool isMe = true;
+
+  @override
+  State<ChattingScreen> createState() => _ChattingScreenState();
+}
+
+class _ChattingScreenState extends State<ChattingScreen> {
+  MessagesController messagesController = Get.find<MessagesController>();
+  AuthController authController = Get.find<AuthController>();
+  Parameters? parameters;
+  @override
+  void initState() {
+    parameters = Parameters(
+      offerId: widget.offer.id,
+      userId: authController.currentUser!.id!,
+    );
+    WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+      await messagesController.refreshData(parameters: parameters);
+    });
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -32,21 +46,33 @@ class ChattingScreen extends StatelessWidget {
             Expanded(
               child: Stack(
                 children: [
-                  ListView.builder(
-                    itemCount: 200,
-                    shrinkWrap: true,
-                    reverse: true,
-                    itemBuilder: (BuildContext context, int index) =>
-                        MessageWidget(
-                      message: messagesController.messages.first,
-                      isMe: index % 3 != 0,
-                    ),
+                  GetBuilder<MessagesController>(
+                    builder: (context) {
+                      return messagesController.isLoading
+                          ? const Center(
+                              child: CircularProgressIndicator(),
+                            )
+                          : messagesController.isEmpty
+                              ? Container()
+                              : ListView.builder(
+                                  itemCount: messagesController.messages.length,
+                                  reverse: true,
+                                  itemBuilder:
+                                      (BuildContext context, int index) =>
+                                          MessageWidget(
+                                    message: messagesController.messages[index],
+                                    isMe: messagesController.isMe(
+                                      messagesController.messages[index],
+                                    ),
+                                  ),
+                                );
+                    },
                   ),
                   OfferAction(),
                 ],
               ),
             ),
-            const MessageField(),
+            MessageField(offer: widget.offer),
           ],
         ),
       ),

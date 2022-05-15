@@ -48,17 +48,19 @@ class _ChatTapState extends State<ChatTap> {
                             title: 'No Messages yet',
                             icon: FontAwesomeIcons.comments,
                           )
-                        : RefreshIndicator(
-                            onRefresh: () async {
-                              await chatController.getOffersByMessages();
-                            },
-                            child: SizedBox(
-                              height: double.infinity,
-                              child: ListView.builder(
-                                shrinkWrap: true,
-                                itemCount: chatController.offers.length,
-                                itemBuilder: (_, index) => ChatItem(
-                                  offer: chatController.offers[index],
+                        : Expanded(
+                            child: RefreshIndicator(
+                              onRefresh: () async {
+                                await chatController.getOffersByMessages();
+                              },
+                              child: SizedBox(
+                                height: double.infinity,
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: chatController.offers.length,
+                                  itemBuilder: (_, index) => ChatItem(
+                                    offer: chatController.offers[index],
+                                  ),
                                 ),
                               ),
                             ),
