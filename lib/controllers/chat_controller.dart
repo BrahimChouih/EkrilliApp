@@ -1,24 +1,24 @@
+import 'package:ekrilli_app/models/chat_item_model.dart';
+
 import '../data/repositories/chat_repository.dart';
 import '../models/offer.dart';
 import 'package:get/get.dart';
 
 class ChatController extends GetxController with ChatRepository {
-  List<Offer> offers = [];
+  List<ChatItemModel> chatItems = [];
   bool isLoading = false;
 
-  bool get isEmpty => offers.isEmpty;
+  bool get isEmpty => chatItems.isEmpty;
 
   @override
-  Future<List<Offer>?> getOffersByMessages() async {
+  Future<List<ChatItemModel>?> getChatItems() async {
     changeLoadingState(true);
-    List<Offer>? offersData = await super.getOffersByMessages();
-    if (offersData != null) {
-      offers = offersData;
-    }
+    List<ChatItemModel>? resualt = await super.getChatItems();
+    chatItems = resualt ?? [];
 
     changeLoadingState(false);
 
-    return offersData;
+    return resualt;
   }
 
   void changeLoadingState(bool state) {

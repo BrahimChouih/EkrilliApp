@@ -1,6 +1,7 @@
 import 'package:ekrilli_app/controllers/auth_controller.dart';
 import 'package:ekrilli_app/controllers/pagination_controller.dart';
 import 'package:ekrilli_app/data/repositories/chat_repository.dart';
+import 'package:ekrilli_app/models/chat_item_model.dart';
 import 'package:ekrilli_app/models/message.dart';
 import 'package:get/get.dart';
 
@@ -17,14 +18,41 @@ class MessagesController extends PaginationController with ChatRepository {
       } else {
         return false;
       }
-    }
-    {
+    } else {
       if (authController.currentUser!.id == message.offer!.house.owner!.id) {
         return true;
       } else {
         return false;
       }
     }
+  }
+
+  String messageType(ChatItemModel chatItemModel) {
+    if (chatItemModel.offer!.house.owner!.id ==
+        authController.currentUser!.id) {
+      return 'RESPONSE';
+    }
+    return 'REQUEST';
+  }
+
+  @override
+  Future<Message?> sendMessage({
+    required int offerId,
+    required int userId,
+    required Message message,
+  }) async {
+    await super.sendMessage(
+      offerId: offerId,
+      userId: userId,
+      message: message,
+    );
+    await initData(
+      parameters: Parameters(
+        offerId: offerId,
+        userId: userId,
+      ),
+    );
+    changeLoadingState(false);
   }
 
   @override
@@ -48,7 +76,7 @@ class MessagesController extends PaginationController with ChatRepository {
       userId: parameters!.userId!,
       offerId: parameters.offerId!,
     );
-    messages.addAll(resualt ?? []);
+    messages = resualt ?? [];
   }
 }
 

@@ -1,8 +1,8 @@
 import 'package:dio/dio.dart';
 import 'package:ekrilli_app/data/api/chat_api.dart';
+import 'package:ekrilli_app/models/chat_item_model.dart';
 
 import '../../models/message.dart';
-import '../../models/offer.dart';
 
 class ChatRepository {
   ChatAPI chatAPI = ChatAPI();
@@ -25,14 +25,14 @@ class ChatRepository {
     return conversation;
   }
 
-  Future<List<Offer>?> getOffersByMessages() async {
-    List<Map<String, dynamic>>? data = await chatAPI.getOffersByMessages();
-    List<Offer> offers = [];
+  Future<List<ChatItemModel>?> getChatItems() async {
+    List<Map<String, dynamic>>? data = await chatAPI.getChatItems();
+    List<ChatItemModel> chatItems = [];
     data?.forEach((element) {
-      offers.add(Offer.fromJson(element));
+      chatItems.add(ChatItemModel.fromJson(element));
     });
 
-    return offers;
+    return chatItems;
   }
 
   Future<Message?> sendMessage({

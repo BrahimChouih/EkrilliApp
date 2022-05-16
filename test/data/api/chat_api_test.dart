@@ -22,13 +22,13 @@ void main() {
     }
   });
 
-  test('ChatAPI get Offers By Messages', () async {
+  test('ChatAPI get chat items', () async {
     //// get instence
     ChatAPI chatAPI = ChatAPI();
 
-    ///// get Offers By Messages
+    ///// get chat items
 
-    List<Map<String, dynamic>>? data = await chatAPI.getOffersByMessages();
+    List<Map<String, dynamic>>? data = await chatAPI.getChatItems();
     print('offers.length: ${data?.length}');
     expect(data != null, true);
   });

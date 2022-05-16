@@ -5,13 +5,14 @@ import 'package:ekrilli_app/components/offer_action.dart';
 import 'package:ekrilli_app/controllers/auth_controller.dart';
 import 'package:ekrilli_app/controllers/messages_controller.dart';
 import 'package:ekrilli_app/controllers/pagination_controller.dart';
+import 'package:ekrilli_app/models/chat_item_model.dart';
 import 'package:ekrilli_app/models/offer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
 class ChattingScreen extends StatefulWidget {
-  ChattingScreen({Key? key, required this.offer}) : super(key: key);
-  final Offer offer;
+  ChattingScreen({Key? key, required this.chatItemModel}) : super(key: key);
+  final ChatItemModel chatItemModel;
 
   @override
   State<ChattingScreen> createState() => _ChattingScreenState();
@@ -19,16 +20,26 @@ class ChattingScreen extends StatefulWidget {
 
 class _ChattingScreenState extends State<ChattingScreen> {
   MessagesController messagesController = Get.find<MessagesController>();
-  AuthController authController = Get.find<AuthController>();
   Parameters? parameters;
+  ScrollController messagesScrollController = ScrollController();
+
   @override
   void initState() {
     parameters = Parameters(
-      offerId: widget.offer.id,
-      userId: authController.currentUser!.id!,
+      offerId: widget.chatItemModel.offer!.id,
+      userId: widget.chatItemModel.user!.id,
     );
+
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+      await Future.delayed(const Duration(milliseconds: 150));
       await messagesController.refreshData(parameters: parameters);
+    });
+
+    messagesScrollController.addListener(() {
+      if ((messagesScrollController.position.maxScrollExtent * 0.9) <
+          messagesScrollController.position.pixels) {
+        messagesController.getNextPage();
+      }
     });
     super.initState();
   }
@@ -49,9 +60,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                   GetBuilder<MessagesController>(
                     builder: (context) {
                       return messagesController.isLoading
-                          ? const Center(
-                              child: CircularProgressIndicator(),
-                            )
+                          ? const MessageLoader()
                           : messagesController.isEmpty
                               ? Container()
                               : ListView.builder(
@@ -72,7 +81,9 @@ class _ChattingScreenState extends State<ChattingScreen> {
                 ],
               ),
             ),
-            MessageField(offer: widget.offer),
+            MessageField(
+              chatItemModel: widget.chatItemModel,
+            ),
           ],
         ),
       ),

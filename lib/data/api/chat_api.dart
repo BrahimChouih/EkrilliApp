@@ -27,8 +27,8 @@ class ChatAPI {
     return [...response.data['results']];
   }
 
-  Future<List<Map<String, dynamic>>?> getOffersByMessages() async {
-    String apiUrl = '$api/api/chat/offers/';
+  Future<List<Map<String, dynamic>>?> getChatItems() async {
+    String apiUrl = '$api/api/chat/items/';
 
     Response response = await dio
         .get(

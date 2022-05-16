@@ -1,6 +1,9 @@
+import 'dart:math';
+
 import 'package:ekrilli_app/models/message.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:skeleton_loader/skeleton_loader.dart';
 
 import '../utils/constants.dart';
 
@@ -61,6 +64,47 @@ class MessageWidget extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class MessageLoader extends StatelessWidget {
+  const MessageLoader({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: SkeletonLoader(
+        baseColor: deepPrimaryColor.withOpacity(0.1),
+        builder: Builder(builder: (context) {
+          MainAxisAlignment mainAxisAlignment = Random().nextBool()
+              ? MainAxisAlignment.start
+              : MainAxisAlignment.end;
+          return Container(
+            padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 10),
+            child: Row(
+              mainAxisAlignment: mainAxisAlignment,
+              children: <Widget>[
+                Container(
+                  width: Get.width * 0.3,
+                  height: 30,
+                  decoration: BoxDecoration(
+                    borderRadius: borderRadius,
+                    color: Colors.white,
+                  ),
+                ),
+              ],
+            ),
+          );
+        }),
+        items: 30,
+        period: const Duration(seconds: 2),
+        highlightColor: primaryColor.withOpacity(0.6),
+        direction: SkeletonDirection.ltr,
+      ),
     );
   }
 }

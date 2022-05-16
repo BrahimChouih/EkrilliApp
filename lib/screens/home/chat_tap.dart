@@ -26,7 +26,7 @@ class _ChatTapState extends State<ChatTap> {
       WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
         chatController.changeLoadingState(true);
         await Future.delayed(const Duration(milliseconds: 300));
-        chatController.getOffersByMessages();
+        chatController.getChatItems();
       });
     }
     super.initState();
@@ -51,15 +51,16 @@ class _ChatTapState extends State<ChatTap> {
                         : Expanded(
                             child: RefreshIndicator(
                               onRefresh: () async {
-                                await chatController.getOffersByMessages();
+                                await chatController.getChatItems();
                               },
                               child: SizedBox(
                                 height: double.infinity,
                                 child: ListView.builder(
                                   shrinkWrap: true,
-                                  itemCount: chatController.offers.length,
+                                  itemCount: chatController.chatItems.length,
                                   itemBuilder: (_, index) => ChatItem(
-                                    offer: chatController.offers[index],
+                                    chatItemModel:
+                                        chatController.chatItems[index],
                                   ),
                                 ),
                               ),

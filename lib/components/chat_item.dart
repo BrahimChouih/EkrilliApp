@@ -1,6 +1,6 @@
 import 'package:ekrilli_app/components/stars_widget.dart';
 import 'package:ekrilli_app/controllers/auth_controller.dart';
-import 'package:ekrilli_app/models/offer.dart';
+import 'package:ekrilli_app/models/chat_item_model.dart';
 import 'package:ekrilli_app/screens/chatting_screen.dart';
 import 'package:ekrilli_app/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -10,18 +10,18 @@ import 'package:get/get.dart';
 import 'package:skeleton_loader/skeleton_loader.dart';
 
 class ChatItem extends StatelessWidget {
-  ChatItem({Key? key, required this.offer}) : super(key: key);
-  final Offer offer;
+  ChatItem({Key? key, required this.chatItemModel}) : super(key: key);
+  final ChatItemModel chatItemModel;
   final AuthController authController = Get.find<AuthController>();
 
   @override
   Widget build(BuildContext context) {
-    print("authController.currentUser!.id != offer.house.owner!.id");
-    print(authController.currentUser!.id != offer.house.owner!.id);
-    print("authController.currentUser!.id");
-    print(authController.currentUser!.id);
-    print("offer.house.owner!.id");
-    print(offer.house.owner!.id);
+    // print("authController.currentUser!.id != chatItemModel.offer.house.owner!.id");
+    // print(authController.currentUser!.id != chatItemModel.offer.house.owner!.id);
+    // print("authController.currentUser!.id");
+    // print(authController.currentUser!.id);
+    // print("chatItemModel.offer.house.owner!.id");
+    // print(chatItemModel.offer.house.owner!.id);
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
       decoration: BoxDecoration(
@@ -40,25 +40,25 @@ class ChatItem extends StatelessWidget {
         // ),
       ),
       child: ListTile(
-        title: Text(offer.house.title ?? ''),
+        title: Text(chatItemModel.offer!.house.title ?? ''),
         onTap: () => Get.to(
-          () => ChattingScreen(offer: offer),
+          () => ChattingScreen(chatItemModel: chatItemModel),
         ),
         leading: CircleAvatar(
           radius: 30,
           backgroundColor: Colors.white,
-          backgroundImage: offer.house.pictures.isNotEmpty
+          backgroundImage: chatItemModel.offer!.house.pictures.isNotEmpty
               ? NetworkImage(
-                  offer.house.pictures.first.picture,
+                  chatItemModel.offer!.house.pictures.first.picture,
                 )
               : null,
-          child: offer.house.pictures.isEmpty
+          child: chatItemModel.offer!.house.pictures.isEmpty
               ? SvgPicture.asset('assets/vectors/house.svg')
               : null,
         ),
         trailing: StarsWidget(
-          stars: offer.house.stars ?? 0,
-          numReviews: offer.house.numReviews ?? 1,
+          stars: chatItemModel.offer!.house.stars ?? 0,
+          numReviews: chatItemModel.offer!.house.numReviews ?? 1,
           type: StarsWidgetType.digital,
         ),
         subtitle: Row(
@@ -76,14 +76,15 @@ class ChatItem extends StatelessWidget {
               ),
               child: FaIcon(
                 FontAwesomeIcons.userLarge,
-                color: authController.currentUser!.id != offer.house.owner!.id
+                color: authController.currentUser!.id !=
+                        chatItemModel.offer!.house.owner!.id
                     ? primaryColor.withOpacity(0.5)
                     : Colors.red.withOpacity(0.5),
                 size: 16,
               ),
             ),
             const SizedBox(width: 10),
-            Text(offer.house.owner?.username ?? ''),
+            Text(chatItemModel.user!.username ?? ''),
           ],
         ),
       ),

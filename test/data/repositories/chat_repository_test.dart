@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:ekrilli_app/data/repositories/chat_repository.dart';
+import 'package:ekrilli_app/models/chat_item_model.dart';
 import 'package:ekrilli_app/models/message.dart';
 import 'package:ekrilli_app/models/offer.dart';
 import 'package:ekrilli_app/models/user.dart';
@@ -18,13 +19,13 @@ void main() {
     print('allMessage.length: ${data?.length}');
   });
 
-  test('ChatRepository get Offers By Messages', () async {
+  test('ChatRepository get chat items', () async {
     //// get instence
     ChatRepository chatRepository = ChatRepository();
 
-    ///// get Offers By Messages
+    ///// get chat items
 
-    List<Offer>? data = await chatRepository.getOffersByMessages();
+    List<ChatItemModel>? data = await chatRepository.getChatItems();
     print('offers.length: ${data?.length}');
     expect(data != null, true);
   });

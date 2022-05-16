@@ -8,8 +8,10 @@ import 'package:ekrilli_app/components/stars_widget.dart';
 import 'package:ekrilli_app/components/rooms_number_widget.dart';
 import 'package:ekrilli_app/components/submit_button.dart';
 import 'package:ekrilli_app/components/title_widget.dart';
+import 'package:ekrilli_app/controllers/auth_controller.dart';
 import 'package:ekrilli_app/controllers/house_controller.dart';
 import 'package:ekrilli_app/controllers/offers_controller.dart';
+import 'package:ekrilli_app/models/chat_item_model.dart';
 import 'package:ekrilli_app/models/offer.dart';
 import 'package:ekrilli_app/models/picture.dart';
 import 'package:ekrilli_app/screens/chatting_screen.dart';
@@ -317,7 +319,13 @@ class _HouseDetailsScreenState extends State<HouseDetailsScreen> {
                                     horizontal: 25,
                                   ),
                                   onTap: () => Get.to(
-                                    () => ChattingScreen(offer: widget.offer),
+                                    () => ChattingScreen(
+                                      chatItemModel: ChatItemModel(
+                                        offer: widget.offer,
+                                        user: Get.find<AuthController>()
+                                            .currentUser,
+                                      ),
+                                    ),
                                     transition: Transition.downToUp,
                                   ),
                                 ),
