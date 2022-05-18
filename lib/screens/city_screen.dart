@@ -24,7 +24,6 @@ class _CityScreenState extends State<CityScreen> {
   OfferController offerController = Get.find<OfferController>();
   ScrollController cityOffersScrollController = ScrollController();
   Parameters? parameters;
-  void initData() async {}
 
   @override
   void initState() {

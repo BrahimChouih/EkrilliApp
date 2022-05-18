@@ -51,11 +51,13 @@ class Parameters {
   int? cityId;
   int? offerId;
   int? userId;
+  bool myHouses;
 
   Parameters({
     this.page = 1,
     this.cityId,
     this.offerId,
     this.userId,
+    this.myHouses = false,
   });
 }

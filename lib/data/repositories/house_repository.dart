@@ -14,10 +14,12 @@ class HouseRepository {
   Future<List<House>?> getHouses({
     int page = 1,
     int? cityId,
+    bool myHouses=false,
   }) async {
     List<Map<String, dynamic>>? data = await houseAPI.getHouses(
       page: page,
       cityId: cityId,
+      myHouses: myHouses,
     );
     List<House> houses = [];
     data?.forEach((element) {

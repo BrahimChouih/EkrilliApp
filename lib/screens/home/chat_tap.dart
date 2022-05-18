@@ -42,7 +42,7 @@ class _ChatTapState extends State<ChatTap> {
             GetBuilder<ChatController>(
               builder: (context) {
                 return chatController.isLoading
-                    ? const ChatLoader()
+                    ? const Expanded(child: ChatLoader())
                     : chatController.isEmpty
                         ? const EmptyScreen(
                             title: 'No Messages yet',

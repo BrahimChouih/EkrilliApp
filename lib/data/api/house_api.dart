@@ -6,8 +6,11 @@ class HouseAPI {
   Future<List<Map<String, dynamic>>?> getHouses({
     int page = 1,
     int? cityId,
+    bool myHouses = false,
   }) async {
     String apiUrl = '$api/api/houses/';
+
+    if (myHouses) apiUrl = '$api/api/myhouses/';
 
     if (cityId != null) apiUrl += 'city/$cityId/';
 
