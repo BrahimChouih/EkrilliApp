@@ -26,13 +26,16 @@ class _ChattingScreenState extends State<ChattingScreen> {
   @override
   void initState() {
     parameters = Parameters(
-      offerId: widget.chatItemModel.offer!.id,
-      userId: widget.chatItemModel.user!.id,
+      offer: widget.chatItemModel.offer,
+      user: widget.chatItemModel.user,
     );
+
+    messagesController.parameters = parameters;
 
     WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
       await Future.delayed(const Duration(milliseconds: 150));
       await messagesController.refreshData(parameters: parameters);
+      await messagesController.chatOfferSended(parameters: parameters!);
     });
 
     messagesScrollController.addListener(() {
@@ -62,7 +65,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
                       return messagesController.isLoading
                           ? const MessageLoader()
                           : messagesController.isEmpty
-                              ? Container()
+                              ? const SizedBox()
                               : ListView.builder(
                                   itemCount: messagesController.messages.length,
                                   reverse: true,
@@ -77,7 +80,13 @@ class _ChattingScreenState extends State<ChattingScreen> {
                                 );
                     },
                   ),
-                  OfferAction(),
+                  GetBuilder<MessagesController>(
+                    id: messagesController.offerSendedId,
+                    builder: (_) => OfferAction(
+                      offerSended: messagesController.offerSended,
+                      parameters: parameters,
+                    ),
+                  ),
                 ],
               ),
             ),

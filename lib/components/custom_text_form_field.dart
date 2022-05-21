@@ -16,6 +16,7 @@ class CustomTextFormField extends StatefulWidget {
     this.hint,
     this.maxChars,
     this.readOnly = false,
+    this.onTap,
   }) : super(key: key);
 
   final TextEditingController? controller;
@@ -29,6 +30,7 @@ class CustomTextFormField extends StatefulWidget {
   final String? hint;
   final int? maxChars;
   final bool readOnly;
+  final Function()? onTap;
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
@@ -40,6 +42,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
     return TextFormField(
       controller: widget.controller,
       expands: widget.expanded,
+      onTap: widget.onTap,
       textInputAction: widget.textInputAction,
       keyboardType: widget.textInputType,
       validator: widget.validator,

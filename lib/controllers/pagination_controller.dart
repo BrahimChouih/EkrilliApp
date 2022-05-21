@@ -1,3 +1,5 @@
+import 'package:ekrilli_app/models/offer.dart';
+import 'package:ekrilli_app/models/user.dart';
 import 'package:get/get.dart';
 
 class PaginationController extends GetxController {
@@ -49,15 +51,15 @@ class PaginationController extends GetxController {
 class Parameters {
   int page;
   int? cityId;
-  int? offerId;
-  int? userId;
+  Offer? offer;
+  User? user;
   bool myHouses;
 
   Parameters({
     this.page = 1,
     this.cityId,
-    this.offerId,
-    this.userId,
+    this.offer,
+    this.user,
     this.myHouses = false,
   });
 }

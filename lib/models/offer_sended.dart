@@ -20,9 +20,14 @@ class OfferSended {
   });
 
   OfferSended.fromJson(Map<String, dynamic> json) {
-    messageId = json['message_id'];
-    offer = Offer.fromJson(json['offer']);
-    user = User.fromJson(json['user']);
+    messageId = json['message_id'] ?? 0;
+    if (json['offer'] != null) {
+      offer = Offer.fromJson(json['offer']);
+    }
+    if (json['user'] != null) {
+      user = User.fromJson(json['user']);
+    }
+
     startDate = DateTime.tryParse(json['start_date']);
     endDate = DateTime.tryParse(json['end_date']);
   }

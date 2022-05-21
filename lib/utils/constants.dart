@@ -13,3 +13,22 @@ ImageFilter blurEffect = ImageFilter.blur(
   sigmaX: 5,
   sigmaY: 5,
 );
+
+/// offer status
+const statusPublished = 'PUBLISHED';
+const statusWaittingForAccepte = 'WAITING_FOR_ACCEPTE';
+const statusRented = 'RENTED';
+const statusDone = 'DONE';
+
+/// message type
+const messageTypeRequest = 'REQUEST';
+const messageTypeResponse = 'RESPONSE';
+
+/// message content type
+const messageContentTypeMessage = 'MESSAGE';
+const messageContentTypeAction = 'ACTION';
+const messageContentTypeOfferInfo = 'OFFER_INFO';
+const messageContentTypeImage = 'IMAGE';
+
+//// date format
+const dateTimeFormat = "yyyy/MM/dd – HH:mm";

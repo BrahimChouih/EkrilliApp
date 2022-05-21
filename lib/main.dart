@@ -18,6 +18,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return GetMaterialApp(
       theme: primaryTheme,
+      debugShowCheckedModeBanner: false,
       home: SplashScreen(),
       // home: HomeScreen(),
       // home: MyHousesScreen(),

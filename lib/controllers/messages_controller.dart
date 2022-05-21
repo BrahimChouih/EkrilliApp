@@ -3,36 +3,46 @@ import 'package:ekrilli_app/controllers/pagination_controller.dart';
 import 'package:ekrilli_app/data/repositories/chat_repository.dart';
 import 'package:ekrilli_app/models/chat_item_model.dart';
 import 'package:ekrilli_app/models/message.dart';
+import 'package:ekrilli_app/models/offer.dart';
+import 'package:ekrilli_app/models/offer_sended.dart';
+import 'package:ekrilli_app/models/user.dart';
+import 'package:ekrilli_app/utils/constants.dart';
 import 'package:get/get.dart';
+
+import '../models/house.dart';
 
 class MessagesController extends PaginationController with ChatRepository {
   List<Message> messages = [];
+  OfferSended? offerSended;
+  Parameters? parameters;
   final AuthController authController = Get.find<AuthController>();
 
   bool get isEmpty => messages.isEmpty;
+  final String offerSendedId = 'offerSendedId';
 
   bool isMe(Message message) {
-    if (message.messageType == 'REQUEST') {
+    if (message.messageType == messageTypeRequest) {
       if (authController.currentUser!.id != message.offer!.house.owner!.id) {
         return true;
       } else {
         return false;
       }
-    } else {
+    } else if (message.messageType == messageTypeResponse) {
       if (authController.currentUser!.id == message.offer!.house.owner!.id) {
         return true;
       } else {
         return false;
       }
     }
+    return true;
   }
 
   String messageType(ChatItemModel chatItemModel) {
     if (chatItemModel.offer!.house.owner!.id ==
         authController.currentUser!.id) {
-      return 'RESPONSE';
+      return messageTypeResponse;
     }
-    return 'REQUEST';
+    return messageTypeRequest;
   }
 
   @override
@@ -48,8 +58,8 @@ class MessagesController extends PaginationController with ChatRepository {
     );
     await initData(
       parameters: Parameters(
-        offerId: offerId,
-        userId: userId,
+        offer: Offer(id: offerId, house: House()),
+        user: User(id: userId),
       ),
     );
     changeLoadingState(false);
@@ -60,8 +70,8 @@ class MessagesController extends PaginationController with ChatRepository {
     // changeLoadingState(true);
 
     List<Message>? resualt = await super.getConversation(
-      userId: parameters!.userId!,
-      offerId: parameters.offerId!,
+      userId: parameters!.user!.id!,
+      offerId: parameters.offer!.id!,
       page: page,
     );
 
@@ -73,10 +83,18 @@ class MessagesController extends PaginationController with ChatRepository {
   @override
   Future<void> initData({Parameters? parameters}) async {
     List<Message>? resualt = await super.getConversation(
-      userId: parameters!.userId!,
-      offerId: parameters.offerId!,
+      userId: parameters!.user!.id!,
+      offerId: parameters.offer!.id!,
     );
     messages = resualt ?? [];
+  }
+
+  Future<void> chatOfferSended({required Parameters parameters}) async {
+    offerSended = await super.getChatOfferSended(
+      offerId: parameters.offer!.id!,
+      userId: parameters.user!.id!,
+    );
+    update([offerSendedId]);
   }
 }
 
