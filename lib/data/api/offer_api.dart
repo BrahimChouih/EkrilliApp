@@ -95,13 +95,17 @@ class OfferAPI {
   Future<Map<String, dynamic>?> changeStatus({
     required int offerId,
     required String status,
+    int? userId,
   }) async {
-    String apiUrl = '$api/api/offers/$offerId/';
+    String apiUrl = '$api/api/offers/status/$offerId/';
 
     Response response = await dio
         .patch(
       apiUrl,
-      data: {'status': status},
+      data: {
+        'status': status,
+        'user': userId,
+      },
       options: options,
     )
         .onError<DioError>(

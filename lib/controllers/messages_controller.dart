@@ -20,6 +20,13 @@ class MessagesController extends PaginationController with ChatRepository {
   bool get isEmpty => messages.isEmpty;
   final String offerSendedId = 'offerSendedId';
 
+  bool isMin(Offer offer) {
+    if (offer.house.owner!.id == authController.currentUser!.id) {
+      return true;
+    }
+    return false;
+  }
+
   bool isMe(Message message) {
     if (message.messageType == messageTypeRequest) {
       if (authController.currentUser!.id != message.offer!.house.owner!.id) {

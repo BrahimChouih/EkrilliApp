@@ -53,17 +53,21 @@ class OfferRepository {
     }
   }
 
-  Future<Offer?> changeStatus({
+  Future<Map<String, dynamic>?> changeStatus({
     required int offerId,
     required String status,
+    int? userId,
   }) async {
     Map<String, dynamic>? data = await offerAPI.changeStatus(
       offerId: offerId,
       status: status,
+      userId: userId,
     );
-    if (data != null) {
-      Offer offer = Offer.fromJson(data);
-      return offer;
-    }
+    // if (data != null) {
+    //   Offer offer = Offer.fromJson(data);
+    //   return offer;
+    // }
+
+    return data;
   }
 }

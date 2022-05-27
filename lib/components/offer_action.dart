@@ -4,7 +4,9 @@ import 'dart:ui';
 import 'package:ekrilli_app/components/submit_button.dart';
 import 'package:ekrilli_app/components/text_field_with_title.dart';
 import 'package:ekrilli_app/controllers/messages_controller.dart';
+import 'package:ekrilli_app/controllers/offers_controller.dart';
 import 'package:ekrilli_app/controllers/pagination_controller.dart';
+import 'package:ekrilli_app/helpers/offer_helper.dart';
 import 'package:ekrilli_app/models/chat_item_model.dart';
 import 'package:ekrilli_app/models/message.dart';
 import 'package:ekrilli_app/models/offer_sended.dart';
@@ -21,21 +23,41 @@ class OfferAction extends StatelessWidget {
     this.offerSended,
     this.parameters,
   }) : super(key: key);
+
   RxBool expanded = false.obs;
+  RxBool isLoading = false.obs;
   OfferSended? offerSended;
+
   final Parameters? parameters;
   MessagesController messagesController = Get.find<MessagesController>();
+  OfferController offerController = Get.find<OfferController>();
+
   TextEditingController startDateController = TextEditingController();
   TextEditingController endDateController = TextEditingController();
+  TextEditingController totalPriceController = TextEditingController();
 
+  initData() {
+    if (offerSended?.startDate != null && offerSended?.endDate != null) {
+      startDateController.text =
+          DateFormat(dateTimeFormat).format(offerSended!.startDate!);
+      endDateController.text =
+          DateFormat(dateTimeFormat).format(offerSended!.endDate!);
+
+      totalPriceController.text = OfferHelper.getTotalPrice(
+        startDate: offerSended!.startDate!,
+        endDate: offerSended!.endDate!,
+        pricePerDay: offerSended!.message!.offer!.pricePerDay!,
+      ).toString();
+    }
+  }
+
+  TextStyle? textStyle;
   @override
   Widget build(BuildContext context) {
-    startDateController.text = offerSended?.startDate != null
-        ? DateFormat(dateTimeFormat).format(offerSended!.startDate!)
-        : '';
-    endDateController.text = offerSended?.startDate != null
-        ? DateFormat(dateTimeFormat).format(offerSended!.endDate!)
-        : '';
+    initData();
+    textStyle = TextStyle(
+      color: Colors.black.withOpacity(0.8),
+    );
     return ClipRRect(
       child: BackdropFilter(
         filter: ImageFilter.blur(
@@ -55,9 +77,7 @@ class OfferAction extends StatelessWidget {
             children: [
               Text(
                 'Make a deal with this person',
-                style: TextStyle(
-                  color: Colors.black.withOpacity(0.8),
-                ),
+                style: textStyle,
               ),
               AnimatedSize(
                 duration: const Duration(milliseconds: 200),
@@ -96,83 +116,92 @@ class OfferAction extends StatelessWidget {
   }
 
   Widget body(BuildContext context) {
+    if (parameters!.offer!.status == statusPublished &&
+        offerSended != null &&
+        !messagesController.isMin(
+          offerSended!.message!.offer!,
+        )) {
+      return accepteOffer(context);
+    }
+
     if (parameters!.offer!.status == statusPublished) {
       return sendOffer(context);
     }
-    if (parameters!.offer!.status == statusWaittingForAccepte) {
-      return accepteOffer();
-    }
+
     if (parameters!.offer!.status == statusRented) {
-      return rentedOffer();
+      return rentedOffer(context);
     }
     if (parameters!.offer!.status == statusDone) {
-      return doneOffer();
+      return doneOffer(context);
     }
 
     return const SizedBox();
   }
 
-  Widget accepteOffer() => Container();
-  Widget rentedOffer() => Container();
-  Widget doneOffer() => Container();
-
-  Widget sendOffer(BuildContext context) => Column(
+  Widget accepteOffer(BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
-          TextFielWithTitle(
-            controller: startDateController,
-            title: 'Start Date',
-            readOnly: true,
-            validator: (_) => null,
-            onTap: () => offerDateRangePicker(context),
-          ),
-          SizedBox(height: Get.height * 0.02),
-          TextFielWithTitle(
-            controller: endDateController,
-            title: 'End Date',
-            readOnly: true,
-            validator: (_) => null,
-            onTap: () => offerDateRangePicker(context),
-          ),
-          SubmitButton(
-            text: 'Send Offer',
+          offerInformation(context, clickable: false),
+          customSubmitButton(
+            text: 'Accept Offer',
             onTap: () async {
-              if (offerSended!.startDate != null &&
-                  offerSended!.endDate != null) {
-                await messagesController.sendMessage(
-                  offerId: parameters!.offer!.id!,
-                  userId: parameters!.user!.id!,
-                  message: Message(
-                    contentType: "OFFER_INFO",
-                    messageType: messagesController.messageType(
-                      ChatItemModel(
-                          offer: parameters?.offer, user: parameters?.user),
-                    ),
-                    message: json.encode(
-                      {
-                        'start_date': offerSended!.startDate!.toIso8601String(),
-                        'end_date': offerSended!.endDate!.toIso8601String(),
-                      },
-                    ),
-                  ),
-                );
-                await messagesController.chatOfferSended(
-                  parameters: parameters!,
-                );
-              }
+              await offerController.changeStatus(
+                offerId: parameters!.offer!.id!,
+                status: statusWaittingForAccepte,
+                userId: parameters!.user!.id,
+              );
+              await messagesController.initData(parameters: parameters);
+              messagesController.changeLoadingState(false);
             },
-            color: primaryColor.withOpacity(0.8),
-            textColor: Colors.white.withOpacity(0.9),
-            margin: EdgeInsets.symmetric(
-              vertical: Get.height * 0.02,
-            ),
-            padding: const EdgeInsets.symmetric(
-              horizontal: 20,
-              vertical: 5,
-            ),
           ),
         ],
       );
+  Widget rentedOffer(BuildContext context) => Container();
+  Widget doneOffer(BuildContext context) => Container();
+
+  Widget sendOffer(BuildContext context) =>
+      messagesController.isMin(offerSended!.message!.offer!)
+          ? Column(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                offerInformation(context),
+                customSubmitButton(
+                  text: 'Send Offer',
+                  onTap: () async {
+                    if (offerSended!.startDate != null &&
+                        offerSended!.endDate != null) {
+                      await messagesController.sendMessage(
+                        offerId: parameters!.offer!.id!,
+                        userId: parameters!.user!.id!,
+                        message: Message(
+                          contentType: "OFFER_INFO",
+                          messageType: messagesController.messageType(
+                            ChatItemModel(
+                                offer: parameters?.offer,
+                                user: parameters?.user),
+                          ),
+                          message: json.encode(
+                            {
+                              'start_date':
+                                  offerSended!.startDate!.toIso8601String(),
+                              'end_date':
+                                  offerSended!.endDate!.toIso8601String(),
+                            },
+                          ),
+                        ),
+                      );
+                      await messagesController.chatOfferSended(
+                        parameters: parameters!,
+                      );
+                    }
+                  },
+                ),
+              ],
+            )
+          : Text(
+              'Text me for make a deal.',
+              style: textStyle,
+            );
 
   void offerDateRangePicker(BuildContext context) async {
     DateTimeRange? dateTimeRange = await showDateRangePicker(
@@ -188,13 +217,71 @@ class OfferAction extends StatelessWidget {
       offerSended = OfferSended(
         startDate: dateTimeRange.start,
         endDate: dateTimeRange.end,
+        message: offerSended!.message,
       );
-      startDateController.text = DateFormat(dateTimeFormat).format(
-        dateTimeRange.start,
-      );
-      endDateController.text = DateFormat(dateTimeFormat).format(
-        dateTimeRange.end,
-      );
+      initData();
     }
   }
+
+  Widget offerInformation(BuildContext context, {bool clickable = true}) =>
+      IgnorePointer(
+        ignoring: !clickable,
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            TextFielWithTitle(
+              controller: startDateController,
+              title: 'Start Date',
+              readOnly: true,
+              validator: (_) => null,
+              onTap: () => offerDateRangePicker(context),
+            ),
+            SizedBox(height: Get.height * 0.02),
+            TextFielWithTitle(
+              controller: endDateController,
+              title: 'End Date',
+              readOnly: true,
+              validator: (_) => null,
+              onTap: () => offerDateRangePicker(context),
+            ),
+            SizedBox(height: Get.height * 0.02),
+            TextFielWithTitle(
+              controller: totalPriceController,
+              title: 'Total Price',
+              readOnly: true,
+              validator: (_) => null,
+            ),
+          ],
+        ),
+      );
+  Widget customSubmitButton({required String text, Future Function()? onTap}) =>
+      Obx(
+        () => IgnorePointer(
+          ignoring: isLoading.value,
+          child: SubmitButton(
+            text: isLoading.value ? 'Wait...' : text,
+            onTap: () async {
+              if (onTap != null) {
+                isLoading.value = true;
+                try {
+                  await onTap();
+                } catch (e) {
+                  print(e);
+                }
+
+                isLoading.value = false;
+              }
+            },
+            color: primaryColor.withOpacity(0.8),
+            textColor: Colors.white.withOpacity(0.9),
+            margin: EdgeInsets.symmetric(
+              vertical: Get.height * 0.02,
+            ),
+            padding: const EdgeInsets.symmetric(
+              horizontal: 20,
+              vertical: 5,
+            ),
+          ),
+        ),
+      );
 }

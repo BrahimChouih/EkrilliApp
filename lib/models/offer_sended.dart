@@ -1,31 +1,24 @@
 import 'package:ekrilli_app/models/city.dart';
+import 'package:ekrilli_app/models/message.dart';
 import 'package:ekrilli_app/models/offer.dart';
 import 'package:ekrilli_app/models/user.dart';
 
 import '../data/api/api.dart';
 
 class OfferSended {
-  int? messageId;
-  Offer? offer;
-  User? user;
+  Message? message;
   DateTime? startDate;
   DateTime? endDate;
 
   OfferSended({
-    this.messageId,
-    this.offer,
-    this.user,
+    this.message,
     this.endDate,
     this.startDate,
   });
 
   OfferSended.fromJson(Map<String, dynamic> json) {
-    messageId = json['message_id'] ?? 0;
-    if (json['offer'] != null) {
-      offer = Offer.fromJson(json['offer']);
-    }
-    if (json['user'] != null) {
-      user = User.fromJson(json['user']);
+    if (json['message'] != null) {
+      message = Message.fromJson(json['message']);
     }
 
     startDate = DateTime.tryParse(json['start_date']);
@@ -34,9 +27,8 @@ class OfferSended {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-    data['message_id'] = messageId;
-    data['offer'] = offer?.id;
-    data['user'] = user?.id;
+    data['message'] = message?.id;
+
     data['start_date'] = startDate?.toIso8601String();
     data['end_date'] = endDate?.toIso8601String();
     return data;
