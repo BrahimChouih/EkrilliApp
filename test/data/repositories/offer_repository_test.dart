@@ -78,11 +78,12 @@ void main() {
 
     ///// change offer status to PUBLISHED
     try {
-      Offer? data = await offerRepository.changeStatus(
+      var data = await offerRepository.changeStatus(
         offerId: 25,
         status: 'PUBLISHED',
+        userId: 2,
       );
-      print(data?.toJson());
+      print(data.toString());
       expect(data != null, true);
     } on DioError catch (e) {
       print(e.response?.data);

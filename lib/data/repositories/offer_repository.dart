@@ -57,11 +57,13 @@ class OfferRepository {
     required int offerId,
     required String status,
     int? userId,
+    Map<String, dynamic>? offerData,
   }) async {
     Map<String, dynamic>? data = await offerAPI.changeStatus(
       offerId: offerId,
       status: status,
       userId: userId,
+      offerData: offerData,
     );
     // if (data != null) {
     //   Offer offer = Offer.fromJson(data);

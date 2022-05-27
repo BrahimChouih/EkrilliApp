@@ -3,6 +3,7 @@ import 'dart:ui';
 
 import 'package:ekrilli_app/components/submit_button.dart';
 import 'package:ekrilli_app/components/text_field_with_title.dart';
+import 'package:ekrilli_app/controllers/auth_controller.dart';
 import 'package:ekrilli_app/controllers/messages_controller.dart';
 import 'package:ekrilli_app/controllers/offers_controller.dart';
 import 'package:ekrilli_app/controllers/pagination_controller.dart';
@@ -21,14 +22,12 @@ class OfferAction extends StatelessWidget {
   OfferAction({
     Key? key,
     this.offerSended,
-    this.parameters,
   }) : super(key: key);
 
   RxBool expanded = false.obs;
   RxBool isLoading = false.obs;
   OfferSended? offerSended;
 
-  final Parameters? parameters;
   MessagesController messagesController = Get.find<MessagesController>();
   OfferController offerController = Get.find<OfferController>();
 
@@ -46,7 +45,7 @@ class OfferAction extends StatelessWidget {
       totalPriceController.text = OfferHelper.getTotalPrice(
         startDate: offerSended!.startDate!,
         endDate: offerSended!.endDate!,
-        pricePerDay: offerSended!.message!.offer!.pricePerDay!,
+        pricePerDay: messagesController.parameters!.offer!.pricePerDay!,
       ).toString();
     }
   }
@@ -116,92 +115,241 @@ class OfferAction extends StatelessWidget {
   }
 
   Widget body(BuildContext context) {
-    if (parameters!.offer!.status == statusPublished &&
-        offerSended != null &&
-        !messagesController.isMin(
-          offerSended!.message!.offer!,
-        )) {
-      return accepteOffer(context);
-    }
+    if (messagesController.isMin(messagesController.parameters!.offer!)) {
+      ///////////////// owner /////////////////////////////
 
-    if (parameters!.offer!.status == statusPublished) {
-      return sendOffer(context);
-    }
+      if (messagesController.parameters!.offer!.status == statusPublished) {
+        return sendOffer(context);
+      }
 
-    if (parameters!.offer!.status == statusRented) {
-      return rentedOffer(context);
+      if (messagesController.parameters!.offer!.status ==
+          statusWaittingForAccepte) {
+        return accepteOffer(context);
+      }
+
+      if (messagesController.parameters!.offer!.status == statusRented) {
+        return messagesController.parameters!.offer!.user!.id ==
+                messagesController.parameters!.user!.id
+            ? rentedOffer(context)
+            : Text(
+                'This offer is not available for this user',
+                style: textStyle!.copyWith(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              );
+      }
+    } else {
+      ////////////////// user //////////////////
+      if (messagesController.parameters!.offer!.status == statusPublished &&
+          offerSended != null &&
+          !messagesController.isMin(
+            messagesController.parameters!.offer!,
+          )) {
+        return accepteOffer(context);
+      }
+
+      if (messagesController.parameters!.offer!.status == statusPublished) {
+        return Text(
+          'Text me for make a deal.',
+          style: textStyle?.copyWith(
+            color: Colors.amber,
+            fontWeight: FontWeight.bold,
+          ),
+        );
+      }
+      if (messagesController.parameters!.offer!.status ==
+          statusWaittingForAccepte) {
+        return accepteOffer(
+          context,
+          waitting: true,
+        );
+      }
+
+      if (messagesController.parameters!.offer!.status == statusRented) {
+        return messagesController.parameters!.offer!.user!.id ==
+                Get.find<AuthController>().currentUser!.id
+            ? rentedOffer(context)
+            : Text(
+                'This offer is not available',
+                style: textStyle?.copyWith(
+                  color: Colors.red,
+                  fontWeight: FontWeight.bold,
+                ),
+              );
+      }
     }
-    if (parameters!.offer!.status == statusDone) {
+    if (messagesController.parameters!.offer!.status == statusDone) {
       return doneOffer(context);
     }
 
     return const SizedBox();
   }
 
-  Widget accepteOffer(BuildContext context) => Column(
+  Widget accepteOffer(BuildContext context, {bool waitting = false}) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          offerInformation(
+            context,
+            clickable:
+                messagesController.isMin(messagesController.parameters!.offer!),
+          ),
+          !waitting
+              ? Row(
+                  mainAxisAlignment: messagesController
+                          .isMin(messagesController.parameters!.offer!)
+                      ? MainAxisAlignment.spaceEvenly
+                      : MainAxisAlignment.center,
+                  children: [
+                    customSubmitButton(
+                      text: 'Accept Offer',
+                      onTap: () async {
+                        await offerController.changeStatus(
+                          offerId: messagesController.parameters!.offer!.id!,
+                          status:
+                              messagesController.parameters!.offer!.status ==
+                                      statusWaittingForAccepte
+                                  ? statusRented
+                                  : statusWaittingForAccepte,
+                          offerData:
+                              messagesController.parameters!.offer!.status ==
+                                      statusWaittingForAccepte
+                                  ? offerSended!.toJson()
+                                  : null,
+                          userId: messagesController.parameters!.user!.id,
+                        );
+                        await messagesController.initData(
+                            parameters: messagesController.parameters);
+                        messagesController.parameters!.offer!.status =
+                            messagesController.parameters!.offer!.status ==
+                                    statusWaittingForAccepte
+                                ? statusRented
+                                : statusWaittingForAccepte;
+                        if (messagesController.parameters!.offer!.status ==
+                            statusRented) {
+                          messagesController.parameters!.offer!.user =
+                              messagesController.parameters!.user;
+                        }
+                        messagesController.changeLoadingState(false);
+                      },
+                    ),
+                    messagesController
+                            .isMin(messagesController.parameters!.offer!)
+                        ? sendOfferButton(text: 'send another offer')
+                        : const SizedBox(),
+                  ],
+                )
+              : Container(
+                  margin: const EdgeInsets.only(top: 15),
+                  child: Text(
+                    'Waitting for accept',
+                    style: textStyle!.copyWith(
+                      color: Colors.amber,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
+        ],
+      );
+
+  Widget rentedOffer(BuildContext context) => Column(
         mainAxisSize: MainAxisSize.min,
         children: [
           offerInformation(context, clickable: false),
-          customSubmitButton(
-            text: 'Accept Offer',
-            onTap: () async {
-              await offerController.changeStatus(
-                offerId: parameters!.offer!.id!,
-                status: statusWaittingForAccepte,
-                userId: parameters!.user!.id,
-              );
-              await messagesController.initData(parameters: parameters);
-              messagesController.changeLoadingState(false);
-            },
-          ),
+          messagesController.isMin(messagesController.parameters!.offer!)
+              ? customSubmitButton(
+                  text: 'Done',
+                  onTap: () async {
+                    await offerController.changeStatus(
+                      offerId: messagesController.parameters!.offer!.id!,
+                      status: statusDone,
+                      offerData: messagesController.parameters!.offer!.status ==
+                              statusWaittingForAccepte
+                          ? offerSended!.toJson()
+                          : null,
+                      userId: messagesController.parameters!.user!.id,
+                    );
+                    messagesController.parameters!.offer!.status = statusDone;
+                    await messagesController.initData(
+                        parameters: messagesController.parameters);
+                    messagesController.changeLoadingState(false);
+                  },
+                )
+              : Container(
+                  margin: const EdgeInsets.only(top: 15),
+                  child: Text(
+                    'Ranted to you',
+                    style: textStyle?.copyWith(
+                      color: Colors.amber,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ),
         ],
       );
-  Widget rentedOffer(BuildContext context) => Container();
-  Widget doneOffer(BuildContext context) => Container();
+  Widget doneOffer(BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          offerInformation(
+            context,
+            clickable: false,
+          ),
+          Container(
+            margin: const EdgeInsets.only(top: 15),
+            child: const Text(
+              'Done',
+              style: TextStyle(
+                color: Colors.amber,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          )
+        ],
+      );
 
-  Widget sendOffer(BuildContext context) =>
-      messagesController.isMin(offerSended!.message!.offer!)
-          ? Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                offerInformation(context),
-                customSubmitButton(
-                  text: 'Send Offer',
-                  onTap: () async {
-                    if (offerSended!.startDate != null &&
-                        offerSended!.endDate != null) {
-                      await messagesController.sendMessage(
-                        offerId: parameters!.offer!.id!,
-                        userId: parameters!.user!.id!,
-                        message: Message(
-                          contentType: "OFFER_INFO",
-                          messageType: messagesController.messageType(
-                            ChatItemModel(
-                                offer: parameters?.offer,
-                                user: parameters?.user),
-                          ),
-                          message: json.encode(
-                            {
-                              'start_date':
-                                  offerSended!.startDate!.toIso8601String(),
-                              'end_date':
-                                  offerSended!.endDate!.toIso8601String(),
-                            },
-                          ),
-                        ),
-                      );
-                      await messagesController.chatOfferSended(
-                        parameters: parameters!,
-                      );
-                    }
+  Widget sendOffer(BuildContext context) => Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          offerInformation(context),
+          sendOfferButton(),
+        ],
+      );
+
+  sendOfferButton({String text = 'Send Offer'}) => customSubmitButton(
+        text: text,
+        onTap: () async {
+          if (offerSended!.startDate != null && offerSended!.endDate != null) {
+            await messagesController.sendMessage(
+              offerId: messagesController.parameters!.offer!.id!,
+              userId: messagesController.parameters!.user!.id!,
+              message: Message(
+                contentType: "OFFER_INFO",
+                messageType: messagesController.messageType(
+                  ChatItemModel(
+                      offer: messagesController.parameters?.offer,
+                      user: messagesController.parameters?.user),
+                ),
+                message: json.encode(
+                  {
+                    'start_date': offerSended!.startDate!.toIso8601String(),
+                    'end_date': offerSended!.endDate!.toIso8601String(),
+                    // 'status': statusPublished,
                   },
                 ),
-              ],
-            )
-          : Text(
-              'Text me for make a deal.',
-              style: textStyle,
+              ),
             );
+            await offerController.changeStatus(
+              offerId: messagesController.parameters!.offer!.id!,
+              userId: messagesController.parameters!.user!.id!,
+              status: statusPublished,
+            );
+            messagesController.parameters!.offer!.status = statusPublished;
+            await messagesController.chatOfferSended(
+              parameters: messagesController.parameters!,
+            );
+          }
+        },
+      );
 
   void offerDateRangePicker(BuildContext context) async {
     DateTimeRange? dateTimeRange = await showDateRangePicker(
@@ -217,7 +365,6 @@ class OfferAction extends StatelessWidget {
       offerSended = OfferSended(
         startDate: dateTimeRange.start,
         endDate: dateTimeRange.end,
-        message: offerSended!.message,
       );
       initData();
     }
@@ -265,6 +412,9 @@ class OfferAction extends StatelessWidget {
                 isLoading.value = true;
                 try {
                   await onTap();
+                  await messagesController.chatOfferSended(
+                    parameters: messagesController.parameters!,
+                  );
                 } catch (e) {
                   print(e);
                 }

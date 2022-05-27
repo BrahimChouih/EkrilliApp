@@ -84,7 +84,6 @@ class _ChattingScreenState extends State<ChattingScreen> {
                     id: messagesController.offerSendedId,
                     builder: (_) => OfferAction(
                       offerSended: messagesController.offerSended,
-                      parameters: parameters,
                     ),
                   ),
                 ],

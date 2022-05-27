@@ -96,16 +96,19 @@ class OfferAPI {
     required int offerId,
     required String status,
     int? userId,
+    Map<String, dynamic>? offerData,
   }) async {
     String apiUrl = '$api/api/offers/status/$offerId/';
 
+    Map<String, dynamic> data = {
+      'status': status,
+      'user': userId,
+    };
+    data.addAll(offerData ?? {});
     Response response = await dio
         .patch(
       apiUrl,
-      data: {
-        'status': status,
-        'user': userId,
-      },
+      data: data,
       options: options,
     )
         .onError<DioError>(

@@ -1,5 +1,6 @@
 import 'package:ekrilli_app/components/stars_widget.dart';
 import 'package:ekrilli_app/controllers/auth_controller.dart';
+import 'package:ekrilli_app/controllers/messages_controller.dart';
 import 'package:ekrilli_app/models/chat_item_model.dart';
 import 'package:ekrilli_app/screens/chatting_screen.dart';
 import 'package:ekrilli_app/utils/constants.dart';
@@ -84,7 +85,12 @@ class ChatItem extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 10),
-            Text(chatItemModel.user!.username ?? ''),
+            Text(
+              (Get.find<MessagesController>().isMin(chatItemModel.offer!)
+                      ? chatItemModel.user!.username ?? ''
+                      : chatItemModel.offer!.house.owner!.username ?? '')
+                  .capitalize!,
+            ),
           ],
         ),
       ),
