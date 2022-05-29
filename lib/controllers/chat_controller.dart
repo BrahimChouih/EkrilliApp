@@ -11,8 +11,8 @@ class ChatController extends GetxController with ChatRepository {
   bool get isEmpty => chatItems.isEmpty;
 
   @override
-  Future<List<ChatItemModel>?> getChatItems() async {
-    changeLoadingState(true);
+  Future<List<ChatItemModel>?> getChatItems({bool withWait = true}) async {
+    if (withWait) changeLoadingState(true);
     List<ChatItemModel>? resualt = await super.getChatItems();
     chatItems = resualt ?? [];
 

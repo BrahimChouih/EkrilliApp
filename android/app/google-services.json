@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "972167885820",
+    "project_id": "ekrilli",
+    "storage_bucket": "ekrilli.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:972167885820:android:339708314da9a8dd97b879",
+        "android_client_info": {
+          "package_name": "com.example.ekrilli_app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "972167885820-dg3mdq06sf8v8r85db3e069h0uarih8i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDKwIHf6dwTCv1QKkrNUKJXcTjdVpCknwo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "972167885820-dg3mdq06sf8v8r85db3e069h0uarih8i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

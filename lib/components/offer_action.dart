@@ -204,6 +204,7 @@ class OfferAction extends StatelessWidget {
                     customSubmitButton(
                       text: 'Accept Offer',
                       onTap: () async {
+                        //// change offer status to Rented or Waitting_for_accept
                         await offerController.changeStatus(
                           offerId: messagesController.parameters!.offer!.id!,
                           status:
@@ -218,13 +219,18 @@ class OfferAction extends StatelessWidget {
                                   : null,
                           userId: messagesController.parameters!.user!.id,
                         );
+
+                        /// get message after change offer status
                         await messagesController.initData(
                             parameters: messagesController.parameters);
+
+                        /// update offer in pramaters after change his status
                         messagesController.parameters!.offer!.status =
                             messagesController.parameters!.offer!.status ==
                                     statusWaittingForAccepte
                                 ? statusRented
                                 : statusWaittingForAccepte;
+
                         if (messagesController.parameters!.offer!.status ==
                             statusRented) {
                           messagesController.parameters!.offer!.user =
@@ -235,7 +241,7 @@ class OfferAction extends StatelessWidget {
                     ),
                     messagesController
                             .isMin(messagesController.parameters!.offer!)
-                        ? sendOfferButton(text: 'send another offer')
+                        ? sendOfferButton()
                         : const SizedBox(),
                   ],
                 )

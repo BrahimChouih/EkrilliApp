@@ -2,10 +2,13 @@ import 'dart:io';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:dio/dio.dart';
+import 'package:ekrilli_app/controllers/chat_controller.dart';
 import 'package:ekrilli_app/controllers/house_controller.dart';
 import 'package:ekrilli_app/controllers/messages_controller.dart';
+import 'package:ekrilli_app/helpers/notification_helper.dart';
 import 'package:ekrilli_app/screens/authentication_screen.dart';
 import 'package:ekrilli_app/screens/home_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
@@ -30,6 +33,10 @@ class SplashScreen extends StatelessWidget {
       await authController.initData();
       await houseController.getCities();
       if (authController.isLogin) {
+        NotificationHelper.onMessage = () {
+          Get.put<ChatController>(ChatController())
+              .getChatItems(withWait: false);
+        };
         await Get.offAll(
           () => HomeScreen(),
         );

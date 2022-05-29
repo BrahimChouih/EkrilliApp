@@ -5,10 +5,13 @@ import 'package:ekrilli_app/components/offer_action.dart';
 import 'package:ekrilli_app/controllers/auth_controller.dart';
 import 'package:ekrilli_app/controllers/messages_controller.dart';
 import 'package:ekrilli_app/controllers/pagination_controller.dart';
+import 'package:ekrilli_app/helpers/notification_helper.dart';
 import 'package:ekrilli_app/models/chat_item_model.dart';
 import 'package:ekrilli_app/models/offer.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../controllers/chat_controller.dart';
 
 class ChattingScreen extends StatefulWidget {
   ChattingScreen({Key? key, required this.chatItemModel}) : super(key: key);
@@ -44,7 +47,22 @@ class _ChattingScreenState extends State<ChattingScreen> {
         messagesController.getNextPage();
       }
     });
+    NotificationHelper.currentOfferId = parameters!.offer!.id!;
+    NotificationHelper.onMessage = () async {
+      await messagesController.initData(parameters: parameters);
+      await messagesController.chatOfferSended(parameters: parameters!);
+      messagesController.changeLoadingState(false);
+    };
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    NotificationHelper.currentOfferId = 0;
+    NotificationHelper.onMessage = () {
+      Get.find<ChatController>().getChatItems(withWait: false);
+    };
+    super.dispose();
   }
 
   @override

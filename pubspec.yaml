@@ -28,9 +28,12 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   animated_text_kit: ^4.2.1
+  awesome_notifications: ^0.6.21
   carousel_slider: ^4.1.1
   cupertino_icons: ^1.0.2
   dio: ^4.0.6
+  firebase_core: ^1.17.1
+  firebase_messaging: ^11.4.1
   flutter:
     sdk: flutter
   flutter_svg: ^1.0.3

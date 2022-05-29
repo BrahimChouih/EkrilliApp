@@ -101,6 +101,7 @@ class MessagesController extends PaginationController with ChatRepository {
       offerId: parameters.offer!.id!,
       userId: parameters.user!.id!,
     );
+    parameters.offer = offerSended!.message!.offer!;
     update([offerSendedId]);
   }
 }

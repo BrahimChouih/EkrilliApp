@@ -113,7 +113,7 @@ class MessageWidget extends StatelessWidget {
     );
   }
 
-  Widget messageAction() => Text("Action");
+  Widget messageAction() => Text(message.message ?? 'Action');
 }
 
 class MessageLoader extends StatelessWidget {
