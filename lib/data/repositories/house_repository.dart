@@ -77,7 +77,7 @@ class HouseRepository {
     data['pictures'] = [];
 
     for (int i = 0; i < house.pictures.length; i++) {
-      if (house.pictures[i].isUrl) {
+      if (!house.pictures[i].isUrl) {
         MultipartFile multipartFile = await MultipartFile.fromFile(
           house.pictures[i].picture,
           filename: basename(house.pictures[i].picture),

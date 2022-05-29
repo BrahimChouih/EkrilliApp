@@ -1,17 +1,30 @@
 import 'package:ekrilli_app/controllers/pagination_controller.dart';
 import 'package:ekrilli_app/models/house.dart';
+import 'package:ekrilli_app/models/municipality.dart';
 import '../data/repositories/house_repository.dart';
 import '../models/city.dart';
+import '../models/picture.dart';
 
 class HouseController extends PaginationController with HouseRepository {
   List<City> cities = [];
+  List<Municipality> municipalities = [];
   List<House> myHouses = [];
+
+  final String municipalitiesId = 'municipalitiesId';
 
   bool get isEmpty => myHouses.isEmpty;
   @override
   Future<List<City>?> getCities() async {
     cities = (await super.getCities()) ?? [];
+    update([municipalitiesId]);
     return cities;
+  }
+
+  @override
+  Future<List<Municipality>?> getMunicipalities({int cityId = 1}) async {
+    municipalities = (await super.getMunicipalities(cityId: cityId)) ?? [];
+    update([municipalitiesId]);
+    return municipalities;
   }
 
   @override
@@ -39,6 +52,26 @@ class HouseController extends PaginationController with HouseRepository {
   @override
   Future<void> deleteHouse(int houseId) async {
     await super.deleteHouse(houseId);
+  }
+
+  @override
+  Future<House?> createHouse(House house) async {
+    await super.createHouse(house);
+    await refreshData(parameters: Parameters(myHouses: true));
+  }
+
+  @override
+  Future<House?> updateHouseInfo({
+    required int houseId,
+    required House house,
+    List<Picture> deletedPictures = const [],
+  }) async {
+    await super.updateHouseInfo(
+      houseId: houseId,
+      house: house,
+      deletedPictures: deletedPictures,
+    );
+    await refreshData(parameters: Parameters(myHouses: true));
   }
 }
 

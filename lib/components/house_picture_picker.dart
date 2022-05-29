@@ -10,16 +10,18 @@ class HousePicturePicker extends StatefulWidget {
   HousePicturePicker({
     Key? key,
     this.onChange,
+    this.onRemove,
+    this.pictures = const [],
   }) : super(key: key);
   final Function(List<Picture>)? onChange;
+  final Function(Picture)? onRemove;
+  List<Picture> pictures;
 
   @override
   State<HousePicturePicker> createState() => _HousePicturePickerState();
 }
 
 class _HousePicturePickerState extends State<HousePicturePicker> {
-  List<Picture> pictures = [];
-
   @override
   Widget build(BuildContext context) {
     return GridView.builder(
@@ -27,7 +29,7 @@ class _HousePicturePickerState extends State<HousePicturePicker> {
         crossAxisCount: 2,
       ),
       primary: false,
-      itemCount: pictures.length + 1,
+      itemCount: widget.pictures.length + 1,
       shrinkWrap: true,
       itemBuilder: (_, index) {
         return Container(
@@ -35,28 +37,28 @@ class _HousePicturePickerState extends State<HousePicturePicker> {
           decoration: BoxDecoration(
             color: deepPrimaryColor.withOpacity(0.1),
             borderRadius: borderRadius,
-            image: index != pictures.length
-                ? pictures[index].isUrl
+            image: index != widget.pictures.length
+                ? widget.pictures[index].isUrl
                     ? DecorationImage(
-                        image: NetworkImage(pictures[index].picture),
+                        image: NetworkImage(widget.pictures[index].picture),
                         fit: BoxFit.cover,
                       )
                     : DecorationImage(
-                        image: FileImage(File(pictures[index].picture)),
+                        image: FileImage(File(widget.pictures[index].picture)),
                         fit: BoxFit.cover,
                       )
                 : null,
           ),
-          child: index == pictures.length
+          child: index == widget.pictures.length
               ? InkWell(
                   onTap: () async {
                     String? image = await FilePickerHelper.imagePicker()
                         .then((value) => value);
                     if (image != null) {
                       Picture picture = Picture(picture: image, isUrl: false);
-                      pictures.add(picture);
+                      widget.pictures.add(picture);
                       if (widget.onChange != null) {
-                        widget.onChange!(pictures);
+                        widget.onChange!(widget.pictures);
                       }
                       setState(() {});
                     }
@@ -70,9 +72,12 @@ class _HousePicturePickerState extends State<HousePicturePicker> {
                   alignment: Alignment.topRight,
                   child: IconButton(
                     onPressed: () {
-                      pictures.removeAt(index);
+                      if (widget.onRemove != null) {
+                        widget.onRemove!(widget.pictures[index]);
+                      }
+                      widget.pictures.removeAt(index);
                       if (widget.onChange != null) {
-                        widget.onChange!(pictures);
+                        widget.onChange!(widget.pictures);
                       }
 
                       setState(() {});
