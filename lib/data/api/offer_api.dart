@@ -126,15 +126,15 @@ class OfferAPI {
 
   Future<List<Map<String, dynamic>>?> search({
     int page = 1,
-    String search = '',
+    String? search,
     int? cityId,
     String? orderBy,
     bool inversOrdering = false,
   }) async {
     String apiUrl = '$api/api/offers/search/';
     apiUrl += '?page=$page';
-    apiUrl += '&search=$search';
 
+    if (search != null) apiUrl += '&search=$search';
     if (cityId != null) apiUrl += '&city=$cityId';
     if (orderBy != null) {
       if (inversOrdering) orderBy = '-' + orderBy;

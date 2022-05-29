@@ -75,7 +75,7 @@ class OfferRepository {
 
   Future<List<Offer>?> search({
     int page = 1,
-    String search = '',
+    String? search,
     int? cityId,
     String? orderBy,
     bool inversOrdering = false,

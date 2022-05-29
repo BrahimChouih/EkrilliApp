@@ -112,33 +112,72 @@ class HouseWidget extends StatelessWidget {
                         bathrooms: (offer?.house ?? house)?.bathrooms ?? 1,
                         bedrooms: (offer?.house ?? house)?.bedrooms ?? 1,
                       ),
-                      StarsWidget(
-                        stars: (offer?.house ?? house)?.stars ?? 0,
-                        numReviews: (offer?.house ?? house)?.numReviews ?? 0,
-                      ),
                       Row(
                         children: [
-                          const FaIcon(
-                            FontAwesomeIcons.locationDot,
-                            color: Colors.white,
-                            size: 20,
-                          ),
-                          const SizedBox(width: 10),
-                          (offer?.house ?? house)!.municipality != null
-                              ? Text(
-                                  ((offer?.house ?? house)!
-                                              .municipality
-                                              ?.name ??
-                                          '') +
-                                      ', ' +
-                                      ((offer?.house ?? house)
-                                              ?.municipality
-                                              ?.city
-                                              ?.name ??
-                                          ''),
-                                  overflow: TextOverflow.ellipsis,
-                                  style: const TextStyle(
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              StarsWidget(
+                                stars: (offer?.house ?? house)?.stars ?? 0,
+                                numReviews:
+                                    (offer?.house ?? house)?.numReviews ?? 0,
+                              ),
+                              Row(
+                                children: [
+                                  const FaIcon(
+                                    FontAwesomeIcons.locationDot,
                                     color: Colors.white,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  (offer?.house ?? house)!.municipality != null
+                                      ? Text(
+                                          ((offer?.house ?? house)!
+                                                      .municipality
+                                                      ?.name ??
+                                                  '') +
+                                              ', ' +
+                                              ((offer?.house ?? house)
+                                                      ?.municipality
+                                                      ?.city
+                                                      ?.name ??
+                                                  ''),
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      : const SizedBox(),
+                                ],
+                              ),
+                            ],
+                          ),
+                          offer?.pricePerDay != null
+                              ? Expanded(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        offer!.pricePerDay.toString(),
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.end,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const Text(
+                                        'DA/Day',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
                                   ),
                                 )
                               : const SizedBox(),

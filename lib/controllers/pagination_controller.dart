@@ -54,6 +54,9 @@ class Parameters {
   Offer? offer;
   User? user;
   bool myHouses;
+  String? search;
+  String? orderBy;
+  bool inversOrdering;
 
   Parameters({
     this.page = 1,
@@ -61,5 +64,8 @@ class Parameters {
     this.offer,
     this.user,
     this.myHouses = false,
+    this.search,
+    this.orderBy = 'created_at',
+    this.inversOrdering = false,
   });
 }

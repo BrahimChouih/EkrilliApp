@@ -8,6 +8,7 @@ import 'package:ekrilli_app/controllers/offers_controller.dart';
 import 'package:ekrilli_app/controllers/pagination_controller.dart';
 import 'package:ekrilli_app/data/api/api.dart';
 import 'package:ekrilli_app/models/city.dart';
+import 'package:ekrilli_app/screens/search_screen.dart';
 import 'package:ekrilli_app/utils/constants.dart';
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
@@ -57,6 +58,11 @@ class _HomeTapState extends State<HomeTap> {
                   hintText: 'Search',
                   margin: EdgeInsets.symmetric(horizontal: Get.width * 0.05),
                   borderColor: deepPrimaryColor,
+                  onTap: () => Get.to(
+                    () => SearchScreen(),
+                    transition: Transition.downToUp,
+                  ),
+                  readOnly: true,
                   prefixIcon: const Icon(
                     FontAwesomeIcons.magnifyingGlass,
                     color: deepPrimaryColor,
@@ -98,7 +104,7 @@ class _HomeTapState extends State<HomeTap> {
                 GetBuilder<OfferController>(
                   builder: (_) => offerController.isEmpty
                       ? offerController.isLoading
-                          ? HouseLoader()
+                          ? const HouseLoader()
                           : const Center(
                               child: EmptyScreen(
                                 title: 'No Houses yet',
