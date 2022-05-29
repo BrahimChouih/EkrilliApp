@@ -72,4 +72,26 @@ class OfferRepository {
 
     return data;
   }
+
+  Future<List<Offer>?> search({
+    int page = 1,
+    String search = '',
+    int? cityId,
+    String? orderBy,
+    bool inversOrdering = false,
+  }) async {
+    List<Map<String, dynamic>>? data = await offerAPI.search(
+      page: page,
+      cityId: cityId,
+      search: search,
+      orderBy: orderBy,
+      inversOrdering: inversOrdering,
+    );
+    List<Offer> offers = [];
+    data?.forEach((element) {
+      offers.add(Offer.fromJson(element));
+    });
+
+    return offers;
+  }
 }

@@ -90,4 +90,21 @@ void main() {
       expect(e.response?.statusCode, 404);
     }
   });
+
+  test('OfferRepository search on an offer', () async {
+    //// get instence
+    OfferRepository offerRepository = OfferRepository();
+
+    //// search
+    List<Offer>? data = await offerRepository.search(
+      inversOrdering: false,
+      search: 'Titree',
+      orderBy: 'stars',
+    );
+    // print('length: ${data?.length}');
+    data?.forEach((d) {
+      print('id:${d.id}');
+      print('stars:${d.house.stars}');
+    });
+  });
 }

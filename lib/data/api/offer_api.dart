@@ -123,4 +123,38 @@ class OfferAPI {
 
     return response.data;
   }
+
+  Future<List<Map<String, dynamic>>?> search({
+    int page = 1,
+    String search = '',
+    int? cityId,
+    String? orderBy,
+    bool inversOrdering = false,
+  }) async {
+    String apiUrl = '$api/api/offers/search/';
+    apiUrl += '?page=$page';
+    apiUrl += '&search=$search';
+
+    if (cityId != null) apiUrl += '&city=$cityId';
+    if (orderBy != null) {
+      if (inversOrdering) orderBy = '-' + orderBy;
+      apiUrl += '&order_by=$orderBy';
+    }
+
+    Response response = await dio
+        .get(
+      apiUrl,
+      options: options,
+    )
+        .onError<DioError>(
+      (error, stackTrace) {
+        throw error;
+      },
+    );
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception(response);
+    }
+    return [...response.data['results']];
+  }
 }

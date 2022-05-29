@@ -91,4 +91,22 @@ void main() {
       expect(e.response?.statusCode, anyOf(404, 400));
     }
   });
+
+  test('OfferAPI search on an offer', () async {
+    //// get instence
+    OfferAPI offerAPI = OfferAPI();
+
+    ///// search
+    List<Map<String, dynamic>>? data = await offerAPI.search(
+      inversOrdering: false,
+      search: 'Titree',
+      orderBy: 'stars',
+    );
+    // print(data);
+    data?.forEach((d) {
+      print('id:${d['id']}');
+      print('stars:${d['house']['stars']}');
+    });
+    expect(data?.length != null, true);
+  });
 }
