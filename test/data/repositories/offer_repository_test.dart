@@ -17,6 +17,10 @@ void main() {
     //// get offers by city
     data = await offerRepository.getOffers(cityId: 1);
     print('offersByCity.length: ${data?.length}');
+
+    //// get offers by house
+    data = await offerRepository.getOffers(houseId: 1);
+    print('offersByHouse.length: ${data?.length}');
   });
 
   test('OfferRepository get offer info', () async {
@@ -43,7 +47,6 @@ void main() {
       Offer? data = await offerRepository.createOffer(
         Offer(
           house: House(id: 1),
-          user: User(id: 2),
         ),
       );
       print(data?.toJson());

@@ -13,6 +13,7 @@ class PaginationController extends GetxController {
     changeLoadingState(true);
     await initData(parameters: parameters);
     changeLoadingState(false);
+    await getNextPage(parameters: parameters);
   }
 
   Future<void> getNextPage({Parameters? parameters}) async {

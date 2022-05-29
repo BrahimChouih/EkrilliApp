@@ -9,10 +9,12 @@ class OfferRepository {
   Future<List<Offer>?> getOffers({
     int page = 1,
     int? cityId,
+    int? houseId,
   }) async {
     List<Map<String, dynamic>>? data = await offerAPI.getOffers(
       page: page,
       cityId: cityId,
+      houseId: houseId,
     );
     List<Offer> offers = [];
     data?.forEach((element) {

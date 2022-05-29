@@ -35,6 +35,11 @@ class HouseController extends PaginationController with HouseRepository {
     );
     myHouses = resualt ?? [];
   }
+
+  @override
+  Future<void> deleteHouse(int houseId) async {
+    await super.deleteHouse(houseId);
+  }
 }
 
 ////

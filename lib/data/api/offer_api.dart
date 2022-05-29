@@ -5,10 +5,12 @@ class OfferAPI {
   Future<List<Map<String, dynamic>>?> getOffers({
     int page = 1,
     int? cityId,
+    int? houseId,
   }) async {
     String apiUrl = '$api/api/offers/';
 
     if (cityId != null) apiUrl += 'city/$cityId/';
+    if (houseId != null) apiUrl += 'house/$houseId/';
 
     apiUrl += '?page=$page';
 

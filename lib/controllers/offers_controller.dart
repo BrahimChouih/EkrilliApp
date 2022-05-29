@@ -1,6 +1,7 @@
 import 'package:ekrilli_app/controllers/pagination_controller.dart';
 import 'package:ekrilli_app/data/repositories/offer_repository.dart';
 import 'package:ekrilli_app/models/user.dart';
+import 'package:ekrilli_app/utils/constants.dart';
 import 'package:get/get.dart';
 
 import '../data/api/api.dart';
@@ -13,8 +14,11 @@ import '../models/picture.dart';
 class OfferController extends PaginationController with OfferRepository {
   List<Offer> offers = [];
   List<Offer> offersByCity = [];
+  List<Offer> offersByHouse = [];
+  bool isGettingOfferByHouse = true;
 
   final String offerInfoWidgetId = 'offerInfoWidgetId';
+  final String offersByHouseId = 'offerByHouseId';
 
   bool get isEmpty => offers.isEmpty;
 
@@ -59,6 +63,39 @@ class OfferController extends PaginationController with OfferRepository {
     update([offerInfoWidgetId]);
     return offer;
   }
+
+  Future<List<House>?> getoffersByHouse(int houseId) async {
+    isGettingOfferByHouse = true;
+    update([offersByHouseId]);
+    offersByHouse = (await super.getOffers(houseId: houseId)) ?? [];
+    offersByHouse = offersByHouse.reversed.toList();
+    isGettingOfferByHouse = false;
+    update([offersByHouseId]);
+  }
+
+  @override
+  Future<Offer?> updateOfferInfo({
+    required int offerId,
+    required Offer offer,
+  }) async {
+    await super.updateOfferInfo(
+      offerId: offerId,
+      offer: offer,
+    );
+    await refreshData();
+  }
+
+  @override
+  Future<Offer?> createOffer(Offer offer) async {
+    await super.createOffer(offer);
+    refreshData();
+  }
+
+  Offer? get offerWithPublishStatus => offersByHouse.firstWhere(
+        (offer) =>
+            offer.status == statusPublished ||
+            offer.status == statusWaittingForAccepte,
+      );
 }
 
 ///

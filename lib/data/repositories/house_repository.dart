@@ -14,7 +14,7 @@ class HouseRepository {
   Future<List<House>?> getHouses({
     int page = 1,
     int? cityId,
-    bool myHouses=false,
+    bool myHouses = false,
   }) async {
     List<Map<String, dynamic>>? data = await houseAPI.getHouses(
       page: page,
@@ -57,6 +57,13 @@ class HouseRepository {
     Map<String, dynamic>? houseJson = await houseAPI.houseInfo(houseId);
     House? houseData = House.fromJson(houseJson!);
     return houseData;
+  }
+
+  Future<void> deleteHouse(int houseId) async {
+    Map<String, dynamic>? houseJson = await houseAPI.houseInfo(
+      houseId,
+      method: DELETE,
+    );
   }
 
   Future<House?> updateHouseInfo({

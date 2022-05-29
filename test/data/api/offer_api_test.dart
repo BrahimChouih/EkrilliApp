@@ -9,7 +9,9 @@ void main() {
     OfferAPI offerAPI = OfferAPI();
 
     ///// get my offers
-    List<Map<String, dynamic>>? data = await offerAPI.getOffers();
+    List<Map<String, dynamic>>? data = await offerAPI.getOffers(
+      houseId: 1,
+    );
     print(data);
     expect(data?.length != null, true);
   });

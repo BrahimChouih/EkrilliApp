@@ -1,5 +1,6 @@
 import 'package:ekrilli_app/components/swipe_help.dart';
 import 'package:ekrilli_app/controllers/house_controller.dart';
+import 'package:ekrilli_app/models/house.dart';
 import 'package:ekrilli_app/screens/create_house_screen.dart';
 import 'package:ekrilli_app/screens/offers_screen.dart';
 import 'package:ekrilli_app/utils/constants.dart';
@@ -44,6 +45,11 @@ class _MyHousesScreenState extends State<MyHousesScreen> {
     super.initState();
   }
 
+  Future deleteHouse(House house) async {
+    await houseController.deleteHouse(house.id!);
+    await houseController.refreshData(parameters: parameters);
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -78,13 +84,15 @@ class _MyHousesScreenState extends State<MyHousesScreen> {
                       : RefreshIndicator(
                           onRefresh: () async {
                             await houseController.refreshData(
-                                parameters: parameters);
+                              parameters: parameters,
+                            );
                           },
                           child: SizedBox(
                             height: double.infinity,
                             child: ListView.builder(
                               itemCount: houseController.myHouses.length + 1,
                               shrinkWrap: true,
+                              physics: const AlwaysScrollableScrollPhysics(),
                               primary: false,
                               controller: myHousesScrollController,
                               itemBuilder: (_, index) => index !=
@@ -95,16 +103,23 @@ class _MyHousesScreenState extends State<MyHousesScreen> {
                                         vertical: 10,
                                       ),
                                       child: Dismissible(
-                                        key: ObjectKey(index),
+                                        key: ObjectKey(
+                                          houseController.myHouses[index],
+                                        ),
                                         background: backgroundSwipping(
-                                            Alignment.centerLeft),
+                                          Alignment.centerLeft,
+                                        ),
                                         secondaryBackground: backgroundSwipping(
-                                            Alignment.centerRight),
+                                          Alignment.centerRight,
+                                        ),
                                         onDismissed: (DismissDirection
-                                            dismissDirection) {
+                                            dismissDirection) async {
                                           if (dismissDirection ==
                                               DismissDirection.startToEnd) {
-                                            print('remove');
+                                            print('remove====');
+
+                                            // deleteHouse(houseController
+                                            //     .myHouses[index]);
                                           }
                                         },
                                         confirmDismiss: (DismissDirection
@@ -122,15 +137,28 @@ class _MyHousesScreenState extends State<MyHousesScreen> {
                                                 confirmed = false;
                                                 // Get.back();
                                               },
-                                              onConfirm: () {
+                                              onConfirm: () async {
                                                 confirmed = true;
+                                                await deleteHouse(
+                                                  houseController
+                                                      .myHouses[index],
+                                                );
                                                 Get.back();
                                               },
                                               confirmTextColor: Colors.white,
                                             );
                                             return confirmed;
                                           } else {
-                                            print('edit');
+                                            print('edit======');
+                                            Get.to(
+                                              () => CreateHouseScreen(
+                                                house: houseController
+                                                    .myHouses[index],
+                                                isUpdate: true,
+                                              ),
+                                              transition:
+                                                  Transition.rightToLeft,
+                                            );
                                             return false;
                                           }
                                         },

@@ -1,4 +1,5 @@
 import 'package:ekrilli_app/helpers/location_helper.dart';
+import 'package:ekrilli_app/models/house.dart';
 import 'package:ekrilli_app/models/picture.dart';
 import 'package:ekrilli_app/utils/constants.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +11,14 @@ import '../components/house_picture_picker.dart';
 import '../components/text_field_with_title.dart';
 
 class CreateHouseScreen extends StatelessWidget {
-  CreateHouseScreen({Key? key}) : super(key: key);
+  CreateHouseScreen({
+    Key? key,
+    this.house,
+    this.isUpdate = false,
+  }) : super(key: key);
+  House? house;
+  bool isUpdate;
+
   var houseTitleKey = GlobalKey<FormState>(
     debugLabel: 'houseTitleKey',
   );
