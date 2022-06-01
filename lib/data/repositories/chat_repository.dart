@@ -16,7 +16,7 @@ class ChatRepository {
     List<Map<String, dynamic>>? data = await chatAPI.getConversation(
       offerId: offerId,
       userId: userId,
-      page: 1,
+      page: page,
     );
     List<Message> conversation = [];
     data?.forEach((element) {

@@ -62,6 +62,7 @@ class _ChattingScreenState extends State<ChattingScreen> {
     NotificationHelper.onMessage = () {
       Get.find<ChatController>().getChatItems(withWait: false);
     };
+    messagesController.messages = [];
     super.dispose();
   }
 
