@@ -53,7 +53,12 @@ class _OffersScreenState extends State<OffersScreen> {
           color: Colors.white,
         ),
         onPressed: () {
-          Offer? offer = offerController.offerWithPublishStatus;
+          Offer? offer;
+          try {
+            offer = offerController.offerWithPublishStatus;
+          } catch (e) {
+            print(e);
+          }
 
           Get.to(
             () => CreateOfferScreen(

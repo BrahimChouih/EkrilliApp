@@ -17,6 +17,7 @@ class TextFielWithTitle extends StatelessWidget {
     this.formKey,
     this.readOnly = false,
     this.onTap,
+    this.onChanged,
   }) : super(key: key);
 
   final TextEditingController controller;
@@ -30,6 +31,7 @@ class TextFielWithTitle extends StatelessWidget {
   final GlobalKey? formKey;
   String? Function(String?)? validator;
   final Function()? onTap;
+  final Function(String)? onChanged;
 
   @override
   Widget build(BuildContext context) {
@@ -48,6 +50,7 @@ class TextFielWithTitle extends StatelessWidget {
             expanded: expanded,
             onTap: onTap,
             maxLines: maxLines,
+            onChanged: onChanged,
             maxChars: maxChars,
             readOnly: readOnly,
             validator: validator ??

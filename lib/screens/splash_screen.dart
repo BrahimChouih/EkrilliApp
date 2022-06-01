@@ -8,6 +8,7 @@ import 'package:ekrilli_app/controllers/messages_controller.dart';
 import 'package:ekrilli_app/helpers/notification_helper.dart';
 import 'package:ekrilli_app/screens/authentication_screen.dart';
 import 'package:ekrilli_app/screens/home_screen.dart';
+import 'package:ekrilli_app/screens/ip_screen.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -66,6 +67,13 @@ class SplashScreen extends StatelessWidget {
             goToNextScreen();
           },
           child: const Text('Rety'),
+        ),
+        cancel: TextButton(
+          onPressed: () async {
+            Get.back();
+            Get.offAll(IpScreen());
+          },
+          child: const Text('Change IP'),
         ),
       );
     }

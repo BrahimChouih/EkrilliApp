@@ -17,6 +17,7 @@ class CustomTextFormField extends StatefulWidget {
     this.maxChars,
     this.readOnly = false,
     this.onTap,
+    this.onChanged,
   }) : super(key: key);
 
   final TextEditingController? controller;
@@ -31,6 +32,7 @@ class CustomTextFormField extends StatefulWidget {
   final int? maxChars;
   final bool readOnly;
   final Function()? onTap;
+  final Function(String)? onChanged;
 
   @override
   State<CustomTextFormField> createState() => _CustomTextFormFieldState();
@@ -49,9 +51,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       maxLines: widget.maxLines,
       cursorColor: deepPrimaryColor,
       readOnly: widget.readOnly,
-      onChanged: (value) {
-        setState(() {});
-      },
+      onChanged: widget.onChanged,
       decoration: InputDecoration(
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(3),

@@ -21,4 +21,9 @@ class City {
     data['picture'] = picture;
     return data;
   }
+
+  @override
+  String toString() {
+    return name ?? super.toString();
+  }
 }

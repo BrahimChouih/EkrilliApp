@@ -79,7 +79,7 @@ class AuthAPI {
     });
 
     Response response = await dio.get(apiUrl, options: options).timeout(
-      const Duration(seconds: 10),
+      const Duration(seconds: 5),
       onTimeout: () {
         throw DioError(
           type: DioErrorType.connectTimeout,

@@ -21,4 +21,9 @@ class Municipality {
     data['city'] = city?.id;
     return data;
   }
+
+  @override
+  String toString() {
+    return name ?? super.toString();
+  }
 }

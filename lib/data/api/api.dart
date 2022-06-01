@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart' as d;
 
-const api = 'http://192.168.1.132:8000';
+String api = 'http://192.168.1.132:8000';
+// const api = 'http://192.168.1.132:8000';
 d.Dio dio = d.Dio();
 
 d.Options? options;
