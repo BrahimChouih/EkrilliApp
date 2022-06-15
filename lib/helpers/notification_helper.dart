@@ -34,12 +34,12 @@ class NotificationHelper {
 
   static void listenFCM() async {
     if (!hasListener) {
-      FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      FirebaseMessaging.onMessage.listen((RemoteMessage message) async {
         RemoteNotification? notification = message.notification;
         Map<String, dynamic> data = jsonDecode(message.data['messageData']);
         Message messageModel = Message.fromJson(data);
         try {
-          if (onMessage != null) onMessage!();
+          if (onMessage != null) await onMessage!();
         } catch (e) {
           print(e);
         }

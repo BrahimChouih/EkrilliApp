@@ -297,7 +297,9 @@ class _HouseDetailsScreenState extends State<HouseDetailsScreen> {
                           }),
                     ),
                   ),
-                  widget.isPreview
+                  widget.isPreview ||
+                          widget.offer.house.owner!.id ==
+                              Get.find<AuthController>().currentUser!.id
                       ? const SizedBox()
                       : Positioned(
                           width: Get.width,
