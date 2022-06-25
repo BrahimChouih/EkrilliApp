@@ -1,24 +1,24 @@
+import 'package:ekrilli_app/models/city.dart';
+
 import '../data/api/api.dart';
 
-class City {
+class Municipality {
   int? id;
   String? name;
-  String? picture;
+  City? city;
 
-  City({this.id, this.name, this.picture});
+  Municipality({this.id, this.name, this.city});
 
-  City.fromJson(Map<String, dynamic> json) {
+  Municipality.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'];
-    picture = !json['picture'].contains(api)
-        ? api + json['picture']
-        : json['picture'];
+    city = City.fromJson(json['city']);
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
     data['name'] = name;
-    data['picture'] = picture;
+    data['city'] = city?.id;
     return data;
   }
 

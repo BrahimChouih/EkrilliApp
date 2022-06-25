@@ -1,3 +1,5 @@
+import 'package:ekrilli_app/components/house_widget.dart';
+import 'package:ekrilli_app/components/swipe_help.dart';
 import 'package:ekrilli_app/controllers/offers_controller.dart';
 import 'package:ekrilli_app/models/house.dart';
 import 'package:ekrilli_app/screens/create_offer_screen.dart';
@@ -8,12 +10,40 @@ import 'package:get/get.dart';
 
 import '../components/custom_app_bar.dart';
 import '../components/empty_screen.dart';
+import '../components/offer_item.dart';
+import '../models/offer.dart';
 import '../utils/constants.dart';
 
-class OffersScreen extends StatelessWidget {
+class OffersScreen extends StatefulWidget {
   OffersScreen({Key? key, required this.house}) : super(key: key);
   House house;
+
+  @override
+  State<OffersScreen> createState() => _OffersScreenState();
+}
+
+class _OffersScreenState extends State<OffersScreen> {
   OfferController offerController = Get.find<OfferController>();
+
+  @override
+  void initState() {
+    offerController.isGettingOfferByHouse = true;
+    WidgetsBinding.instance?.addPostFrameCallback(
+      (timeStamp) async {
+        await Future.delayed(const Duration(milliseconds: 300));
+        offerController.getoffersByHouse(widget.house.id!);
+      },
+    );
+
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    offerController.offersByHouse = [];
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,9 +52,22 @@ class OffersScreen extends StatelessWidget {
           FontAwesomeIcons.notesMedical,
           color: Colors.white,
         ),
-        onPressed: () => Get.to(() => CreateOfferScreen(
-              house: house,
-            )),
+        onPressed: () {
+          Offer? offer;
+          try {
+            offer = offerController.offerWithPublishStatus;
+          } catch (e) {
+            print(e);
+          }
+
+          Get.to(
+            () => CreateOfferScreen(
+              house: widget.house,
+              offer: offer,
+              isUpdate: offer != null,
+            ),
+          );
+        },
       ),
       body: SafeArea(
         child: Column(
@@ -34,115 +77,47 @@ class OffersScreen extends StatelessWidget {
               backButton: true,
             ),
             SizedBox(height: Get.height * 0.01),
-            offerController.isEmpty
-                ? const EmptyScreen(
-                    title: 'There are not any offers yet',
-                    icon: FontAwesomeIcons.moneyCheckDollar,
-                  )
-                : Expanded(
-                    child: Column(
-                      children: [
-                        Container(
-                          decoration: BoxDecoration(
-                            color: Colors.white30,
-                            borderRadius: borderRadius,
-                          ),
-                          padding: const EdgeInsets.symmetric(
-                            vertical: 5,
-                            horizontal: 10,
-                          ),
-                          child: Row(
-                            mainAxisSize: MainAxisSize.min,
+            Expanded(
+              child: GetBuilder<OfferController>(
+                  id: offerController.offersByHouseId,
+                  builder: (context) {
+                    return offerController.isGettingOfferByHouse
+                        ? const OfferItemLoader()
+                        : Column(
                             children: [
-                              SvgPicture.asset(
-                                'assets/icons/swipe.svg',
-                                color: deepPrimaryColor,
-                              ),
-                              const SizedBox(width: 5),
-                              const Text(
-                                'swipe on an item to edit',
-                                style: TextStyle(
-                                  color: deepPrimaryColor,
-                                  fontSize: 12,
-                                ),
-                              ),
+                              offerController.offersByHouse.isEmpty
+                                  ? const EmptyScreen(
+                                      title: 'There are not any offers yet',
+                                      icon: FontAwesomeIcons.moneyCheckDollar,
+                                    )
+                                  : Expanded(
+                                      child: Column(
+                                        children: [
+                                          const SwipeHelp(
+                                              text: 'swipe on an item to edit'),
+                                          Expanded(
+                                            child: ListView.builder(
+                                              itemCount: offerController
+                                                  .offersByHouse.length,
+                                              shrinkWrap: true,
+                                              primary: false,
+                                              itemBuilder: (_, index) =>
+                                                  OfferItem(
+                                                offer: offerController
+                                                    .offersByHouse[index],
+                                              ),
+                                            ),
+                                          ),
+                                        ],
+                                      ),
+                                    ),
                             ],
-                          ),
-                        ),
-                        Expanded(
-                          child: ListView.builder(
-                            itemCount: 10,
-                            shrinkWrap: true,
-                            primary: false,
-                            itemBuilder: (_, index) => Container(
-                              margin: const EdgeInsets.symmetric(
-                                  horizontal: 10, vertical: 8),
-                              decoration: BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: borderRadius,
-                                boxShadow: [
-                                  BoxShadow(
-                                    color: primaryColor.withOpacity(0.5),
-                                    blurRadius: 8,
-                                    spreadRadius: -3,
-                                    offset: const Offset(2, 2),
-                                  ),
-                                ],
-                              ),
-                              child: Dismissible(
-                                key: ObjectKey(index),
-                                background:
-                                    backgroundSwipping(Alignment.centerLeft),
-                                secondaryBackground:
-                                    backgroundSwipping(Alignment.centerRight),
-                                onDismissed:
-                                    (DismissDirection dismissDirection) {
-                                  if (dismissDirection ==
-                                      DismissDirection.startToEnd) {
-                                    print('remove');
-                                  }
-                                },
-                                confirmDismiss: (dismissDirection) async {
-                                  print('edit');
-                                  return false;
-                                },
-                                child: ListTile(
-                                  title: Text(
-                                    offerController.offers.first.status ?? '',
-                                  ),
-                                  trailing: Text(
-                                    offerController.offers.first.pricePerDay
-                                            .toString() +
-                                        ' DA',
-                                  ),
-                                  subtitle: Text(offerController
-                                          .offers.first.user?.username ??
-                                      ''),
-                                ),
-                              ),
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
+                          );
+                  }),
+            ),
           ],
         ),
       ),
     );
   }
-
-  Widget backgroundSwipping(AlignmentGeometry alignment) => Container(
-        decoration: BoxDecoration(
-          color: primaryColor,
-          borderRadius: borderRadius,
-        ),
-        alignment: alignment,
-        padding: EdgeInsets.symmetric(horizontal: Get.width * 0.1),
-        child: Icon(
-          FontAwesomeIcons.penToSquare,
-          color: Colors.white,
-          size: Get.width * 0.08,
-        ),
-      );
 }

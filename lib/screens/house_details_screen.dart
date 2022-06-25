@@ -8,31 +8,57 @@ import 'package:ekrilli_app/components/stars_widget.dart';
 import 'package:ekrilli_app/components/rooms_number_widget.dart';
 import 'package:ekrilli_app/components/submit_button.dart';
 import 'package:ekrilli_app/components/title_widget.dart';
+import 'package:ekrilli_app/controllers/auth_controller.dart';
+import 'package:ekrilli_app/controllers/house_controller.dart';
+import 'package:ekrilli_app/controllers/offers_controller.dart';
+import 'package:ekrilli_app/models/chat_item_model.dart';
 import 'package:ekrilli_app/models/offer.dart';
+import 'package:ekrilli_app/models/picture.dart';
+import 'package:ekrilli_app/screens/chatting_screen.dart';
 import 'package:ekrilli_app/utils/constants.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
 import 'package:map_launcher/map_launcher.dart';
 
 import '../components/custom_app_bar.dart';
+import '../controllers/favorite_controller.dart';
 
-class HouseDetailsScreen extends StatelessWidget {
+class HouseDetailsScreen extends StatefulWidget {
   HouseDetailsScreen({
     Key? key,
     required this.offer,
     this.isPreview = false,
   }) : super(key: key);
+
   Offer offer;
   bool isPreview;
+
+  @override
+  State<HouseDetailsScreen> createState() => _HouseDetailsScreenState();
+}
+
+class _HouseDetailsScreenState extends State<HouseDetailsScreen> {
+  OfferController offerController = Get.find<OfferController>();
+  FavoriteController favoriteController = Get.find<FavoriteController>();
+
   EdgeInsets margin = EdgeInsets.symmetric(
     horizontal: Get.width * 0.03,
     vertical: Get.height * 0.01,
   );
+
   GlobalKey startChattingButton = GlobalKey();
+
   RxDouble startChattingButtonHeight = 0.0.obs;
+
   @override
-  Widget build(BuildContext context) {
+  void initState() {
+    if (!widget.isPreview) {
+      offerController.getOfferInfo(widget.offer.id!, returnOffer: (ofr) {
+        widget.offer = ofr;
+      });
+    }
     WidgetsBinding.instance?.addPostFrameCallback((d) {
       startChattingButtonHeight.value =
           (startChattingButton.currentContext?.findRenderObject() as RenderBox)
@@ -40,170 +66,240 @@ class HouseDetailsScreen extends StatelessWidget {
               .height;
       print(startChattingButtonHeight);
     });
+    super.initState();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
         child: Column(
           children: [
-            isPreview
+            widget.isPreview
                 ? CustomAppBar(title: 'Preview')
                 : CustomAppBar(
                     title: 'House',
                     backButton: true,
                     trailing: InkWell(
-                      child: const Icon(
-                        Icons.favorite_border,
-                        color: Colors.black54,
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      child: GetBuilder<FavoriteController>(
+                        id: favoriteController.favoriteIconId,
+                        builder: (context) {
+                          return Icon(
+                            favoriteController.contains(widget.offer.id!)
+                                ? Icons.favorite_rounded
+                                : Icons.favorite_border,
+                            color: favoriteController.contains(widget.offer.id!)
+                                ? primaryColor
+                                : deepPrimaryColor,
+                          );
+                        },
                       ),
-                      onTap: () {},
+                      onTap: () async {
+                        if (widget.offer.id != null) {
+                          await favoriteController
+                              .addFavorite(widget.offer.id!);
+                        }
+                      },
                     ),
                   ),
             Expanded(
               child: Stack(
                 children: [
-                  SingleChildScrollView(
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Container(
-                          margin: EdgeInsets.symmetric(
-                            horizontal: Get.width * 0.03,
-                            vertical: Get.height * 0.02,
-                          ),
-                          alignment: Alignment.center,
-                          child: Text(
-                            offer.house?.title ?? '',
-                            style: Get.theme.textTheme.headline5
-                                ?.copyWith(fontWeight: FontWeight.bold),
-                          ),
-                        ),
-                        PicturesSlider(
-                          pictures: offer.house?.pictures ?? [],
-                        ),
-                        SizedBox(height: Get.height * 0.03),
-                        Container(
-                          margin: margin,
-                          child: Row(
-                            children: [
-                              CircleAvatar(
-                                backgroundImage: NetworkImage(
-                                  offer.house?.owner?.picture ?? '',
+                  RefreshIndicator(
+                    onRefresh: () async {
+                      if (!widget.isPreview) {
+                        offerController.getOfferInfo(widget.offer.id!,
+                            returnOffer: (ofr) {
+                          widget.offer = ofr;
+                        });
+                      }
+                    },
+                    child: SingleChildScrollView(
+                      child: GetBuilder<OfferController>(
+                          id: offerController.offerInfoWidgetId,
+                          builder: (context) {
+                            return Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Container(
+                                  margin: EdgeInsets.symmetric(
+                                    horizontal: Get.width * 0.03,
+                                    vertical: Get.height * 0.02,
+                                  ),
+                                  alignment: Alignment.center,
+                                  child: Text(
+                                    widget.offer.house.title ?? '',
+                                    style: Get.theme.textTheme.headline5
+                                        ?.copyWith(fontWeight: FontWeight.bold),
+                                  ),
                                 ),
-                                radius: Get.width * 0.07,
-                              ),
-                              const SizedBox(width: 10),
-                              Text(
-                                offer.house?.owner?.username ?? '',
-                                style: const TextStyle(
-                                  fontWeight: FontWeight.bold,
+                                PicturesSlider(
+                                  pictures: widget
+                                          .offer.house.pictures.isNotEmpty
+                                      ? widget.offer.house.pictures
+                                      : [
+                                          Picture(
+                                            isUrl: false,
+                                            picture: 'assets/vectors/house.svg',
+                                          )
+                                        ],
                                 ),
-                              ),
-                              const Spacer(),
-                              StarsWidget(
-                                stars: offer.house?.stars ?? 0,
-                                numReviews: offer.house?.numReviews ?? 1,
-                                type: StarsWidgetType.digital,
-                              ),
-                            ],
-                          ),
-                        ),
-                        Container(
-                          margin: margin,
-                          child: RoomsNumberWidget(
-                            kitchens: offer.house?.kitchens ?? 1,
-                            bathrooms: offer.house?.bathrooms ?? 1,
-                            bedrooms: offer.house?.bedrooms ?? 1,
-                            color: Colors.black54,
-                            size: 25,
-                            textStyle: Get.theme.textTheme.headline5,
-                          ),
-                        ),
-                        Container(
-                          margin: margin,
-                          child: Row(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              InkWell(
-                                splashColor: Colors.transparent,
-                                highlightColor: Colors.transparent,
-                                onTap: () {
-                                  if (offer.house!.locationLatitude != null &&
-                                      offer.house!.locationLongitude != null) {
-                                    Get.bottomSheet(
-                                      MapApps(
-                                        coords: Coords(
-                                          offer.house!.locationLatitude!,
-                                          offer.house!.locationLongitude!,
+                                SizedBox(height: Get.height * 0.03),
+                                Container(
+                                  margin: margin,
+                                  child: Row(
+                                    children: [
+                                      CircleAvatar(
+                                        backgroundColor: Colors.transparent,
+                                        backgroundImage:
+                                            widget.offer.house.owner?.picture !=
+                                                    null
+                                                ? NetworkImage(
+                                                    widget.offer.house.owner
+                                                            ?.picture ??
+                                                        '',
+                                                  )
+                                                : null,
+                                        child:
+                                            widget.offer.house.owner?.picture ==
+                                                    null
+                                                ? SvgPicture.asset(
+                                                    'assets/vectors/person.svg',
+                                                  )
+                                                : null,
+                                        radius: Get.width * 0.07,
+                                      ),
+                                      const SizedBox(width: 10),
+                                      Text(
+                                        widget.offer.house.owner?.username ??
+                                            '',
+                                        style: const TextStyle(
+                                          fontWeight: FontWeight.bold,
                                         ),
                                       ),
-                                      elevation: 0,
-                                      barrierColor: Colors.transparent,
-                                    );
-                                  }
-                                },
-                                child: Row(
-                                  children: const [
-                                    FaIcon(
-                                      FontAwesomeIcons.locationDot,
-                                      color: primaryColor,
-                                    ),
-                                    SizedBox(width: 5),
-                                    Text(
-                                      'Open Map',
-                                      style: TextStyle(
-                                        color: primaryColor,
-                                        fontSize: 16,
+                                      const Spacer(),
+                                      StarsWidget(
+                                        stars: widget.offer.house.stars ?? 0,
+                                        numReviews:
+                                            widget.offer.house.numReviews ?? 1,
+                                        type: StarsWidgetType.digital,
                                       ),
-                                    ),
-                                  ],
+                                    ],
+                                  ),
                                 ),
-                              ),
-                              Expanded(
-                                child: Text(
-                                  offer.pricePerDay.toString(),
-                                  overflow: TextOverflow.ellipsis,
-                                  textAlign: TextAlign.end,
-                                  style: const TextStyle(
-                                    fontSize: 18,
+                                Container(
+                                  margin: margin,
+                                  child: RoomsNumberWidget(
+                                    kitchens: widget.offer.house.kitchens ?? 1,
+                                    bathrooms:
+                                        widget.offer.house.bathrooms ?? 1,
+                                    bedrooms: widget.offer.house.bedrooms ?? 1,
+                                    color: Colors.black54,
+                                    size: 25,
+                                    textStyle: Get.theme.textTheme.headline5,
+                                  ),
+                                ),
+                                Container(
+                                  margin: margin,
+                                  child: Row(
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
+                                    children: [
+                                      InkWell(
+                                        splashColor: Colors.transparent,
+                                        highlightColor: Colors.transparent,
+                                        onTap: () {
+                                          if (widget.offer.house
+                                                      .locationLatitude !=
+                                                  null &&
+                                              widget.offer.house
+                                                      .locationLongitude !=
+                                                  null) {
+                                            Get.bottomSheet(
+                                              MapApps(
+                                                coords: Coords(
+                                                  widget.offer.house
+                                                      .locationLatitude!,
+                                                  widget.offer.house
+                                                      .locationLongitude!,
+                                                ),
+                                              ),
+                                              elevation: 0,
+                                              barrierColor: Colors.transparent,
+                                            );
+                                          }
+                                        },
+                                        child: Row(
+                                          children: const [
+                                            FaIcon(
+                                              FontAwesomeIcons.locationDot,
+                                              color: primaryColor,
+                                            ),
+                                            SizedBox(width: 5),
+                                            Text(
+                                              'Open Map',
+                                              style: TextStyle(
+                                                color: primaryColor,
+                                                fontSize: 16,
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      Expanded(
+                                        child: Text(
+                                          widget.offer.pricePerDay.toString(),
+                                          overflow: TextOverflow.ellipsis,
+                                          textAlign: TextAlign.end,
+                                          style: const TextStyle(
+                                            fontSize: 18,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                      ),
+                                      const Text(
+                                        'DA/Day',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                ),
+                                TitleWidget(
+                                  title: 'Description:',
+                                  margin: margin.copyWith(
+                                    bottom: 0,
+                                    top: Get.height * 0.04,
+                                  ),
+                                  textStyle: Get.textTheme.headline6?.copyWith(
+                                    color: Colors.black.withOpacity(0.7),
                                     fontWeight: FontWeight.bold,
                                   ),
                                 ),
-                              ),
-                              const Text(
-                                'DA/Day',
-                                style: TextStyle(
-                                  fontSize: 10,
-                                  fontWeight: FontWeight.bold,
+                                Container(
+                                  margin: margin,
+                                  child: DescriptionViewer(
+                                      text:
+                                          widget.offer.house.description ?? ''),
                                 ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        TitleWidget(
-                          title: 'Description:',
-                          margin: margin.copyWith(
-                            bottom: 0,
-                            top: Get.height * 0.04,
-                          ),
-                          textStyle: Get.textTheme.headline6?.copyWith(
-                            color: Colors.black.withOpacity(0.7),
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        Container(
-                          margin: margin,
-                          child: DescriptionViewer(
-                              text: offer.house!.description ?? ''),
-                        ),
-                        RatingWidget(offer: offer),
-                        Obx(
-                          () => SizedBox(
-                            height: startChattingButtonHeight.value,
-                          ),
-                        ),
-                      ],
+                                RatingWidget(offer: widget.offer),
+                                Obx(
+                                  () => SizedBox(
+                                    height: startChattingButtonHeight.value,
+                                  ),
+                                ),
+                              ],
+                            );
+                          }),
                     ),
                   ),
-                  isPreview
+                  widget.isPreview ||
+                          widget.offer.house.owner!.id ==
+                              Get.find<AuthController>().currentUser!.id
                       ? const SizedBox()
                       : Positioned(
                           width: Get.width,
@@ -224,7 +320,16 @@ class HouseDetailsScreen extends StatelessWidget {
                                     vertical: 10,
                                     horizontal: 25,
                                   ),
-                                  onTap: () {},
+                                  onTap: () => Get.to(
+                                    () => ChattingScreen(
+                                      chatItemModel: ChatItemModel(
+                                        offer: widget.offer,
+                                        user: Get.find<AuthController>()
+                                            .currentUser,
+                                      ),
+                                    ),
+                                    transition: Transition.downToUp,
+                                  ),
                                 ),
                               ),
                             ),

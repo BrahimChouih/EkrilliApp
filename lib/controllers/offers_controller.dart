@@ -1,49 +1,131 @@
+import 'package:ekrilli_app/controllers/pagination_controller.dart';
 import 'package:ekrilli_app/data/repositories/offer_repository.dart';
 import 'package:ekrilli_app/models/user.dart';
+import 'package:ekrilli_app/utils/constants.dart';
 import 'package:get/get.dart';
 
 import '../data/api/api.dart';
 import '../models/city.dart';
 import '../models/house.dart';
+import '../models/municipality.dart';
 import '../models/offer.dart';
 import '../models/picture.dart';
 
-class OfferController extends GetxController with OfferRepository {
+class OfferController extends PaginationController with OfferRepository {
   List<Offer> offers = [];
-  bool isLoading = false;
+  List<Offer> offersByCity = [];
+  List<Offer> offersByHouse = [];
+  bool isGettingOfferByHouse = true;
+
+  final String offerInfoWidgetId = 'offerInfoWidgetId';
+  final String offersByHouseId = 'offerByHouseId';
 
   bool get isEmpty => offers.isEmpty;
 
   @override
-  Future<List<Offer>?> getOffers({int page = 1, int? cityId}) async {
-    changeLoadingState(true);
+  Future<void> getData({required int page, Parameters? parameters}) async {
+    // changeLoadingState(true);
 
-    List<Offer>? resualt = await super.getOffers(page: page, cityId: cityId);
-    if (resualt != null) {
-      offers = resualt;
+    List<Offer>? resualt = await super.getOffers(
+      page: page,
+      cityId: parameters?.cityId,
+    );
+
+    if (parameters?.cityId == null) {
+      offers.addAll(resualt ?? []);
+    } else {
+      offersByCity.addAll(resualt ?? []);
     }
-
-    changeLoadingState(false);
-
-    return resualt;
+    // changeLoadingState(false);
   }
 
-  void changeLoadingState(bool state) {
-    isLoading = state;
-    update();
+  @override
+  Future<void> initData({Parameters? parameters}) async {
+    List<Offer>? resualt = await super.getOffers(
+      cityId: parameters?.cityId,
+    );
+    if (parameters?.cityId == null) {
+      offers = resualt ?? [];
+    } else {
+      offersByCity = resualt ?? [];
+    }
   }
+
+  @override
+  Future<Offer?> getOfferInfo(
+    int offerId, {
+    Function(Offer)? returnOffer,
+  }) async {
+    Offer? offer = await super.getOfferInfo(offerId);
+    if (offer != null && returnOffer != null) {
+      returnOffer(offer);
+    }
+    update([offerInfoWidgetId]);
+    return offer;
+  }
+
+  Future<List<House>?> getoffersByHouse(int houseId) async {
+    isGettingOfferByHouse = true;
+    update([offersByHouseId]);
+    offersByHouse = (await super.getOffers(houseId: houseId)) ?? [];
+    offersByHouse = offersByHouse.reversed.toList();
+    isGettingOfferByHouse = false;
+    update([offersByHouseId]);
+  }
+
+  @override
+  Future<Offer?> updateOfferInfo({
+    required int offerId,
+    required Offer offer,
+  }) async {
+    await super.updateOfferInfo(
+      offerId: offerId,
+      offer: offer,
+    );
+    await refreshData();
+  }
+
+  @override
+  Future<Offer?> createOffer(Offer offer) async {
+    await super.createOffer(offer);
+    refreshData();
+  }
+
+  Offer? get offerWithPublishStatus => offersByHouse.firstWhere(
+        (offer) =>
+            offer.status == statusPublished ||
+            offer.status == statusWaittingForAccepte,
+      );
 }
 
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
+///
 List offerData = [
   Offer(
     pricePerDay: 3000,
     status: 'PUBLISHED',
     house: House(
       title: 'Come to titree',
-      location: '3ème Boulevard Péripherique',
       locationLatitude: 36.26417,
       locationLongitude: 2.75393,
-      city: City(name: 'Oran'),
+      municipality: Municipality(
+        name: 'Ouled Bouachra',
+        city: City(name: 'Medea'),
+      ),
       owner: User(
         username: 'Brahim CHOUIH',
         picture: '$api/media/users/5_pictuer_2022-04-29-150027.864713.png',

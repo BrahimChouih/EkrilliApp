@@ -15,10 +15,10 @@ class AuthenticationScreen extends StatelessWidget {
   AuthController authController = Get.find<AuthController>();
 
   TextEditingController emailController =
-      TextEditingController(text: 'test3@gmail.com');
+      TextEditingController(text: 'test1@gmail.com');
 
   TextEditingController usernameController =
-      TextEditingController(text: 'test3');
+      TextEditingController(text: 'test1');
 
   TextEditingController passwordController =
       TextEditingController(text: '123123');

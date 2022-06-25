@@ -6,8 +6,11 @@ class HouseAPI {
   Future<List<Map<String, dynamic>>?> getHouses({
     int page = 1,
     int? cityId,
+    bool myHouses = false,
   }) async {
     String apiUrl = '$api/api/houses/';
+
+    if (myHouses) apiUrl = '$api/api/myhouses/';
 
     if (cityId != null) apiUrl += 'city/$cityId/';
 
@@ -111,6 +114,30 @@ class HouseAPI {
 
   Future<List<Map<String, dynamic>>?> getCities() async {
     String apiUrl = '$api/api/cities/';
+
+    Response response = await dio
+        .get(
+      apiUrl,
+      options: options,
+    )
+        .onError<DioError>(
+      (error, stackTrace) {
+        // print(error.response.data);
+        throw error;
+      },
+    );
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception(response);
+    }
+
+    return [...response.data];
+  }
+
+  Future<List<Map<String, dynamic>>?> getMunicipalities({
+    int cityId = 1,
+  }) async {
+    String apiUrl = '$api/api/municipalities/$cityId/';
 
     Response response = await dio
         .get(

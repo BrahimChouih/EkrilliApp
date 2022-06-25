@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:ekrilli_app/models/municipality.dart';
 import 'package:path/path.dart';
 import 'package:dio/dio.dart';
 import 'package:ekrilli_app/data/api/house_api.dart';
@@ -13,10 +14,12 @@ class HouseRepository {
   Future<List<House>?> getHouses({
     int page = 1,
     int? cityId,
+    bool myHouses = false,
   }) async {
     List<Map<String, dynamic>>? data = await houseAPI.getHouses(
       page: page,
       cityId: cityId,
+      myHouses: myHouses,
     );
     List<House> houses = [];
     data?.forEach((element) {
@@ -56,6 +59,13 @@ class HouseRepository {
     return houseData;
   }
 
+  Future<void> deleteHouse(int houseId) async {
+    Map<String, dynamic>? houseJson = await houseAPI.houseInfo(
+      houseId,
+      method: DELETE,
+    );
+  }
+
   Future<House?> updateHouseInfo({
     required int houseId,
     required House house,
@@ -67,7 +77,7 @@ class HouseRepository {
     data['pictures'] = [];
 
     for (int i = 0; i < house.pictures.length; i++) {
-      if (house.pictures[i].isUrl) {
+      if (!house.pictures[i].isUrl) {
         MultipartFile multipartFile = await MultipartFile.fromFile(
           house.pictures[i].picture,
           filename: basename(house.pictures[i].picture),
@@ -105,5 +115,17 @@ class HouseRepository {
     });
 
     return cities;
+  }
+
+  Future<List<Municipality>?> getMunicipalities({int cityId = 1}) async {
+    List<Map<String, dynamic>>? data = await houseAPI.getMunicipalities(
+      cityId: cityId,
+    );
+    List<Municipality> municipalities = [];
+    data?.forEach((element) {
+      municipalities.add(Municipality.fromJson(element));
+    });
+
+    return municipalities;
   }
 }

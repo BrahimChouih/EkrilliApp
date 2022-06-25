@@ -17,6 +17,10 @@ void main() {
     //// get offers by city
     data = await offerRepository.getOffers(cityId: 1);
     print('offersByCity.length: ${data?.length}');
+
+    //// get offers by house
+    data = await offerRepository.getOffers(houseId: 1);
+    print('offersByHouse.length: ${data?.length}');
   });
 
   test('OfferRepository get offer info', () async {
@@ -43,7 +47,6 @@ void main() {
       Offer? data = await offerRepository.createOffer(
         Offer(
           house: House(id: 1),
-          user: User(id: 2),
         ),
       );
       print(data?.toJson());
@@ -62,7 +65,7 @@ void main() {
     try {
       Offer? data = await offerRepository.updateOfferInfo(
         offerId: 25,
-        offer: Offer(status: 'DONE'),
+        offer: Offer(status: 'DONE', house: House()),
       );
       print(data?.toJson());
       expect(data != null, true);
@@ -78,15 +81,33 @@ void main() {
 
     ///// change offer status to PUBLISHED
     try {
-      Offer? data = await offerRepository.changeStatus(
+      var data = await offerRepository.changeStatus(
         offerId: 25,
         status: 'PUBLISHED',
+        userId: 2,
       );
-      print(data?.toJson());
+      print(data.toString());
       expect(data != null, true);
     } on DioError catch (e) {
       print(e.response?.data);
       expect(e.response?.statusCode, 404);
     }
+  });
+
+  test('OfferRepository search on an offer', () async {
+    //// get instence
+    OfferRepository offerRepository = OfferRepository();
+
+    //// search
+    List<Offer>? data = await offerRepository.search(
+      inversOrdering: false,
+      search: 'Titree',
+      orderBy: 'stars',
+    );
+    // print('length: ${data?.length}');
+    data?.forEach((d) {
+      print('id:${d.id}');
+      print('stars:${d.house.stars}');
+    });
   });
 }

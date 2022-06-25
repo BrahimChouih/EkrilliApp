@@ -6,8 +6,10 @@ import 'package:ekrilli_app/models/house.dart';
 import 'package:ekrilli_app/models/offer.dart';
 import 'package:ekrilli_app/screens/house_details_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:get/get.dart';
+import 'package:skeleton_loader/skeleton_loader.dart';
 
 import '../data/api/api.dart';
 import '../utils/constants.dart';
@@ -66,10 +68,17 @@ class HouseWidget extends StatelessWidget {
               height: height ?? Get.height * 0.27,
               child: ClipRRect(
                 borderRadius: borderRadius,
-                child: Image.network(
-                  (offer?.house ?? house)?.pictures.first.picture ?? '',
-                  fit: BoxFit.cover,
-                ),
+                child: (offer?.house ?? house)!.pictures.isNotEmpty
+                    ? Image.network(
+                        (offer?.house ?? house)!.pictures.first.picture,
+                        fit: BoxFit.cover,
+                      )
+                    : Container(
+                        color: deepPrimaryColor.withOpacity(0.1),
+                        child: SvgPicture.asset(
+                          'assets/vectors/house.svg',
+                        ),
+                      ),
               ),
             ),
             ClipRRect(
@@ -103,27 +112,75 @@ class HouseWidget extends StatelessWidget {
                         bathrooms: (offer?.house ?? house)?.bathrooms ?? 1,
                         bedrooms: (offer?.house ?? house)?.bedrooms ?? 1,
                       ),
-                      StarsWidget(
-                        stars: (offer?.house ?? house)?.stars ?? 0,
-                        numReviews: (offer?.house ?? house)?.numReviews ?? 0,
-                      ),
                       Row(
                         children: [
-                          const FaIcon(
-                            FontAwesomeIcons.locationDot,
-                            color: Colors.white,
-                            size: 20,
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              StarsWidget(
+                                stars: (offer?.house ?? house)?.stars ?? 0,
+                                numReviews:
+                                    (offer?.house ?? house)?.numReviews ?? 0,
+                              ),
+                              Row(
+                                children: [
+                                  const FaIcon(
+                                    FontAwesomeIcons.locationDot,
+                                    color: Colors.white,
+                                    size: 20,
+                                  ),
+                                  const SizedBox(width: 10),
+                                  (offer?.house ?? house)!.municipality != null
+                                      ? Text(
+                                          ((offer?.house ?? house)!
+                                                      .municipality
+                                                      ?.name ??
+                                                  '') +
+                                              ', ' +
+                                              ((offer?.house ?? house)
+                                                      ?.municipality
+                                                      ?.city
+                                                      ?.name ??
+                                                  ''),
+                                          overflow: TextOverflow.ellipsis,
+                                          style: const TextStyle(
+                                            color: Colors.white,
+                                          ),
+                                        )
+                                      : const SizedBox(),
+                                ],
+                              ),
+                            ],
                           ),
-                          const SizedBox(width: 10),
-                          Text(
-                            ((offer?.house ?? house)!.location ?? '') +
-                                ', ' +
-                                ((offer?.house ?? house)?.city?.name ?? ''),
-                            overflow: TextOverflow.ellipsis,
-                            style: const TextStyle(
-                              color: Colors.white,
-                            ),
-                          ),
+                          offer?.pricePerDay != null
+                              ? Expanded(
+                                  child: Row(
+                                    mainAxisAlignment: MainAxisAlignment.end,
+                                    children: [
+                                      Text(
+                                        offer!.pricePerDay.toString(),
+                                        overflow: TextOverflow.ellipsis,
+                                        textAlign: TextAlign.end,
+                                        style: const TextStyle(
+                                          fontSize: 18,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                      const Text(
+                                        'DA/Day',
+                                        style: TextStyle(
+                                          fontSize: 10,
+                                          color: Colors.white,
+                                          fontWeight: FontWeight.bold,
+                                        ),
+                                      ),
+                                    ],
+                                  ),
+                                )
+                              : const SizedBox(),
                         ],
                       ),
                     ],
@@ -133,6 +190,37 @@ class HouseWidget extends StatelessWidget {
             ),
           ],
         ),
+      ),
+    );
+  }
+}
+
+class HouseLoader extends StatelessWidget {
+  const HouseLoader({
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return SingleChildScrollView(
+      physics: const NeverScrollableScrollPhysics(),
+      child: SkeletonLoader(
+        baseColor: deepPrimaryColor.withOpacity(0.1),
+        builder: Container(
+          margin: EdgeInsets.symmetric(
+            vertical: 10,
+            horizontal: Get.width * 0.05,
+          ),
+          height: Get.height * 0.27,
+          decoration: BoxDecoration(
+            borderRadius: borderRadius,
+            color: Colors.white,
+          ),
+        ),
+        items: 4,
+        period: const Duration(seconds: 2),
+        highlightColor: primaryColor.withOpacity(0.6),
+        direction: SkeletonDirection.ltr,
       ),
     );
   }

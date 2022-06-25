@@ -9,7 +9,9 @@ void main() {
     OfferAPI offerAPI = OfferAPI();
 
     ///// get my offers
-    List<Map<String, dynamic>>? data = await offerAPI.getOffers();
+    List<Map<String, dynamic>>? data = await offerAPI.getOffers(
+      houseId: 1,
+    );
     print(data);
     expect(data?.length != null, true);
   });
@@ -90,5 +92,23 @@ void main() {
       print(e.response?.data);
       expect(e.response?.statusCode, anyOf(404, 400));
     }
+  });
+
+  test('OfferAPI search on an offer', () async {
+    //// get instence
+    OfferAPI offerAPI = OfferAPI();
+
+    ///// search
+    List<Map<String, dynamic>>? data = await offerAPI.search(
+      inversOrdering: false,
+      search: 'Titree',
+      orderBy: 'stars',
+    );
+    // print(data);
+    data?.forEach((d) {
+      print('id:${d['id']}');
+      print('stars:${d['house']['stars']}');
+    });
+    expect(data?.length != null, true);
   });
 }

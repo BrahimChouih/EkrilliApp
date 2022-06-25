@@ -2,14 +2,20 @@ import 'dart:io';
 
 import 'package:animated_text_kit/animated_text_kit.dart';
 import 'package:dio/dio.dart';
+import 'package:ekrilli_app/controllers/chat_controller.dart';
+import 'package:ekrilli_app/controllers/house_controller.dart';
+import 'package:ekrilli_app/controllers/messages_controller.dart';
+import 'package:ekrilli_app/helpers/notification_helper.dart';
 import 'package:ekrilli_app/screens/authentication_screen.dart';
 import 'package:ekrilli_app/screens/home_screen.dart';
-import 'package:ekrilli_app/themes/primary_theme.dart';
+import 'package:ekrilli_app/screens/ip_screen.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:get/get.dart';
 
 import '../controllers/auth_controller.dart';
+import '../controllers/favorite_controller.dart';
 import '../utils/constants.dart';
 
 class SplashScreen extends StatelessWidget {
@@ -18,11 +24,28 @@ class SplashScreen extends StatelessWidget {
   void goToNextScreen() async {
     // await Future.delayed(const Duration(seconds: 3));
     AuthController authController = Get.find<AuthController>();
+    HouseController houseController = Get.put(HouseController());
+    // FavoriteController favoriteController = Get.put(FavoriteController());
+    // MessagesController messagesController = Get.put(MessagesController());
+    Get.lazyPut(() => FavoriteController(), fenix: true);
+    Get.lazyPut(() => MessagesController(), fenix: true);
+
     try {
       await authController.initData();
-      Get.offAll(
-        () => !authController.isLogin ? AuthenticationScreen() : HomeScreen(),
-      );
+      await houseController.getCities();
+      if (authController.isLogin) {
+        NotificationHelper.onMessage = () {
+          Get.put<ChatController>(ChatController())
+              .getChatItems(withWait: false);
+        };
+        await Get.offAll(
+          () => HomeScreen(),
+        );
+      } else {
+        Get.offAll(
+          () => AuthenticationScreen(),
+        );
+      }
     } on DioError catch (e) {
       String message = e.message.toString();
       if (e.message == 'Http status error [401]') {
@@ -44,6 +67,13 @@ class SplashScreen extends StatelessWidget {
             goToNextScreen();
           },
           child: const Text('Rety'),
+        ),
+        cancel: TextButton(
+          onPressed: () async {
+            Get.back();
+            Get.offAll(IpScreen());
+          },
+          child: const Text('Change IP'),
         ),
       );
     }

@@ -22,13 +22,13 @@ class FavoriteAPI {
     return [...response.data];
   }
 
-  Future<Map<String, dynamic>?> addFavorite(int houseId) async {
+  Future<Map<String, dynamic>?> addFavorite(int offerId) async {
     String apiUrl = '$api/api/favorites/';
 
     Response response = await dio
         .post(
       apiUrl,
-      data: {'house': houseId},
+      data: {'offer': offerId},
       options: options,
     )
         .onError<DioError>(

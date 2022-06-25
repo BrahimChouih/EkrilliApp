@@ -1,4 +1,5 @@
 import 'package:ekrilli_app/models/city.dart';
+import 'package:ekrilli_app/models/municipality.dart';
 import 'package:ekrilli_app/models/picture.dart';
 import 'package:ekrilli_app/models/user.dart';
 
@@ -11,7 +12,6 @@ class House {
   int? bathrooms;
   int? kitchens;
   int? bedrooms;
-  String? location;
   double? locationLatitude;
   double? locationLongitude;
   bool? isAvailable;
@@ -19,7 +19,7 @@ class House {
   int? numReviews;
   DateTime? createdAt;
   User? owner;
-  City? city;
+  Municipality? municipality;
   List<Picture> pictures = [];
 
   House({
@@ -31,7 +31,6 @@ class House {
     this.bathrooms,
     this.kitchens,
     this.bedrooms,
-    this.location,
     this.locationLatitude,
     this.locationLongitude,
     this.isAvailable,
@@ -39,7 +38,7 @@ class House {
     this.numReviews,
     this.createdAt,
     this.owner,
-    this.city,
+    this.municipality,
     this.pictures = const [],
   });
 
@@ -52,14 +51,13 @@ class House {
     bathrooms = json['bathrooms'];
     kitchens = json['kitchens'];
     bedrooms = json['bedrooms'];
-    location = json['location'];
     locationLatitude = json['location_latitude'];
     locationLongitude = json['location_longitude'];
     isAvailable = json['isAvailable'];
     stars = json['stars'];
     numReviews = json['numReviews'];
     createdAt = DateTime.parse(json['created_at']);
-    city = City.fromJson(json['city']);
+    municipality = Municipality.fromJson(json['municipality']);
     owner = User.fromJson(json['owner']);
     for (var item in (json['pictures'] as List)) {
       pictures.add(Picture.fromJson(item));
@@ -75,13 +73,12 @@ class House {
     data['bathrooms'] = bathrooms;
     data['kitchens'] = kitchens;
     data['bedrooms'] = bedrooms;
-    data['location'] = location;
     data['location_latitude'] = locationLatitude;
     data['location_longitude'] = locationLongitude;
     data['isAvailable'] = isAvailable;
     data['stars'] = stars;
     data['numReviews'] = numReviews;
-    data['city'] = city?.id;
+    data['municipality'] = municipality?.id;
     data['pictures'] = [];
     pictures.forEach((element) {
       data['pictures'].add(element.picture);

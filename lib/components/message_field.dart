@@ -1,14 +1,23 @@
+import 'package:ekrilli_app/controllers/messages_controller.dart';
+import 'package:ekrilli_app/models/chat_item_model.dart';
+import 'package:ekrilli_app/models/message.dart';
+import 'package:ekrilli_app/models/offer.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 import '../utils/constants.dart';
 
 class MessageField extends StatelessWidget {
-  const MessageField({Key? key}) : super(key: key);
+  MessageField({Key? key, required this.chatItemModel}) : super(key: key);
 
+  final ChatItemModel chatItemModel;
+  final MessagesController messagesController = Get.find<MessagesController>();
+
+  TextEditingController textFieldController = TextEditingController();
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.only(bottom: 5),
+      padding: const EdgeInsets.only(bottom: 5),
       child: Row(
         children: [
           IconButton(
@@ -18,15 +27,28 @@ class MessageField extends StatelessWidget {
               color: deepPrimaryColor,
             ),
           ),
-          const Expanded(
+          Expanded(
             child: TextField(
-              decoration: InputDecoration(
+              controller: textFieldController,
+              decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
               ),
             ),
           ),
           IconButton(
-            onPressed: () {},
+            onPressed: () async {
+              if (textFieldController.text.isNotEmpty) {
+                messagesController.sendMessage(
+                  offerId: chatItemModel.offer!.id!,
+                  userId: chatItemModel.user!.id!,
+                  message: Message(
+                    message: textFieldController.text,
+                    messageType: messagesController.messageType(chatItemModel),
+                  ),
+                );
+                textFieldController.clear();
+              }
+            },
             icon: const Icon(
               Icons.send,
               color: deepPrimaryColor,

@@ -22,6 +22,34 @@ void main() {
     }
   });
 
+  test('ChatAPI get chat items', () async {
+    //// get instence
+    ChatAPI chatAPI = ChatAPI();
+
+    ///// get chat items
+
+    List<Map<String, dynamic>>? data = await chatAPI.getChatItems();
+    print('offers.length: ${data?.length}');
+    expect(data != null, true);
+  });
+
+  test('ChatAPI get OfferSended', () async {
+    //// get instence
+    ChatAPI chatAPI = ChatAPI();
+
+    try {
+      Map<String, dynamic>? data = await chatAPI.getChatOfferSended(
+        offerId: 1,
+        userId: 5,
+      );
+      print(data);
+      expect(data != null, true);
+    } on DioError catch (e) {
+      print(e.response?.data);
+      expect(e.response?.statusCode, 404);
+    }
+  });
+
   test('ChatAPI send message', () async {
     //// get instence
     ChatAPI chatAPI = ChatAPI();

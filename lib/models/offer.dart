@@ -8,7 +8,7 @@ class Offer {
   DateTime? startDate;
   DateTime? endDate;
   DateTime? createdAt;
-  House? house;
+  late House house;
   User? user;
 
   Offer(
@@ -18,7 +18,7 @@ class Offer {
       this.startDate,
       this.endDate,
       this.createdAt,
-      this.house,
+      required this.house,
       this.user});
 
   Offer.fromJson(Map<String, dynamic> json) {
@@ -46,7 +46,7 @@ class Offer {
     data['price_per_day'] = pricePerDay;
     data['start_date'] = startDate?.toIso8601String();
     data['end_date'] = endDate?.toIso8601String();
-    data['house'] = house?.id;
+    data['house'] = house.id;
     data['user'] = user?.id;
     return data;
   }

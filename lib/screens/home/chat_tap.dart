@@ -10,9 +10,28 @@ import 'package:get/get.dart';
 import '../../components/custom_app_bar.dart';
 import '../../models/offer.dart';
 
-class ChatTap extends StatelessWidget {
+class ChatTap extends StatefulWidget {
   ChatTap({Key? key}) : super(key: key);
+
+  @override
+  State<ChatTap> createState() => _ChatTapState();
+}
+
+class _ChatTapState extends State<ChatTap> {
   ChatController chatController = Get.put(ChatController());
+
+  @override
+  void initState() {
+    if (chatController.isEmpty) {
+      WidgetsBinding.instance?.addPostFrameCallback((timeStamp) async {
+        chatController.changeLoadingState(true);
+        await Future.delayed(const Duration(milliseconds: 300));
+        chatController.getChatItems();
+      });
+    }
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -20,20 +39,35 @@ class ChatTap extends StatelessWidget {
         child: Column(
           children: [
             CustomAppBar(title: 'Chat'),
-            chatController.isEmpty
-                ? const EmptyScreen(
-                    title: 'No Messages yet',
-                    icon: FontAwesomeIcons.comments,
-                  )
-                : Expanded(
-                    child: ListView.builder(
-                      shrinkWrap: true,
-                      itemCount: 50,
-                      itemBuilder: (_, index) => ChatItem(
-                        offer: chatController.offers.first,
-                      ),
-                    ),
-                  ),
+            GetBuilder<ChatController>(
+              builder: (context) {
+                return chatController.isLoading
+                    ? const Expanded(child: ChatLoader())
+                    : chatController.isEmpty
+                        ? const EmptyScreen(
+                            title: 'No Messages yet',
+                            icon: FontAwesomeIcons.comments,
+                          )
+                        : Expanded(
+                            child: RefreshIndicator(
+                              onRefresh: () async {
+                                await chatController.getChatItems();
+                              },
+                              child: SizedBox(
+                                height: double.infinity,
+                                child: ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: chatController.chatItems.length,
+                                  itemBuilder: (_, index) => ChatItem(
+                                    chatItemModel:
+                                        chatController.chatItems[index],
+                                  ),
+                                ),
+                              ),
+                            ),
+                          );
+              },
+            ),
           ],
         ),
       ),

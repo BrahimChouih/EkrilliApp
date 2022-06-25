@@ -15,6 +15,9 @@ class CustomTextField extends StatelessWidget {
     this.onChange,
     this.prefixIcon,
     this.borderColor = primaryColor,
+    this.readOnly = false,
+    this.onTap,
+    this.onSubmitted,
   }) : super(key: key);
 
   final String? hintText;
@@ -25,6 +28,9 @@ class CustomTextField extends StatelessWidget {
   Function(String)? onChange;
   Widget? prefixIcon;
   final Color borderColor;
+  final bool readOnly;
+  final Function()? onTap;
+  final Function(String)? onSubmitted;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +42,9 @@ class CustomTextField extends StatelessWidget {
         onChanged: onChange,
         obscureText: obscureText,
         keyboardType: keyboardType,
+        onTap: onTap,
+        onSubmitted: onSubmitted,
+        readOnly: readOnly,
         decoration: InputDecoration(
           hintText: hintText,
           prefixIcon: prefixIcon,

@@ -5,10 +5,12 @@ class OfferAPI {
   Future<List<Map<String, dynamic>>?> getOffers({
     int page = 1,
     int? cityId,
+    int? houseId,
   }) async {
     String apiUrl = '$api/api/offers/';
 
     if (cityId != null) apiUrl += 'city/$cityId/';
+    if (houseId != null) apiUrl += 'house/$houseId/';
 
     apiUrl += '?page=$page';
 
@@ -95,13 +97,20 @@ class OfferAPI {
   Future<Map<String, dynamic>?> changeStatus({
     required int offerId,
     required String status,
+    int? userId,
+    Map<String, dynamic>? offerData,
   }) async {
-    String apiUrl = '$api/api/offers/$offerId/';
+    String apiUrl = '$api/api/offers/status/$offerId/';
 
+    Map<String, dynamic> data = {
+      'status': status,
+      'user': userId,
+    };
+    data.addAll(offerData ?? {});
     Response response = await dio
         .patch(
       apiUrl,
-      data: {'status': status},
+      data: data,
       options: options,
     )
         .onError<DioError>(
@@ -115,5 +124,39 @@ class OfferAPI {
     }
 
     return response.data;
+  }
+
+  Future<List<Map<String, dynamic>>?> search({
+    int page = 1,
+    String? search,
+    int? cityId,
+    String? orderBy,
+    bool inversOrdering = false,
+  }) async {
+    String apiUrl = '$api/api/offers/search/';
+    apiUrl += '?page=$page';
+
+    if (search != null) apiUrl += '&search=$search';
+    if (cityId != null) apiUrl += '&city=$cityId';
+    if (orderBy != null) {
+      if (inversOrdering) orderBy = '-' + orderBy;
+      apiUrl += '&order_by=$orderBy';
+    }
+
+    Response response = await dio
+        .get(
+      apiUrl,
+      options: options,
+    )
+        .onError<DioError>(
+      (error, stackTrace) {
+        throw error;
+      },
+    );
+
+    if (response.statusCode != 200 && response.statusCode != 201) {
+      throw Exception(response);
+    }
+    return [...response.data['results']];
   }
 }

@@ -15,8 +15,8 @@ class FavoriteRepository {
     return favorites;
   }
 
-  Future<Favorite?> addFavorite(int houseId) async {
-    Map<String, dynamic>? responseData = await favoriteAPI.addFavorite(houseId);
+  Future<Favorite?> addFavorite(int offerId) async {
+    Map<String, dynamic>? responseData = await favoriteAPI.addFavorite(offerId);
     if (responseData != null) {
       Favorite responseFavorite = Favorite.fromJson(responseData);
       return responseFavorite;

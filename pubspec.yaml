@@ -28,9 +28,12 @@ environment:
 # versions available, run `flutter pub outdated`.
 dependencies:
   animated_text_kit: ^4.2.1
+  awesome_notifications: ^0.6.21
   carousel_slider: ^4.1.1
   cupertino_icons: ^1.0.2
   dio: ^4.0.6
+  firebase_core: ^1.17.1
+  firebase_messaging: ^11.4.1
   flutter:
     sdk: flutter
   flutter_svg: ^1.0.3
@@ -38,8 +41,10 @@ dependencies:
   geolocator: ^8.2.1
   get: ^4.6.1
   image_picker: ^0.8.5
+  intl: ^0.17.0
   map_launcher: ^2.2.1+2
   shared_preferences: ^2.0.13
+  skeleton_loader: ^2.0.0+4
 
 dev_dependencies:
   flutter_lints: ^1.0.0

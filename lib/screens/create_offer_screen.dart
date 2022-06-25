@@ -1,3 +1,4 @@
+import 'package:ekrilli_app/controllers/offers_controller.dart';
 import 'package:ekrilli_app/helpers/location_helper.dart';
 import 'package:ekrilli_app/models/house.dart';
 import 'package:ekrilli_app/models/picture.dart';
@@ -16,8 +17,12 @@ class CreateOfferScreen extends StatefulWidget {
   CreateOfferScreen({
     Key? key,
     required this.house,
+    this.offer,
+    this.isUpdate = false,
   }) : super(key: key);
   House house;
+  Offer? offer;
+  bool isUpdate;
 
   @override
   State<CreateOfferScreen> createState() => _CreateOfferScreenState();
@@ -32,18 +37,23 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
     debugLabel: 'pricePerDayKey',
   );
 
-  TextEditingController pricePerDayController = TextEditingController(
-    text: '0.0',
-  );
+  TextEditingController? pricePerDayController;
+  OfferController offerController = Get.find<OfferController>();
 
   @override
   void initState() {
+    pricePerDayController = TextEditingController(
+      text: widget.isUpdate ? widget.offer?.pricePerDay.toString() : '0.0',
+    );
     offer = Offer(
       house: widget.house,
+      status: statusPublished,
     );
-    pricePerDayController.addListener(() {
+    pricePerDay.value = double.parse(pricePerDayController!.text);
+
+    pricePerDayController?.addListener(() {
       try {
-        pricePerDay.value = double.parse(pricePerDayController.text);
+        pricePerDay.value = double.parse(pricePerDayController!.text);
       } catch (e) {}
     });
     super.initState();
@@ -69,8 +79,25 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
                       fontWeight: FontWeight.bold,
                     ),
                   ),
-                  onTap: () {
-                    pricePerDayKey.currentState?.validate();
+                  onTap: () async {
+                    print(offer?.status);
+                    if (pricePerDayKey.currentState?.validate() ?? false) {
+                      if (widget.isUpdate) {
+                        await offerController.updateOfferInfo(
+                          offerId: widget.offer!.id!,
+                          offer: widget.offer!
+                            ..pricePerDay = pricePerDay.value
+                            ..status = statusPublished,
+                        );
+                      } else {
+                        await offerController.createOffer(
+                          offer!..pricePerDay = pricePerDay.value,
+                        );
+                      }
+
+                      offerController.getoffersByHouse(widget.house.id!);
+                      Get.back();
+                    }
                   },
                 ),
               ),
@@ -81,17 +108,16 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
                     SizedBox(height: Get.height * 0.02),
                     TextFielWithTitle(
                       formKey: pricePerDayKey,
-                      controller: pricePerDayController,
+                      controller: pricePerDayController!,
                       textInputType: TextInputType.number,
                       title: 'Price per day',
                       validator: (value) {
-                        if (pricePerDayController.text.isEmpty) {
+                        if (pricePerDayController!.text.isEmpty) {
                           return 'You must fill in this field';
                         }
-                        if (double.parse(pricePerDayController.text) == 0.0) {
+                        if (double.parse(pricePerDayController!.text) == 0.0) {
                           return 'You have to change this field';
                         }
-
                         return null;
                       },
                     ),
