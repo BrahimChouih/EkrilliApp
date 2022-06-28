@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:ekrilli_app/components/blur_widget.dart';
 import 'package:ekrilli_app/components/stars_widget.dart';
 import 'package:ekrilli_app/components/rooms_number_widget.dart';
 import 'package:ekrilli_app/models/house.dart';
@@ -81,110 +82,104 @@ class HouseWidget extends StatelessWidget {
                       ),
               ),
             ),
-            ClipRRect(
+            BlurWidget(
               borderRadius: borderRadius,
-              child: BackdropFilter(
-                filter: ImageFilter.blur(
-                  sigmaX: 6,
-                  sigmaY: 6,
-                ),
-                child: Container(
-                  width: Get.width * 0.9,
-                  // height: (height ?? Get.height * 0.27) * 0.4,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                      colors: [
-                        deepPrimaryColor.withOpacity(0.3),
-                        deepPrimaryColor.withOpacity(0.1),
-                      ],
-                    ),
-                  ),
-                  padding: const EdgeInsets.all(10),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      RoomsNumberWidget(
-                        kitchens: (offer?.house ?? house)?.kitchens ?? 1,
-                        bathrooms: (offer?.house ?? house)?.bathrooms ?? 1,
-                        bedrooms: (offer?.house ?? house)?.bedrooms ?? 1,
-                      ),
-                      Row(
-                        children: [
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            mainAxisSize: MainAxisSize.min,
-                            children: [
-                              StarsWidget(
-                                stars: (offer?.house ?? house)?.stars ?? 0,
-                                numReviews:
-                                    (offer?.house ?? house)?.numReviews ?? 0,
-                              ),
-                              Row(
-                                children: [
-                                  const FaIcon(
-                                    FontAwesomeIcons.locationDot,
-                                    color: Colors.white,
-                                    size: 20,
-                                  ),
-                                  const SizedBox(width: 10),
-                                  (offer?.house ?? house)!.municipality != null
-                                      ? Text(
-                                          ((offer?.house ?? house)!
-                                                      .municipality
-                                                      ?.name ??
-                                                  '') +
-                                              ', ' +
-                                              ((offer?.house ?? house)
-                                                      ?.municipality
-                                                      ?.city
-                                                      ?.name ??
-                                                  ''),
-                                          overflow: TextOverflow.ellipsis,
-                                          style: const TextStyle(
-                                            color: Colors.white,
-                                          ),
-                                        )
-                                      : const SizedBox(),
-                                ],
-                              ),
-                            ],
-                          ),
-                          offer?.pricePerDay != null
-                              ? Expanded(
-                                  child: Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      Text(
-                                        offer!.pricePerDay.toString(),
-                                        overflow: TextOverflow.ellipsis,
-                                        textAlign: TextAlign.end,
-                                        style: const TextStyle(
-                                          fontSize: 18,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                      const Text(
-                                        'DA/Day',
-                                        style: TextStyle(
-                                          fontSize: 10,
-                                          color: Colors.white,
-                                          fontWeight: FontWeight.bold,
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                )
-                              : const SizedBox(),
-                        ],
-                      ),
+              child: Container(
+                width: Get.width * 0.9,
+                // height: (height ?? Get.height * 0.27) * 0.4,
+                decoration: BoxDecoration(
+                  gradient: LinearGradient(
+                    begin: Alignment.topLeft,
+                    end: Alignment.bottomRight,
+                    colors: [
+                      deepPrimaryColor.withOpacity(0.3),
+                      deepPrimaryColor.withOpacity(0.1),
                     ],
                   ),
+                ),
+                padding: const EdgeInsets.all(10),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    RoomsNumberWidget(
+                      kitchens: (offer?.house ?? house)?.kitchens ?? 1,
+                      bathrooms: (offer?.house ?? house)?.bathrooms ?? 1,
+                      bedrooms: (offer?.house ?? house)?.bedrooms ?? 1,
+                    ),
+                    Row(
+                      children: [
+                        Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            StarsWidget(
+                              stars: (offer?.house ?? house)?.stars ?? 0,
+                              numReviews:
+                                  (offer?.house ?? house)?.numReviews ?? 0,
+                            ),
+                            Row(
+                              children: [
+                                const FaIcon(
+                                  FontAwesomeIcons.locationDot,
+                                  color: Colors.white,
+                                  size: 20,
+                                ),
+                                const SizedBox(width: 10),
+                                (offer?.house ?? house)!.municipality != null
+                                    ? Text(
+                                        ((offer?.house ?? house)!
+                                                    .municipality
+                                                    ?.name ??
+                                                '') +
+                                            ', ' +
+                                            ((offer?.house ?? house)
+                                                    ?.municipality
+                                                    ?.city
+                                                    ?.name ??
+                                                ''),
+                                        overflow: TextOverflow.ellipsis,
+                                        style: const TextStyle(
+                                          color: Colors.white,
+                                        ),
+                                      )
+                                    : const SizedBox(),
+                              ],
+                            ),
+                          ],
+                        ),
+                        offer?.pricePerDay != null
+                            ? Expanded(
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.end,
+                                  children: [
+                                    Text(
+                                      offer!.pricePerDay.toString(),
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.end,
+                                      style: const TextStyle(
+                                        fontSize: 18,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                    const Text(
+                                      'DA/Day',
+                                      style: TextStyle(
+                                        fontSize: 10,
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.bold,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              )
+                            : const SizedBox(),
+                      ],
+                    ),
+                  ],
                 ),
               ),
             ),

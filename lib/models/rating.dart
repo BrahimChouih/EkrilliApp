@@ -19,10 +19,8 @@ class Rating {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
-
     data['comment'] = comment;
     data['stars'] = stars;
-    data['created_at'] = createdAt?.toIso8601String();
     data['offer'] = offer?.id;
     return data;
   }

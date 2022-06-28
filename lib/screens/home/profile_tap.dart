@@ -1,4 +1,5 @@
 import 'dart:ui';
+import 'package:ekrilli_app/components/blur_widget.dart';
 import 'package:ekrilli_app/components/custom_app_bar.dart';
 import 'package:ekrilli_app/components/submit_button.dart';
 import 'package:ekrilli_app/controllers/auth_controller.dart';
@@ -171,24 +172,21 @@ class ProfileTap extends StatelessWidget {
     double? width,
     double? height,
   }) =>
-      ClipRRect(
-        child: BackdropFilter(
-          filter: ImageFilter.blur(sigmaX: 3, sigmaY: 3),
-          child: Container(
-            width: width,
-            height: height,
-            margin: margin,
-            padding: padding ??
-                EdgeInsets.symmetric(
-                  horizontal: Get.width * 0.05,
-                  vertical: Get.height * 0.02,
-                ),
-            decoration: BoxDecoration(
-              color: deepPrimaryColor.withOpacity(0.1),
-              borderRadius: borderRadius,
-            ),
-            child: child,
+      BlurWidget(
+        child: Container(
+          width: width,
+          height: height,
+          margin: margin,
+          padding: padding ??
+              EdgeInsets.symmetric(
+                horizontal: Get.width * 0.05,
+                vertical: Get.height * 0.02,
+              ),
+          decoration: BoxDecoration(
+            color: deepPrimaryColor.withOpacity(0.1),
+            borderRadius: borderRadius,
           ),
+          child: child,
         ),
       );
 }

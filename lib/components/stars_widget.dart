@@ -69,7 +69,7 @@ class StarsWidget extends StatelessWidget {
         mainAxisSize: MainAxisSize.min,
         children: [
           Text(
-            '(' + rate.toString() + ')',
+            '(' + rate.toStringAsFixed(1) + ')',
           ),
           const FaIcon(
             Icons.star_rounded,

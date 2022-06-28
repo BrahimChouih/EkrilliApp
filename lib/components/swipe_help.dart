@@ -1,3 +1,4 @@
+import 'package:ekrilli_app/components/blur_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 
@@ -9,36 +10,33 @@ class SwipeHelp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
+    return BlurWidget(
       borderRadius: borderRadius,
-      child: BackdropFilter(
-        filter: blurEffect,
-        child: Container(
-          decoration: BoxDecoration(
-            color: Colors.white30,
-            borderRadius: borderRadius,
-          ),
-          padding: const EdgeInsets.symmetric(
-            vertical: 5,
-            horizontal: 10,
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              SvgPicture.asset(
-                'assets/icons/swipe.svg',
+      child: Container(
+        decoration: BoxDecoration(
+          color: Colors.white30,
+          borderRadius: borderRadius,
+        ),
+        padding: const EdgeInsets.symmetric(
+          vertical: 5,
+          horizontal: 10,
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            SvgPicture.asset(
+              'assets/icons/swipe.svg',
+              color: deepPrimaryColor,
+            ),
+            const SizedBox(width: 5),
+            Text(
+              text,
+              style: const TextStyle(
                 color: deepPrimaryColor,
+                fontSize: 12,
               ),
-              const SizedBox(width: 5),
-              Text(
-                text,
-                style: const TextStyle(
-                  color: deepPrimaryColor,
-                  fontSize: 12,
-                ),
-              ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

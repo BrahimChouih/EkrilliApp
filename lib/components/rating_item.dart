@@ -1,6 +1,7 @@
 import 'package:ekrilli_app/components/stars_widget.dart';
 import 'package:ekrilli_app/models/rating.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 
 import '../utils/constants.dart';
 
@@ -28,9 +29,16 @@ class RatingItem extends StatelessWidget {
         leading: CircleAvatar(
           radius: 30,
           backgroundColor: Colors.white,
-          backgroundImage: NetworkImage(
-            rating.offer?.user?.picture ?? '',
-          ),
+          backgroundImage: rating.offer?.user?.picture != null
+              ? NetworkImage(
+                  rating.offer?.user?.picture ?? '',
+                )
+              : null,
+          child: rating.offer?.user?.picture == null
+              ? SvgPicture.asset(
+                  'assets/vectors/person.svg',
+                )
+              : null,
         ),
         trailing: StarsWidget(
           stars: rating.stars ?? 0,

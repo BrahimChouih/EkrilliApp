@@ -14,6 +14,24 @@ class MessageField extends StatelessWidget {
   final MessagesController messagesController = Get.find<MessagesController>();
 
   TextEditingController textFieldController = TextEditingController();
+
+  FocusNode focusNode = FocusNode();
+
+  void sendMessage() async {
+    if (textFieldController.text.isNotEmpty) {
+      messagesController.sendMessage(
+        offerId: chatItemModel.offer!.id!,
+        userId: chatItemModel.user!.id!,
+        message: Message(
+          message: textFieldController.text,
+          messageType: messagesController.messageType(chatItemModel),
+        ),
+      );
+      textFieldController.clear();
+      focusNode.requestFocus();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -30,25 +48,17 @@ class MessageField extends StatelessWidget {
           Expanded(
             child: TextField(
               controller: textFieldController,
+              onSubmitted: (value) {
+                sendMessage();
+              },
+              focusNode: focusNode,
               decoration: const InputDecoration(
                 border: UnderlineInputBorder(),
               ),
             ),
           ),
           IconButton(
-            onPressed: () async {
-              if (textFieldController.text.isNotEmpty) {
-                messagesController.sendMessage(
-                  offerId: chatItemModel.offer!.id!,
-                  userId: chatItemModel.user!.id!,
-                  message: Message(
-                    message: textFieldController.text,
-                    messageType: messagesController.messageType(chatItemModel),
-                  ),
-                );
-                textFieldController.clear();
-              }
-            },
+            onPressed: sendMessage,
             icon: const Icon(
               Icons.send,
               color: deepPrimaryColor,

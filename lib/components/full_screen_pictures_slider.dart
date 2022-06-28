@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:ekrilli_app/components/blur_widget.dart';
 import 'package:ekrilli_app/models/picture.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -11,8 +12,7 @@ class FullscreenPicturesSlider extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BackdropFilter(
-      filter: ImageFilter.blur(sigmaX: 10.0, sigmaY: 10.0),
+    return BlurWidget(
       child: Builder(
         builder: (context) {
           return Hero(
