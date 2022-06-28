@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:ekrilli_app/components/blur_widget.dart';
 import 'package:ekrilli_app/components/description_viewer.dart';
 import 'package:ekrilli_app/components/map_apps.dart';
 import 'package:ekrilli_app/components/pictures_slider.dart';
@@ -43,6 +44,8 @@ class _HouseDetailsScreenState extends State<HouseDetailsScreen> {
   OfferController offerController = Get.find<OfferController>();
   FavoriteController favoriteController = Get.find<FavoriteController>();
 
+  ScrollController scrollController = ScrollController();
+
   EdgeInsets margin = EdgeInsets.symmetric(
     horizontal: Get.width * 0.03,
     vertical: Get.height * 0.01,
@@ -60,11 +63,12 @@ class _HouseDetailsScreenState extends State<HouseDetailsScreen> {
       });
     }
     WidgetsBinding.instance?.addPostFrameCallback((d) {
-      startChattingButtonHeight.value =
-          (startChattingButton.currentContext?.findRenderObject() as RenderBox)
-              .size
-              .height;
-      print(startChattingButtonHeight);
+      try {
+        startChattingButtonHeight.value = (startChattingButton.currentContext
+                ?.findRenderObject() as RenderBox)
+            .size
+            .height;
+      } catch (e) {}
     });
     super.initState();
   }
@@ -117,6 +121,7 @@ class _HouseDetailsScreenState extends State<HouseDetailsScreen> {
                       }
                     },
                     child: SingleChildScrollView(
+                      controller: scrollController,
                       child: GetBuilder<OfferController>(
                           id: offerController.offerInfoWidgetId,
                           builder: (context) {
@@ -286,7 +291,10 @@ class _HouseDetailsScreenState extends State<HouseDetailsScreen> {
                                       text:
                                           widget.offer.house.description ?? ''),
                                 ),
-                                RatingWidget(offer: widget.offer),
+                                RatingWidget(
+                                  offer: widget.offer,
+                                  scrollController: scrollController,
+                                ),
                                 Obx(
                                   () => SizedBox(
                                     height: startChattingButtonHeight.value,
@@ -304,32 +312,25 @@ class _HouseDetailsScreenState extends State<HouseDetailsScreen> {
                       : Positioned(
                           width: Get.width,
                           bottom: 0,
-                          child: ClipRRect(
-                            child: BackdropFilter(
-                              filter: ImageFilter.blur(
-                                sigmaX: 6,
-                                sigmaY: 6,
-                              ),
-                              child: Center(
-                                child: SubmitButton(
-                                  key: startChattingButton,
-                                  text: 'Start Chatting',
-                                  margin:
-                                      const EdgeInsets.symmetric(vertical: 5),
-                                  padding: const EdgeInsets.symmetric(
-                                    vertical: 10,
-                                    horizontal: 25,
-                                  ),
-                                  onTap: () => Get.to(
-                                    () => ChattingScreen(
-                                      chatItemModel: ChatItemModel(
-                                        offer: widget.offer,
-                                        user: Get.find<AuthController>()
-                                            .currentUser,
-                                      ),
+                          child: BlurWidget(
+                            child: Center(
+                              child: SubmitButton(
+                                key: startChattingButton,
+                                text: 'Start Chatting',
+                                margin: const EdgeInsets.symmetric(vertical: 5),
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 10,
+                                  horizontal: 25,
+                                ),
+                                onTap: () => Get.to(
+                                  () => ChattingScreen(
+                                    chatItemModel: ChatItemModel(
+                                      offer: widget.offer,
+                                      user: Get.find<AuthController>()
+                                          .currentUser,
                                     ),
-                                    transition: Transition.downToUp,
                                   ),
+                                  transition: Transition.downToUp,
                                 ),
                               ),
                             ),

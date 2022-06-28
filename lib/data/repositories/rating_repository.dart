@@ -11,7 +11,7 @@ class RatingRepository {
   }) async {
     List<Map<String, dynamic>>? data = await ratingAPI.getHouseRatings(
       houseId: houseId,
-      page: 1,
+      page: page,
     );
     List<Rating> ratings = [];
     data?.forEach((element) {

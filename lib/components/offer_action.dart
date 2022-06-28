@@ -1,6 +1,8 @@
 import 'dart:convert';
 import 'dart:ui';
 
+import 'package:ekrilli_app/components/blur_widget.dart';
+import 'package:ekrilli_app/components/rate_house.dart';
 import 'package:ekrilli_app/components/submit_button.dart';
 import 'package:ekrilli_app/components/text_field_with_title.dart';
 import 'package:ekrilli_app/controllers/auth_controller.dart';
@@ -57,58 +59,52 @@ class OfferAction extends StatelessWidget {
     textStyle = TextStyle(
       color: Colors.black.withOpacity(0.8),
     );
-    return ClipRRect(
-      child: BackdropFilter(
-        filter: ImageFilter.blur(
-          sigmaX: 5,
-          sigmaY: 5,
+    return BlurWidget(
+      child: Container(
+        width: Get.width,
+        color: deepPrimaryColor.withOpacity(0.1),
+        padding: EdgeInsets.symmetric(
+          horizontal: Get.width * 0.03,
+        ).copyWith(
+          top: Get.height * 0.01,
         ),
-        child: Container(
-          width: Get.width,
-          color: deepPrimaryColor.withOpacity(0.1),
-          padding: EdgeInsets.symmetric(
-            horizontal: Get.width * 0.03,
-          ).copyWith(
-            top: Get.height * 0.01,
-          ),
-          child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text(
-                'Make a deal with this person',
-                style: textStyle,
-              ),
-              AnimatedSize(
-                duration: const Duration(milliseconds: 200),
-                child: Obx(
-                  () => Column(
-                    mainAxisSize: MainAxisSize.min,
-                    crossAxisAlignment: CrossAxisAlignment.center,
-                    children: [
-                      expanded.value ? body(context) : const SizedBox(),
-                      InkWell(
-                        onTap: () {
-                          expanded.value = !expanded.value;
-                        },
-                        child: SizedBox(
-                          height: Get.height * 0.04,
-                          width: Get.width * 0.5,
-                          child: Center(
-                            child: FaIcon(
-                              expanded.value
-                                  ? FontAwesomeIcons.caretUp
-                                  : FontAwesomeIcons.caretDown,
-                              color: Colors.black.withOpacity(0.75),
-                            ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Text(
+              'Make a deal with this person',
+              style: textStyle,
+            ),
+            AnimatedSize(
+              duration: const Duration(milliseconds: 200),
+              child: Obx(
+                () => Column(
+                  mainAxisSize: MainAxisSize.min,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    expanded.value ? body(context) : const SizedBox(),
+                    InkWell(
+                      onTap: () {
+                        expanded.value = !expanded.value;
+                      },
+                      child: SizedBox(
+                        height: Get.height * 0.04,
+                        width: Get.width * 0.5,
+                        child: Center(
+                          child: FaIcon(
+                            expanded.value
+                                ? FontAwesomeIcons.caretUp
+                                : FontAwesomeIcons.caretDown,
+                            color: Colors.black.withOpacity(0.75),
                           ),
                         ),
                       ),
-                    ],
-                  ),
+                    ),
+                  ],
                 ),
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -300,16 +296,29 @@ class OfferAction extends StatelessWidget {
             context,
             clickable: false,
           ),
-          Container(
-            margin: const EdgeInsets.only(top: 15),
-            child: const Text(
-              'Done',
-              style: TextStyle(
-                color: Colors.amber,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          )
+          !messagesController.isMin(messagesController.parameters!.offer!) &&
+                  !messagesController.parameters!.offer!.rated!
+              ? customSubmitButton(
+                  text: 'Rate',
+                  onTap: () async {
+                    Get.generalDialog(
+                      pageBuilder: (_, a, d) => RateHouse(
+                        offer: messagesController.parameters!.offer!,
+                      ),
+                      barrierColor: Colors.transparent,
+                    );
+                  },
+                )
+              : Container(
+                  margin: const EdgeInsets.only(top: 15),
+                  child: const Text(
+                    'Done',
+                    style: TextStyle(
+                      color: Colors.amber,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                )
         ],
       );
 

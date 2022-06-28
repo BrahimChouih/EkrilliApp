@@ -8,6 +8,7 @@ class Offer {
   DateTime? startDate;
   DateTime? endDate;
   DateTime? createdAt;
+  bool? rated;
   late House house;
   User? user;
 
@@ -18,6 +19,7 @@ class Offer {
       this.startDate,
       this.endDate,
       this.createdAt,
+      this.rated,
       required this.house,
       this.user});
 
@@ -36,6 +38,7 @@ class Offer {
       createdAt = DateTime.parse(json['created_at']);
     }
 
+    rated = json['rated'];
     house = House.fromJson(json['house']);
     user = User.fromJson(json['user']);
   }
@@ -46,6 +49,7 @@ class Offer {
     data['price_per_day'] = pricePerDay;
     data['start_date'] = startDate?.toIso8601String();
     data['end_date'] = endDate?.toIso8601String();
+    data['rated'] = rated;
     data['house'] = house.id;
     data['user'] = user?.id;
     return data;
