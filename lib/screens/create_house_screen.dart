@@ -29,6 +29,8 @@ class CreateHouseScreen extends StatefulWidget {
 class _CreateHouseScreenState extends State<CreateHouseScreen> {
   HouseController houseController = Get.find<HouseController>();
 
+  RxBool isLoading = false.obs;
+
   var titleKey = GlobalKey<FormState>(
     debugLabel: 'titleKey',
   );
@@ -135,7 +137,11 @@ class _CreateHouseScreenState extends State<CreateHouseScreen> {
       );
       return;
     }
-    await publish();
+    isLoading.value = true;
+    try {
+      await publish();
+    } catch (e) {}
+    isLoading.value = false;
   }
 
   Future publish() async {
@@ -155,71 +161,89 @@ class _CreateHouseScreenState extends State<CreateHouseScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomAppBar(
-                title: 'New House',
-                backButton: true,
-                trailing: InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  child: const Icon(
-                    Icons.check_rounded,
-                    color: Colors.black54,
+      body: Stack(
+        children: [
+          SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomAppBar(
+                    title: 'New House',
+                    backButton: true,
+                    trailing: InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      child: const Icon(
+                        Icons.check_rounded,
+                        color: Colors.black54,
+                      ),
+                      onTap: submit,
+                    ),
                   ),
-                  onTap: submit,
-                ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: Get.width * 0.05),
+                    child: Column(
+                      children: [
+                        SizedBox(height: Get.height * 0.02),
+                        TextFielWithTitle(
+                          formKey: titleKey,
+                          controller: titleController,
+                          title: 'Title',
+                          maxChars: 25,
+                        ),
+                        Container(
+                          margin:
+                              EdgeInsets.symmetric(vertical: Get.height * 0.02),
+                          child: addressInput(),
+                        ),
+                        Container(
+                          margin:
+                              EdgeInsets.symmetric(vertical: Get.height * 0.02),
+                          child: roomsNumberInput(),
+                        ),
+                        Container(
+                          margin:
+                              EdgeInsets.symmetric(vertical: Get.height * 0.02),
+                          child: locationCoordinates(),
+                        ),
+                        TextFielWithTitle(
+                          formKey: descriptionKey,
+                          controller: descriptionController,
+                          title: 'Description',
+                          maxLines: 10,
+                          maxChars: 1000,
+                        ),
+                        SizedBox(height: Get.height * 0.02),
+                        HousePicturePicker(
+                          pictures: pictures,
+                          onRemove: (pic) {
+                            if (pic.isUrl) deletedPictures.add(pic);
+                          },
+                          onChange: (pcts) {
+                            pictures = pictures;
+                          },
+                        ),
+                        SizedBox(height: Get.height * 0.02),
+                      ],
+                    ),
+                  ),
+                ],
               ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: Get.width * 0.05),
-                child: Column(
-                  children: [
-                    SizedBox(height: Get.height * 0.02),
-                    TextFielWithTitle(
-                      formKey: titleKey,
-                      controller: titleController,
-                      title: 'Title',
-                      maxChars: 25,
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: Get.height * 0.02),
-                      child: addressInput(),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: Get.height * 0.02),
-                      child: roomsNumberInput(),
-                    ),
-                    Container(
-                      margin: EdgeInsets.symmetric(vertical: Get.height * 0.02),
-                      child: locationCoordinates(),
-                    ),
-                    TextFielWithTitle(
-                      formKey: descriptionKey,
-                      controller: descriptionController,
-                      title: 'Description',
-                      maxLines: 10,
-                      maxChars: 1000,
-                    ),
-                    SizedBox(height: Get.height * 0.02),
-                    HousePicturePicker(
-                      pictures: pictures,
-                      onRemove: (pic) {
-                        if (pic.isUrl) deletedPictures.add(pic);
-                      },
-                      onChange: (pcts) {
-                        pictures = pictures;
-                      },
-                    ),
-                    SizedBox(height: Get.height * 0.02),
-                  ],
-                ),
-              ),
-            ],
+            ),
           ),
-        ),
+          Obx(
+            () => isLoading.value
+                ? Container(
+                    width: Get.width,
+                    height: Get.height,
+                    color: Colors.black.withOpacity(0.3),
+                    alignment: Alignment.center,
+                    child: const CircularProgressIndicator(),
+                  )
+                : const SizedBox(),
+          ),
+        ],
       ),
     );
   }

@@ -1,6 +1,6 @@
 import 'package:dio/dio.dart' as d;
 
-String api = 'http://192.168.1.132:8000';
+String api = 'https://ekrilli-backend.herokuapp.com';
 // const api = 'http://192.168.1.132:8000';
 d.Dio dio = d.Dio();
 

@@ -27,112 +27,132 @@ class AuthenticationScreen extends StatelessWidget {
       TextEditingController(text: '123123');
 
   Rx<AuthenticationMode> authenticationMode = AuthenticationMode.signIn.obs;
+  RxBool isLoading = false.obs;
 
   String? accountType;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 20.0),
-            child: Obx(
-              () => Column(
-                children: [
-                  SizedBox(
-                    height: Get.height * 0.4,
-                    child: authenticationMode.value == AuthenticationMode.signIn
-                        ? SvgPicture.asset('assets/vectors/sign_in.svg')
-                        : SvgPicture.asset('assets/vectors/sign_up.svg'),
-                  ),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      body: Stack(
+        children: [
+          SafeArea(
+            child: SingleChildScrollView(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 20.0),
+                child: Obx(
+                  () => Column(
                     children: [
-                      authModeButton(AuthenticationMode.signIn),
-                      authModeButton(AuthenticationMode.signUp),
+                      SizedBox(
+                        height: Get.height * 0.4,
+                        child: authenticationMode.value ==
+                                AuthenticationMode.signIn
+                            ? SvgPicture.asset('assets/vectors/sign_in.svg')
+                            : SvgPicture.asset('assets/vectors/sign_up.svg'),
+                      ),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          authModeButton(AuthenticationMode.signIn),
+                          authModeButton(AuthenticationMode.signUp),
+                        ],
+                      ),
+                      SizedBox(height: Get.height * 0.03),
+                      CustomTextField(
+                        hintText: 'Email',
+                        controller: emailController,
+                        keyboardType: TextInputType.emailAddress,
+                      ),
+                      authenticationMode.value == AuthenticationMode.signUp
+                          ? CustomTextField(
+                              hintText: 'Username',
+                              controller: usernameController,
+                            )
+                          : const SizedBox(),
+                      CustomTextField(
+                        hintText: 'Password',
+                        controller: passwordController,
+                        obscureText: true,
+                      ),
+                      authenticationMode.value == AuthenticationMode.signUp
+                          ? CustomTextField(
+                              hintText: 'Confirm Password',
+                              controller: confirmPasswordController,
+                              obscureText: true,
+                            )
+                          : const SizedBox(),
+                      authenticationMode.value == AuthenticationMode.signUp
+                          ? CustomDropDown<String>(
+                              items: const ['Owner', 'Tenant'],
+                              value: accountType,
+                              onChange: (val) {
+                                accountType = val;
+                                authenticationMode.refresh();
+                              },
+                            )
+                          : const SizedBox(),
+                      SubmitButton(
+                        text: authenticationMode.value ==
+                                AuthenticationMode.signIn
+                            ? 'Sign In'
+                            : 'Sign Up',
+                        onTap: () async {
+                          // print(accountType);
+                          try {
+                            isLoading.value = true;
+                            if (authenticationMode.value ==
+                                AuthenticationMode.signIn) {
+                              await authController.signIn(
+                                email: emailController.text,
+                                password: passwordController.text,
+                              );
+                            } else {
+                              await authController.signUp(
+                                email: emailController.text,
+                                password: passwordController.text,
+                                username: usernameController.text,
+                                userType: accountType ?? 'Tenant',
+                              );
+                            }
+                            if (authController.isLogin) {
+                              Get.offAll(() => HomeScreen());
+                            }
+                          } on DioError catch (e) {
+                            Get.defaultDialog(
+                              title: 'Error',
+                              content: Text(
+                                (e.response ?? 'Check your internet connection')
+                                    .toString(),
+                              ),
+                              confirm: TextButton(
+                                onPressed: () => Get.back(),
+                                child: const Text('Ok'),
+                              ),
+                            );
+                            print('===========');
+                            print(e.response);
+                          }
+                          isLoading.value = false;
+                        },
+                      ),
                     ],
                   ),
-                  SizedBox(height: Get.height * 0.03),
-                  CustomTextField(
-                    hintText: 'Email',
-                    controller: emailController,
-                    keyboardType: TextInputType.emailAddress,
-                  ),
-                  authenticationMode.value == AuthenticationMode.signUp
-                      ? CustomTextField(
-                          hintText: 'Username',
-                          controller: usernameController,
-                        )
-                      : const SizedBox(),
-                  CustomTextField(
-                    hintText: 'Password',
-                    controller: passwordController,
-                    obscureText: true,
-                  ),
-                  authenticationMode.value == AuthenticationMode.signUp
-                      ? CustomTextField(
-                          hintText: 'Confirm Password',
-                          controller: confirmPasswordController,
-                          obscureText: true,
-                        )
-                      : const SizedBox(),
-                  authenticationMode.value == AuthenticationMode.signUp
-                      ? CustomDropDown<String>(
-                          items: const ['Owner', 'Tenant'],
-                          value: accountType,
-                          onChange: (val) {
-                            accountType = val;
-                            authenticationMode.refresh();
-                          },
-                        )
-                      : const SizedBox(),
-                  SubmitButton(
-                    text: authenticationMode.value == AuthenticationMode.signIn
-                        ? 'Sign In'
-                        : 'Sign Up',
-                    onTap: () async {
-                      // print(accountType);
-                      try {
-                        if (authenticationMode.value ==
-                            AuthenticationMode.signIn) {
-                          await authController.signIn(
-                            email: emailController.text,
-                            password: passwordController.text,
-                          );
-                        } else {
-                          await authController.signUp(
-                            email: emailController.text,
-                            password: passwordController.text,
-                            username: usernameController.text,
-                            userType: accountType ?? 'Tenant',
-                          );
-                        }
-                        if (authController.isLogin) {
-                          Get.offAll(() => HomeScreen());
-                        }
-                      } on DioError catch (e) {
-                        Get.defaultDialog(
-                          title: 'Error',
-                          content: Text(
-                            (e.response ?? 'Check your internet connection')
-                                .toString(),
-                          ),
-                          confirm: TextButton(
-                            onPressed: () => Get.back(),
-                            child: const Text('Ok'),
-                          ),
-                        );
-                        print('===========');
-                        print(e.response);
-                      }
-                    },
-                  ),
-                ],
+                ),
               ),
             ),
           ),
-        ),
+          Obx(
+            () => isLoading.value
+                ? Container(
+                    width: Get.width,
+                    height: Get.height,
+                    color: Colors.black.withOpacity(0.3),
+                    alignment: Alignment.center,
+                    child: const CircularProgressIndicator(),
+                  )
+                : const SizedBox(),
+          ),
+        ],
       ),
     );
   }
