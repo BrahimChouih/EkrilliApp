@@ -33,6 +33,8 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
 
   RxDouble pricePerDay = 0.0.obs;
 
+  RxBool isLoading = false.obs;
+
   var pricePerDayKey = GlobalKey<FormState>(
     debugLabel: 'pricePerDayKey',
   );
@@ -62,90 +64,111 @@ class _CreateOfferScreenState extends State<CreateOfferScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              CustomAppBar(
-                title: 'New Offer',
-                backButton: true,
-                trailing: InkWell(
-                  splashColor: Colors.transparent,
-                  highlightColor: Colors.transparent,
-                  child: const Text(
-                    'Publish',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  onTap: () async {
-                    print(offer?.status);
-                    if (pricePerDayKey.currentState?.validate() ?? false) {
-                      if (widget.isUpdate) {
-                        await offerController.updateOfferInfo(
-                          offerId: widget.offer!.id!,
-                          offer: widget.offer!
-                            ..pricePerDay = pricePerDay.value
-                            ..status = statusPublished,
-                        );
-                      } else {
-                        await offerController.createOffer(
-                          offer!..pricePerDay = pricePerDay.value,
-                        );
-                      }
+      body: Stack(
+        children: [
+          SafeArea(
+            child: SingleChildScrollView(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  CustomAppBar(
+                    title: 'New Offer',
+                    backButton: true,
+                    trailing: InkWell(
+                      splashColor: Colors.transparent,
+                      highlightColor: Colors.transparent,
+                      child: const Text(
+                        'Publish',
+                        style: TextStyle(
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      onTap: () async {
+                        isLoading.value = true;
+                        try {
+                          print(offer?.status);
+                          if (pricePerDayKey.currentState?.validate() ??
+                              false) {
+                            if (widget.isUpdate) {
+                              await offerController.updateOfferInfo(
+                                offerId: widget.offer!.id!,
+                                offer: widget.offer!
+                                  ..pricePerDay = pricePerDay.value
+                                  ..status = statusPublished,
+                              );
+                            } else {
+                              await offerController.createOffer(
+                                offer!..pricePerDay = pricePerDay.value,
+                              );
+                            }
 
-                      offerController.getoffersByHouse(widget.house.id!);
-                      Get.back();
-                    }
-                  },
-                ),
-              ),
-              Container(
-                margin: EdgeInsets.symmetric(horizontal: Get.width * 0.05),
-                child: Column(
-                  children: [
-                    SizedBox(height: Get.height * 0.02),
-                    TextFielWithTitle(
-                      formKey: pricePerDayKey,
-                      controller: pricePerDayController!,
-                      textInputType: TextInputType.number,
-                      title: 'Price per day',
-                      validator: (value) {
-                        if (pricePerDayController!.text.isEmpty) {
-                          return 'You must fill in this field';
-                        }
-                        if (double.parse(pricePerDayController!.text) == 0.0) {
-                          return 'You have to change this field';
-                        }
-                        return null;
+                            offerController.getoffersByHouse(widget.house.id!);
+                            Get.back();
+                          }
+                        } catch (e) {}
+                        isLoading.value = false;
                       },
                     ),
-                  ],
-                ),
-              ),
-              SizedBox(height: Get.height * 0.02),
-              Center(
-                child: Container(
-                  height: Get.height * 0.75,
-                  width: Get.width * 0.9,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(3),
-                    border: Border.all(
-                      color: deepPrimaryColor.withOpacity(0.5),
+                  ),
+                  Container(
+                    margin: EdgeInsets.symmetric(horizontal: Get.width * 0.05),
+                    child: Column(
+                      children: [
+                        SizedBox(height: Get.height * 0.02),
+                        TextFielWithTitle(
+                          formKey: pricePerDayKey,
+                          controller: pricePerDayController!,
+                          textInputType: TextInputType.number,
+                          title: 'Price per day',
+                          validator: (value) {
+                            if (pricePerDayController!.text.isEmpty) {
+                              return 'You must fill in this field';
+                            }
+                            if (double.parse(pricePerDayController!.text) ==
+                                0.0) {
+                              return 'You have to change this field';
+                            }
+                            return null;
+                          },
+                        ),
+                      ],
                     ),
                   ),
-                  child: Obx(
-                    () => HouseDetailsScreen(
-                      offer: offer!..pricePerDay = pricePerDay.value,
-                      isPreview: true,
+                  SizedBox(height: Get.height * 0.02),
+                  Center(
+                    child: Container(
+                      height: Get.height * 0.75,
+                      width: Get.width * 0.9,
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(3),
+                        border: Border.all(
+                          color: deepPrimaryColor.withOpacity(0.5),
+                        ),
+                      ),
+                      child: Obx(
+                        () => HouseDetailsScreen(
+                          offer: offer!..pricePerDay = pricePerDay.value,
+                          isPreview: true,
+                        ),
+                      ),
                     ),
                   ),
-                ),
+                ],
               ),
-            ],
+            ),
           ),
-        ),
+          Obx(
+            () => isLoading.value
+                ? Container(
+                    width: Get.width,
+                    height: Get.height,
+                    color: Colors.black.withOpacity(0.3),
+                    alignment: Alignment.center,
+                    child: const CircularProgressIndicator(),
+                  )
+                : const SizedBox(),
+          ),
+        ],
       ),
     );
   }
